@@ -29,6 +29,14 @@
 * OneConnect Acceleration Profile
 * TLS
 
+|link:f5-cis-ingress-kubernetes/README.adoc[F5 Container Ingress Service]
+|F5
+|
+* Ingress Controller/Ingress
+* `least-connections-member` load balancing method
+* L7 load balancer
+* TLS
+
 |link:nginx-plus-ingress/README.adoc[F5 Nginx Plus Ingress Controller]
 |F5
 |
