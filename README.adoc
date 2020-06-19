@@ -36,6 +36,7 @@
 * `least-connections-member` load balancing method
 * L7 load balancer
 * TLS
+* rewrite `app-root` and `target-url`
 
 |link:nginx-plus-ingress/README.adoc[F5 Nginx Plus Ingress Controller]
 |F5

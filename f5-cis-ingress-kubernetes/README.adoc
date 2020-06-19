@@ -30,6 +30,12 @@ kubectl create ns test003
 kubectl label ns test003 zone=zone_1
 kubectl create -f deploy03.yaml
 kubectl create -f in03.yaml
+
+kubectl create ns test004
+kubectl label ns test004 zone=zone_1
+kubectl create -f deploy04.yaml
+kubectl create -f in04.yaml
+kubectl create -f in05.yaml
 ----
 
 [source, bash]
@@ -42,4 +48,8 @@ curl http://app.example.com/bar
 curl http://app.example.com/foo
 
 curl -k https://svc.example.com
+
+// broswer access, will rewrite web root from `/` to `bar`
+http://old.example.com/
+http://new.example.com/bar
 ----
