@@ -42,5 +42,7 @@
 |F5
 |
 * Nginx plus docker image build
+* L7 load balancer
+* TLS
 
 |=== 
