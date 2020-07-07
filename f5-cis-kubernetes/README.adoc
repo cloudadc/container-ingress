@@ -64,3 +64,25 @@ This above commands will
 2. create a 4 namesapces, the first 3 with `--namespace-label=cis_scanner_zone=zone_1` label
 3. create 4 services in 4 namesapces accordingly
 4. create 4 ingress reference with 4 services
+
+== CIS Robust Test
+
+[source, bash]
+----
+// CIS + AS3 Deploy 2 services
+kubectl create -f cis.yaml
+kubectl apply -f deploy.yaml
+kubectl apply -f cm.1.yaml
+
+// Execute the following commands simultaneously to deploy 3rd service
+kubectl delete pod $(kubectl get pods -n bigip-ctlr --no-headers | awk '{print $1}') -n bigip-ctlr
+kubectl apply -f cm.2.yaml
+
+// Force cistest101 pod restart
+kubectl delete pod $(kubectl get pods -n cistest101 --no-headers | awk '{print $1}') -n cistest101
+
+//Delete all service
+kubectl delete -f cm.2.yaml
+----
+
+Refer to link:cis-pod-restart/README.adoc[link] for more details.
