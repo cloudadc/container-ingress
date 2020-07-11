@@ -1,0 +1,13 @@
+= Nginx Ingress Controller
+:toc: manual
+
+== Installation
+
+=== Cluster-wide Ingress Controller
+
+[source, bash]
+.*Install*
+----
+
+----
+

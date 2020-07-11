@@ -38,6 +38,10 @@
 * TLS
 * rewrite `app-root` and `target-url`
 
+|link:nginx-ingress/README.adoc[Nginx Ingress Controller]
+|Open Source
+|
+
 |link:nginx-plus-ingress/README.adoc[F5 Nginx Plus Ingress Controller]
 |F5
 |
