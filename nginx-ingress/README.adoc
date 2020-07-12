@@ -140,3 +140,13 @@ $ kubectl logs -f nginx-ingress-658848c866-vsbzh -n nginx-ingress
 2020/07/11 17:40:09 [notice] 10#10: signal 29 (SIGIO) received
 I0711 17:40:09.494809       1 event.go:278] Event(v1.ObjectReference{Kind:"Ingress", Namespace:"cafe", Name:"cafe-ingress", UID:"051be8fa-aa72-462c-8b5f-a477020eda94", APIVersion:"extensions/v1beta1", ResourceVersion:"3398169", FieldPath:""}): type: 'Normal' reason: 'AddedOrUpdated' Configuration for cafe/cafe-ingress was added or updated
 ----
+
+== Deployment Architectures
+
+The Deployment Architectures using both BIGIP and Nginx, there are 3 trypical deployment architectures:
+
+* BIG-IP with Cluster-wide Ingress Controller
+* BIG-IP with Single-namespace Ingress Controller
+* BIG-IP with Ingress Controller for Specific Ingress Class
+
+More details refer to link:bigip/README.adoc[bigip with nginx].

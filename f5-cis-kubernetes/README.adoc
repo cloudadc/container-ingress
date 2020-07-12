@@ -67,6 +67,8 @@ This above commands will
 
 == CIS Robust Test
 
+=== Re-create CIS POD
+
 [source, bash]
 ----
 // CIS + AS3 Deploy 2 services
@@ -86,3 +88,7 @@ kubectl delete -f cm.2.yaml
 ----
 
 Refer to link:cis-pod-restart/README.adoc[link] for more details.
+
+=== Re-start F5 VE
+
+Refer to link:f5-restart/README.adoc[link] for detailed steps.

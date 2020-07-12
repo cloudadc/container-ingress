@@ -1,6 +1,14 @@
 = Container Ingress & Container Route
+:toc: manual
 
-.*Exist Solutions Demonstation*
+== Popularity of Ingress Controllers 
+
+The below Popularity of Ingress Controllers is from the downloads counts from DockerHub:
+
+image:etc/img/k8s-ingress-downloads-dockerhub.png[]
+
+== Exist Solutions Demonstation
+
 [cols="2,2,5a"]
 |===
 |Solution |Provider |Demonstations
