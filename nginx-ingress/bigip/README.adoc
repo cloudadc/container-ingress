@@ -21,6 +21,9 @@ kubectl apply -f ns-and-sa.yaml
 kubectl apply -f rbac.yaml
 kubectl apply -f default-server-secret.yaml
 kubectl apply -f nginx-config.yaml
+kubectl apply -f vs-definition.yaml
+kubectl apply -f vsr-definition.yaml
+kubectl apply -f ts-definition.yaml
 kubectl apply -f nginx-ingress.yaml
 
 // 2. deploy bigip controller
@@ -28,9 +31,9 @@ kubectl create ns bigip-ctlr
 kubectl create secret generic bigip-login --from-literal=username=admin --from-literal=password=admin.F5demo.com -n bigip-ctlr
 kubectl create serviceaccount bigip-ctlr -n bigip-ctlr
 kubectl apply -f rbac-cis.yaml
-kubectl apply -f cis-global-nginx.yaml
+kubectl apply -f cis-nginx.yaml
 kubectl apply -f nginx-ingress-svc.yaml
-kubectl apply -f nginx-ingress-f5-configmap.yaml
+kubectl apply -f nginx-ingress-configmap.yaml
 ----
 
 === Examples
@@ -153,7 +156,112 @@ server {
 
 == BIG-IP with Single-namespace Ingress Controller
 
+=== Architectures
+
+image:img/bigip-nginx-single-namespace.png[]
+
+* Each namespace has reference a nginx controller
+* Each nginx Controller has multiple replicas
+* Nginx Controller play as single-namespace ingress control
+* BIGIP Virtual Server IP is the external enterence
+* `bigip-ctlr` deploy BIGIP Virtual Server nginx pod as pool member
+
+[source, bash]
+.*Set up*
+----
+// 1. deploy cluster wide nginx ingress controller
+cd single-namespace/
+kubectl apply -f ns-and-sa.yaml
+kubectl apply -f rbac.yaml
+kubectl apply -f default-server-secret.yaml
+kubectl apply -f nginx-config.yaml
+kubectl apply -f vs-definition.yaml
+kubectl apply -f vsr-definition.yaml
+kubectl apply -f ts-definition.yaml
+kubectl apply -f nginx-ingress-test01.yaml
+kubectl apply -f nginx-ingress-test02.yaml
+
+// 2. deploy bigip controller
+kubectl create ns bigip-ctlr
+kubectl create secret generic bigip-login --from-literal=username=admin --from-literal=password=admin.F5demo.com -n bigip-ctlr
+kubectl create serviceaccount bigip-ctlr -n bigip-ctlr
+kubectl apply -f rbac-cis.yaml
+kubectl apply -f cis-nginx.yaml
+kubectl apply -f nginx-ingress-svc.yaml
+kubectl apply -f nginx-ingress-configmap.yaml
+----
+
+=== Examples
+
+[source, bash]
+.*1. Set up*
+----
+cd single-namespace/
+kubectl apply -f example-deploy.yaml
+kubectl apply -f example-ingress.yaml
+---- 
+
+[source, bash] 
+.*2. Test* 
+----
+curl http://nginxtest01.example.com/coffee
+curl http://nginxtest01.example.com/tea
+
+curl http://nginxtest02.example.com/coffee
+curl http://nginxtest02.example.com/tea
+---- 
 
 == BIG-IP with Ingress Controller for Specific Ingress Class
 
+=== Architectures
 
+image:img/nginx-ingress-class.png[]
+
+* Multiple nginx controller work parallel
+* Each nginx Controller has multiple replicas
+* Nginx Controller for specific ingress class
+* BIGIP Virtual Server IP is the external enterence 
+* `bigip-ctlr` deploy BIGIP Virtual Server nginx pod as pool member
+
+.*Set up*
+----
+// 1. deploy cluster wide nginx ingress controller
+cd specific-ingress-class/
+kubectl apply -f ns-and-sa.yaml
+kubectl apply -f rbac.yaml
+kubectl apply -f default-server-secret.yaml
+kubectl apply -f nginx-config.yaml
+kubectl apply -f vs-definition.yaml
+kubectl apply -f vsr-definition.yaml
+kubectl apply -f ts-definition.yaml
+kubectl apply -f nginx-ingress.yaml
+kubectl apply -f nginx-ingress-fintech.yaml
+
+// 2. deploy bigip controller
+kubectl create ns bigip-ctlr
+kubectl create secret generic bigip-login --from-literal=username=admin --from-literal=password=admin.F5demo.com -n bigip-ctlr
+kubectl create serviceaccount bigip-ctlr -n bigip-ctlr
+kubectl apply -f rbac-cis.yaml
+kubectl apply -f cis-nginx.yaml
+kubectl apply -f nginx-ingress-svc.yaml
+kubectl apply -f nginx-ingress-configmap.yaml
+----
+
+=== Examples
+
+[source, bash]
+.*1. Set up*
+----
+cd single-namespace/
+kubectl apply -f example-deploy.yaml
+kubectl apply -f example-ingress.yaml
+kubectl apply -f example-ingress-fintech.yaml
+----
+
+[source, bash]
+.*2. Test*
+----
+for i in {1..10} ; do curl http://nginxtest01.example.com/coffee ; curl http://nginxtest01.example.com/tea ; curl http://nginxtest02.example.com/coffee ; curl http://nginxtest02.example.com/tea ; done
+
+for i in {1..10} ; do curl http://nginxtest03.example.com/coffee ; curl http://nginxtest03.example.com/tea ; curl http://nginxtest04.example.com/coffee ; curl http://nginxtest04.example.com/tea ; done
+----
