@@ -1,0 +1,94 @@
+= F5 Container Ingress Service
+:toc: manual
+
+== Installation
+
+=== Install on kube-system
+
+[source, bash]
+.*Install*
+----
+cd install-on-kube-system/
+kubectl create secret generic bigip-login --from-literal=username=admin --from-literal=password=admin.F5demo.com -n kube-system
+kubectl create serviceaccount bigip-ctlr -n kube-system
+kubectl create -f rbac.yaml
+kubectl create -f cis.yaml
+----
+
+[source, bash]
+.*Uninstall*
+----
+cd install-on-kube-system/
+kubectl delete -f cis.yaml 
+kubectl delete -f rbac.yaml
+kubectl delete serviceaccount bigip-ctlr -n kube-system
+kubectl delete secret bigip-login -n kube-system
+----
+
+=== Install on bigip-ctlr
+
+[source, bash]
+.*Install*
+----
+cd install-on-bigip-ctlr/
+kubectl create ns bigip-ctlr
+kubectl create secret generic bigip-login --from-literal=username=admin --from-literal=password=admin.F5demo.com -n bigip-ctlr
+kubectl create serviceaccount bigip-ctlr -n bigip-ctlr
+kubectl create -f rbac.yaml
+kubectl create -f cis.yaml
+----
+
+[source, bash]
+.*Uninstall*
+----
+cd install-on-bigip-ctlr/
+kubectl delete -f cis.yaml
+kubectl delete -f rbac.yaml
+kubectl delete serviceaccount bigip-ctlr -n bigip-ctlr
+kubectl delete secret bigip-login -n bigip-ctlr
+kubectl delete ns bigip-ctlr
+----
+
+== Namespaces isolation ingress
+
+[source, bash]
+----
+cd namespaces-isolation-ingress
+kubectl create -f cis.yaml
+kubectl apply -f deploy.yaml 
+----
+
+This above commands will 
+
+1. deploy a CIS pod with `--namespace-label=cis_scanner_zone=zone_1`
+2. create a 4 namesapces, the first 3 with `--namespace-label=cis_scanner_zone=zone_1` label
+3. create 4 services in 4 namesapces accordingly
+4. create 4 ingress reference with 4 services
+
+== CIS Robust Test
+
+=== Re-create CIS POD
+
+[source, bash]
+----
+// CIS + AS3 Deploy 2 services
+kubectl create -f cis.yaml
+kubectl apply -f deploy.yaml
+kubectl apply -f cm.1.yaml
+
+// Execute the following commands simultaneously to deploy 3rd service
+kubectl delete pod $(kubectl get pods -n bigip-ctlr --no-headers | awk '{print $1}') -n bigip-ctlr
+kubectl apply -f cm.2.yaml
+
+// Force cistest101 pod restart
+kubectl delete pod $(kubectl get pods -n cistest101 --no-headers | awk '{print $1}') -n cistest101
+
+//Delete all service
+kubectl delete -f cm.2.yaml
+----
+
+Refer to link:cis-pod-restart/README.adoc[link] for more details.
+
+=== Re-start F5 VE
+
+Refer to link:f5-restart/README.adoc[link] for detailed steps.

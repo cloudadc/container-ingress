@@ -1,0 +1,61 @@
+= What's this
+:toc: manual
+
+F5 Nginx Plus Ingress Controller.
+
+== Ingress Controller Image Building and Installing
+
+Refer to https://docs.nginx.com/nginx-ingress-controller/installation/building-ingress-controller-image/ for building the Ingress Controller Image.
+
+NOTE: Apply a Nginx plus envaluation license is necessary for above steps.
+
+[source, bash]
+.*Image*
+----
+docker pull kylinsoong/nginx-plus-ingress:1.7.0
+----
+
+Refer to https://docs.nginx.com/nginx-ingress-controller/installation/installation-with-manifests/ for installing Nginx Plus Ingress Controller base on image build above.
+
+== Basic Configuration
+
+The Basic Configuration will demonstation:
+
+* TLS
+* Path based route
+
+[source, bash]
+.*Set up*
+----
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.cert -subj "/CN=app.example.com/O=app.example.com"
+kubectl create secret tls app-secret --key tls.key --cert tls.cert
+kubectl create -f basic-deploy.yaml 
+kubectl create -f basic-ingress.yaml
+----
+
+[source, bash]
+.*Demostrations*
+----
+curl -k https://app.example.com:31028/bar
+curl -k https://app.example.com:31028/foo
+----
+
+== Advanced Configuration
+
+The Advanced Configuration can use annotations to do more fine-grained ingress controll.
+
+More details refer to https://docs.nginx.com/nginx-ingress-controller/configuration/ingress-resources/advanced-configuration-with-annotations
+
+[source, bash]
+.*Set up*
+----
+kubectl apply -f advanced-ingress.yaml 
+----
+
+[source, bash]
+.*Demostrations*
+----
+curl http://app.example.com:30304/foo
+curl http://app.example.com:30304/bar
+----
+
