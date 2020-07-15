@@ -3,8 +3,6 @@
 
 == Installation
 
-=== Cluster-wide Ingress Controller
-
 [source, bash]
 .*Install*
 ----
@@ -141,7 +139,7 @@ $ kubectl logs -f nginx-ingress-658848c866-vsbzh -n nginx-ingress
 I0711 17:40:09.494809       1 event.go:278] Event(v1.ObjectReference{Kind:"Ingress", Namespace:"cafe", Name:"cafe-ingress", UID:"051be8fa-aa72-462c-8b5f-a477020eda94", APIVersion:"extensions/v1beta1", ResourceVersion:"3398169", FieldPath:""}): type: 'Normal' reason: 'AddedOrUpdated' Configuration for cafe/cafe-ingress was added or updated
 ----
 
-== Deployment Architectures
+== Controller Deployment Architectures
 
 The Deployment Architectures using both BIGIP and Nginx, there are 3 trypical deployment architectures:
 
@@ -150,3 +148,7 @@ The Deployment Architectures using both BIGIP and Nginx, there are 3 trypical de
 * BIG-IP with Ingress Controller for Specific Ingress Class
 
 More details refer to link:bigip/README.adoc[bigip with nginx].
+
+== Zero-Downtime Releases
+
+More details about Blue-Green Deployments and Canary Releasing refer to link:release/README.adoc[link].
