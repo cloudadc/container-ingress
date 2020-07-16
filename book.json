@@ -4,7 +4,7 @@
         "copyrightHolder" :  "Kylin Soong"
     },
     "styles": {
-        "website": "styles/website.css"
+        "website": "website.css"
     },
     "plugins": ["collapsible-menu","donate","-sharing","sharing-plus","splitter","back-to-top-button","edit-link"],
     "pluginsConfig": {
