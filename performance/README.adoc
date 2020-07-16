@@ -1,0 +1,42 @@
+= Container Ingress Performance
+:toc: manual
+
+== Set up
+
+[source, bash]
+.*1. Get Code*
+----
+git clone https://github.com/cloudadc/container-ingress.git
+cd container-ingress/performance/
+----
+
+[source, bash]
+.*2. Install nginx ingress controller*
+----
+kubectl apply -f ns-and-sa.yaml
+kubectl apply -f rbac.yaml
+kubectl apply -f default-server-secret.yaml
+kubectl apply -f nginx-config.yaml
+kubectl apply -f vs-definition.yaml
+kubectl apply -f vsr-definition.yaml
+kubectl apply -f ts-definition.yaml
+kubectl apply -f nginx-ingress.yaml
+kubectl apply -f nginx-ingress-nodeport.yaml
+----
+
+[source, bash]
+.*3. Install F5 container ingress service*
+----
+kubectl create ns bigip-ctlr
+kubectl create secret generic bigip-login --from-literal=username=admin --from-literal=password=admin.F5demo.com -n bigip-ctlr
+kubectl create serviceaccount bigip-ctlr -n bigip-ctlr
+kubectl apply -f rbac-cis.yaml
+kubectl apply -f cis.yaml
+----
+
+[source, bash]
+.*4. Deploy Performance Comparsion App*
+----
+kubectl apply -f app-deploy.yaml
+kubectl apply -f app-ingress.yaml
+----
