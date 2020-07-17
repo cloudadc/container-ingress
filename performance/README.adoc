@@ -34,9 +34,35 @@ kubectl apply -f rbac-cis.yaml
 kubectl apply -f cis.yaml
 ----
 
+== Performance Comparsion Test
+
+=== Software Used
+
+* `wrk` 4.1.0
+* `k8s` 1.15.12, one master two worker, 6 vCPU 12 GB(each node 2 vCPU 4 GB)
+* `CentOS Linux` 7.8.2003
+* `nginx/nginx-ingress:1.7.2`
+* `f5networks/k8s-bigip-ctlr:2.0.0`
+
 [source, bash]
 .*4. Deploy Performance Comparsion App*
 ----
 kubectl apply -f app-deploy.yaml
 kubectl apply -f app-ingress.yaml
 ----
+
+[source, bash]
+.*Testing RPS, TPS, Throughput*
+----
+wrk -t 6 -c 100 -d 180s http://perftest01.example.com/coffee
+wrk -t 6 -c 100 -d 180s -H 'Connection: Close' http://perftest01.example.com/coffee
+----
+
+[source, csv]
+.*Results*
+----
+Type,RPS,TPS,Throughput
+F5,14216,493,5.10
+Nginx,4303,224,1.54
+----
+
