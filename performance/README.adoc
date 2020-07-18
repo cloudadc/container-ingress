@@ -34,6 +34,22 @@ kubectl apply -f rbac-cis.yaml
 kubectl apply -f cis.yaml
 ----
 
+[source, bash]
+.*4. Install HAProxy controller*
+----
+kubectl apply -f haproxy-ingress.yaml 
+----
+
+[source, bash]
+.*5. Verify the installation*
+----
+$ kubectl get ns
+NAME                 STATUS   AGE
+bigip-ctlr           Active   5m
+haproxy-controller   Active   5m
+nginx-ingress        Active   5m
+----
+
 == Performance Comparsion Test
 
 === Software Used
@@ -43,6 +59,7 @@ kubectl apply -f cis.yaml
 * `CentOS Linux` 7.8.2003
 * `nginx/nginx-ingress:1.7.2`
 * `f5networks/k8s-bigip-ctlr:2.0.0`
+* `haproxytech/kubernetes-ingress:latest`
 
 [source, bash]
 .*4. Deploy Performance Comparsion App*
@@ -62,7 +79,77 @@ wrk -t 6 -c 100 -d 180s -H 'Connection: Close' http://perftest01.example.com/cof
 .*Results*
 ----
 Type,RPS,TPS,Throughput
-F5,14216,493,5.10
-Nginx,4303,224,1.54
+F5,14216,514,5.10
+Nginx,3815,278,1.36
+HAProxy,6569,274,2.20
 ----
 
+
+[source, csv]
+.*Journals*
+----
+./wrk -t 6 -c 100 -d 180s http://perftest01.example.com/coffee
+Running 3m test @ http://perftest01.example.com/coffee
+  6 threads and 100 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     6.79ms    2.50ms  43.36ms   80.22%
+    Req/Sec     2.38k   196.42     2.95k    74.06%
+  2559718 requests in 3.00m, 0.90GB read
+Requests/sec:  14215.71
+Transfer/sec:      5.10MB
+
+./wrk -t 6 -c 100 -d 180s -H 'Connection: Close' http://perftest01.example.com
+Running 3m test @ http://perftest01.example.com
+  6 threads and 100 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    14.73ms    4.73ms  79.80ms   79.79%
+    Req/Sec   762.15    244.45     1.01k    85.54%
+  92481 requests in 3.00m, 42.36MB read
+  Socket errors: connect 96, read 0, write 0, timeout 0
+Requests/sec:    513.57
+Transfer/sec:    240.91KB
+
+./wrk -t 6 -c 100 -d 180s http://perftest01.example.com/coffee
+Running 3m test @ http://perftest01.example.com/coffee
+  6 threads and 100 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    28.04ms   27.88ms   1.03s    96.63%
+    Req/Sec   639.07     90.63     1.15k    70.78%
+  687099 requests in 3.00m, 245.69MB read
+Requests/sec:   3815.10
+Transfer/sec:      1.36MB
+
+./wrk -t 6 -c 100 -d 180s -H 'Connection: Close' http://perftest01.example.com
+Running 3m test @ http://perftest01.example.com
+  6 threads and 100 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    22.36ms   32.54ms   1.03s    99.57%
+    Req/Sec   554.09    162.35   767.00     88.63%
+  50056 requests in 3.00m, 14.46MB read
+  Socket errors: connect 96, read 0, write 0, timeout 0
+  Non-2xx or 3xx responses: 50056
+Requests/sec:    277.93
+Transfer/sec:     82.24KB
+
+./wrk -t 6 -c 100 -d 180s http://perftest01.example.com/coffee
+Running 3m test @ http://perftest01.example.com/coffee
+  6 threads and 100 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    14.97ms    7.95ms 251.38ms   79.14%
+    Req/Sec     1.10k   121.04     1.48k    68.66%
+  1182909 requests in 3.00m, 395.97MB read
+Requests/sec:   6568.77
+Transfer/sec:      2.20MB
+
+./wrk -t 6 -c 100 -d 180s -H 'Connection: Close' http://perftest01.example.com
+Running 3m test @ http://perftest01.example.com
+  6 threads and 100 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    19.63ms   19.60ms   1.03s    99.79%
+    Req/Sec   593.08    198.71     0.85k    88.60%
+  49289 requests in 3.00m, 10.95MB read
+  Socket errors: connect 96, read 0, write 0, timeout 0
+  Non-2xx or 3xx responses: 49289
+Requests/sec:    273.69
+Transfer/sec:     62.27KB
+----

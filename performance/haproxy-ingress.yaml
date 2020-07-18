@@ -104,7 +104,7 @@ spec:
     spec:
       containers:
       - name: ingress-default-backend
-        image: gcr.io/google_containers/defaultbackend:1.0
+        image: kylinsoong/defaultbackend:1.0
         ports:
         - containerPort: 8080
 
