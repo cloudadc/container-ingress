@@ -13,10 +13,16 @@ image:img/bigip-with-cluster-wide-nginx.png[]
 * `bigip-ctlr` deploy BIGIP Virtual Server nginx pod as pool member
 
 [source, bash]
+.*Get Code*
+----
+git clone https://github.com/cloudadc/container-ingress.git
+cd container-ingress/nginx-ingress/bigip/cluster-wide/
+----
+
+[source, bash]
 .*Set up*
 ----
 // 1. deploy cluster wide nginx ingress controller
-cd cluster-wide/
 kubectl apply -f ns-and-sa.yaml
 kubectl apply -f rbac.yaml
 kubectl apply -f default-server-secret.yaml
@@ -41,7 +47,6 @@ kubectl apply -f nginx-ingress-configmap.yaml
 [source, bash]
 .*1. Set up*
 ----
-cd cluster-wide/
 kubectl apply -f example-deploy.yaml
 kubectl apply -f example-ingress.yaml
 ----
@@ -167,10 +172,16 @@ image:img/bigip-nginx-single-namespace.png[]
 * `bigip-ctlr` deploy BIGIP Virtual Server nginx pod as pool member
 
 [source, bash]
+.*Get Code*
+----
+git clone https://github.com/cloudadc/container-ingress.git
+cd container-ingress/nginx-ingress/bigip/single-namespace/
+----
+
+[source, bash]
 .*Set up*
 ----
-// 1. deploy cluster wide nginx ingress controller
-cd single-namespace/
+// 1. deploy single namespace nginx ingress controller
 kubectl apply -f ns-and-sa.yaml
 kubectl apply -f rbac.yaml
 kubectl apply -f default-server-secret.yaml
@@ -196,7 +207,6 @@ kubectl apply -f nginx-ingress-configmap.yaml
 [source, bash]
 .*1. Set up*
 ----
-cd single-namespace/
 kubectl apply -f example-deploy.yaml
 kubectl apply -f example-ingress.yaml
 ---- 
@@ -223,10 +233,16 @@ image:img/nginx-ingress-class.png[]
 * BIGIP Virtual Server IP is the external enterence 
 * `bigip-ctlr` deploy BIGIP Virtual Server nginx pod as pool member
 
+[source, bash]
+.*Get Code*
+----
+git clone https://github.com/cloudadc/container-ingress.git
+cd container-ingress/nginx-ingress/bigip/specific-ingress-class/
+----
+
 .*Set up*
 ----
-// 1. deploy cluster wide nginx ingress controller
-cd specific-ingress-class/
+// 1. deploy Ingress Controller for Specific Ingress Class
 kubectl apply -f ns-and-sa.yaml
 kubectl apply -f rbac.yaml
 kubectl apply -f default-server-secret.yaml
@@ -252,7 +268,6 @@ kubectl apply -f nginx-ingress-configmap.yaml
 [source, bash]
 .*1. Set up*
 ----
-cd single-namespace/
 kubectl apply -f example-deploy.yaml
 kubectl apply -f example-ingress.yaml
 kubectl apply -f example-ingress-fintech.yaml

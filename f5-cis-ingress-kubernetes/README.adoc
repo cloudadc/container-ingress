@@ -3,6 +3,13 @@
 F5 Container Ingress Service, which BIG-IP Controller plan as a kubernetes ingress controller, VS be created in F5 BIG-IP HW/VE.
 
 [source, bash]
+.*Get Code*
+----
+git clone https://github.com/cloudadc/container-ingress.git
+cd container-ingress/f5-cis-ingress-kubernetes/
+----
+
+[source, bash]
 .*Set up*
 ----
 kubectl create secret generic bigip-login --from-literal=username=admin --from-literal=password=admin.F5demo.com -n kube-system
