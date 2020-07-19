@@ -9,4 +9,5 @@
 .. link:nginx-ingress/bigip/README.adoc[Deployment Architectures]
 .. link:nginx-ingress/release/README.adoc[Zero-Downtime Releases]
 . link:nginx-plus-ingress/README.adoc[Nginx Plus Ingress Controller]
+. link:performance/README.adoc[Performance Comparision]
 
