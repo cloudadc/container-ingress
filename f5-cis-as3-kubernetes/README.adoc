@@ -2,8 +2,15 @@
 
 F5 Container Ingress Service with AS3 agent, which BIG-IP Controller deployed in kubernetes use AS3 agent communicated with F5 BIG-IP HW/VE.
 
-*Advantage* - L4/l7 load balance, complete BIG-IP ADC capability
-*Disadvantage* - AS3 based configmap
+* *Advantage* - L4/l7 load balance, complete BIG-IP ADC capability
+* *Disadvantage* - AS3 based configmap
+
+[source, bash]
+.*Get Code*
+----
+git clone https://github.com/cloudadc/container-ingress.git
+cd container-ingress/f5-cis-as3-kubernetes/
+----
 
 [source, bash]
 .*Set up*
