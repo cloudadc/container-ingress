@@ -50,7 +50,7 @@ haproxy-controller   Active   5m
 nginx-ingress        Active   5m
 ----
 
-== Performance Comparsion Test
+== Performance Comparision Test
 
 === Software Used
 
@@ -60,20 +60,45 @@ nginx-ingress        Active   5m
 * `nginx/nginx-ingress:1.7.2`
 * `f5networks/k8s-bigip-ctlr:2.0.0`
 * `haproxytech/kubernetes-ingress:latest`
+* `kylinsoong/cafe:1.0`
+
+=== Topology
+
+The topology looks like below diagram:
+
+image:img/performance-comparision.png[]
+
+The `cafe` application have 3 replicas are used as performance comparision application, the k8s ingress object are created, use the following command to deploy performance comparision application: 
 
 [source, bash]
-.*4. Deploy Performance Comparsion App*
 ----
 kubectl apply -f app-deploy.yaml
 kubectl apply -f app-ingress.yaml
 ----
 
+There are 3 ingress controller deployed, F5, Nginx and HAProxy, refer to above *Set up* section for details. The Ingress controller will take aware of the created k8s ingress object and make a amendment of controller controll panel settings to be ready for the incoming request: 
+
+* F5 will add a Policy rule to exist Virtual server and add a Pool with 3 pool members refer to the 3 POD of `cafe` service
+* Nginx will add a config file under `/etc/nginx/conf.d/` which contains server and upstream settings, the upstream contains 3 servers refer to the 3 POD of `cafe` service
+* HAProxy will update the configuration files that add a frontend and a backend, the backend contains 3 servers refer to the 3 POD of `cafe` service
+
+=== Metrics Collected
+
+There are 3 metrics are collected, RPS, TPS and Throughput, 
+
+* Requests per second (RPS) - The number of requests the IC can process per second, averaged over a fixed time period. 
+* Transactions per second (TPS) - The number of new HTTP connections the IC can establish and serve per second, averaged over a fixed time period.
+* Throughput – The data transmission rate that IC is able to sustain while processing HTTP requests for static content over a fixed time period. 
+
+There are 3 groups of metrics are collected, each for a different IC, the below commands are are use to collect metrics:
+
 [source, bash]
-.*Testing RPS, TPS, Throughput*
 ----
 wrk -t 6 -c 100 -d 180s http://perftest01.example.com/coffee
 wrk -t 6 -c 100 -d 180s -H 'Connection: Close' http://perftest01.example.com/coffee
 ----
+
+=== Results
 
 [source, csv]
 .*Results*
@@ -84,6 +109,17 @@ Nginx,3815,278,1.36
 HAProxy,6569,274,2.20
 ----
 
+*Requests per second (RPS)*
+
+image:img/rps.png[]
+
+*Transactions per second (TPS)*
+
+image:img/tps.png[]
+
+*Throughput*
+
+image:img/throughput.png[]
 
 [source, csv]
 .*Journals*
