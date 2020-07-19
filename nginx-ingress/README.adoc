@@ -4,36 +4,41 @@
 == Installation
 
 [source, bash]
-.*Install*
+.*Get Code*
 ----
-// 1. get the install scripts
+git clone https://github.com/cloudadc/container-ingress.git
+cd container-ingress/nginx-ingress/install/
+
 git clone https://github.com/nginxinc/kubernetes-ingress/
 cd kubernetes-ingress/deployments
 git checkout v1.7.2
+----
 
-// 2. configure rbac
+[source, bash]
+.*Install*
+----
+// 1. configure rbac
 kubectl apply -f common/ns-and-sa.yaml
 kubectl apply -f rbac/rbac.yaml
 
-// 3. create common resource
+// 2. create common resource
 kubectl apply -f common/default-server-secret.yaml
 kubectl apply -f common/nginx-config.yaml
 kubectl apply -f common/vs-definition.yaml
 kubectl apply -f common/vsr-definition.yaml
 kubectl apply -f common/ts-definition.yaml
 
-// 4. deploy ingress controller
+// 3. deploy ingress controller
 kubectl apply -f deployment/nginx-ingress.yaml
 
-// 5. set up f5 cis
+// 4. set up f5 cis
 kubectl create ns bigip-ctlr
 kubectl create secret generic bigip-login --from-literal=username=admin --from-literal=password=admin.F5demo.com -n bigip-ctlr
 kubectl create serviceaccount bigip-ctlr -n bigip-ctlr
-cd install/
 kubectl create -f rbac-global-nginx.yaml
 kubectl create -f cis-global-nginx.yaml
 
-// 6. create service and configmap
+// 5. create service and configmap
 kubectl create -f nginx-ingress-svc.yaml 
 kubectl apply -f nginx-ingress-f5-configmap.yaml 
 ----
@@ -41,9 +46,15 @@ kubectl apply -f nginx-ingress-f5-configmap.yaml
 == Coffee Tea Example
 
 [source, bash]
+.*0. Get Code*
+----
+git clone https://github.com/cloudadc/container-ingress.git
+cd container-ingress/nginx-ingress/coffee-tea/
+----
+
+[source, bash]
 .*1. Set up*
 ----
-cd coffee-tea/
 kubectl apply -f cafe.yaml
 kubectl create -f cafe-ingress.yaml 
 ----

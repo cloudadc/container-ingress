@@ -2,8 +2,15 @@
 
 F5 Container Ingress Service with CCCL agent, which BIG-IP Controller deployed in kubernetes use CCCL agent communicated with F5 BIG-IP HW/VE.
 
-*Advantage* - L4 load balance, simple L7 load balance
-*Disadvantage* - Lack of complex ADC capbilities
+* *Advantage* - L4 load balance, simple L7 load balance
+* *Disadvantage* - Lack of complex ADC capbilities
+
+[source, bash]
+.*Get Code*
+----
+git clone https://github.com/cloudadc/container-ingress.git
+cd container-ingress/f5-cis-cccl-kubernetes/
+----
 
 [source, bash]
 .*Set up*
