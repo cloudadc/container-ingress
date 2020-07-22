@@ -3,19 +3,26 @@
 
 F5 Nginx Plus Ingress Controller.
 
-== Ingress Controller Image Building and Installing
+== Image Building
 
 Refer to https://docs.nginx.com/nginx-ingress-controller/installation/building-ingress-controller-image/ for building the Ingress Controller Image.
 
 NOTE: Apply a Nginx plus envaluation license is necessary for above steps.
 
+https://hub.docker.com/r/cloudadc/nginx-plus-ingress contains all built nginx plus image.
+
 [source, bash]
 .*Image*
 ----
-docker pull kylinsoong/nginx-plus-ingress:1.7.0
+docker pull cloudadc/nginx-plus-ingress:1.7.2
 ----
 
+== Installing
+
 Refer to https://docs.nginx.com/nginx-ingress-controller/installation/installation-with-manifests/ for installing Nginx Plus Ingress Controller base on image build above.
+
+
+
 
 == Basic Configuration
 
