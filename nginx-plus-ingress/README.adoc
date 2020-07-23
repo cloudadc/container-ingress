@@ -65,7 +65,7 @@ kubectl create -f rbac-nginx.yaml
 kubectl create -f cis-nginx.yaml
 
 kubectl create -f nginx-plus-ingress-svc.yaml
-kubectl apply -f nginx-plus-ingress-f5-configmap.yaml
+kubectl apply -f nginx-plus-ingress-configmap.yaml
 ----
 
 NOTE: Refer to https://docs.nginx.com/nginx-ingress-controller/installation/installation-with-manifests/ for installing Nginx Plus Ingress Controller base on image build above.
@@ -104,8 +104,37 @@ URI: /tea
 Request ID: d8344e70dfe8627d67a136c701851573
 ----
 
-
 == Basic Configuration
+
+=== Monitoring Dashboard
+
+[source, bash]
+.*1. Get Code*
+----
+git clone https://github.com/cloudadc/container-ingress.git
+cd container-ingress/nginx-plus-ingress/monitor/
+----
+
+[source, yaml]
+.*2. Configuration Highlight*
+----
+      containers:
+        ports:
+        - name: monitor
+          containerPort: 8898
+        args:
+          - -nginx-status=true
+          - -nginx-status-allow-cidrs=0.0.0.0/0
+          - -nginx-status-port=8898
+----
+
+*3. Dashboard*
+
+image:monitor/nginx-plus-dashboard.png[]
+
+
+=== TLS
+
 
 The Basic Configuration will demonstation:
 
