@@ -1,7 +1,21 @@
 = Container Ingress Performance
 :toc: manual
 
-== Set up
+== HTTP Request Performance Comparision
+
+This section will compare the performance of different Ingress controller(F5, Nginx, HAProxy) to process simple http request.
+
+=== Software Used
+
+* `wrk` 4.1.0
+* `k8s` 1.15.12, one master two worker, 6 vCPU 12 GB(each node 2 vCPU 4 GB)
+* `CentOS Linux` 7.8.2003
+* `nginx/nginx-ingress:1.7.2`
+* `f5networks/k8s-bigip-ctlr:2.0.0`
+* `haproxytech/kubernetes-ingress:latest`
+* `kylinsoong/cafe:1.0`
+
+=== Set up
 
 [source, bash]
 .*1. Get Code*
@@ -37,7 +51,7 @@ kubectl apply -f cis.yaml
 [source, bash]
 .*4. Install HAProxy controller*
 ----
-kubectl apply -f haproxy-ingress.yaml 
+kubectl apply -f haproxy-ingress.yaml
 ----
 
 [source, bash]
@@ -49,20 +63,6 @@ bigip-ctlr           Active   5m
 haproxy-controller   Active   5m
 nginx-ingress        Active   5m
 ----
-
-== HTTP Request Performance Comparision
-
-This section will compare the performance of different Ingress controller(F5, Nginx, HAProxy) to process simple http request.
-
-=== Software Used
-
-* `wrk` 4.1.0
-* `k8s` 1.15.12, one master two worker, 6 vCPU 12 GB(each node 2 vCPU 4 GB)
-* `CentOS Linux` 7.8.2003
-* `nginx/nginx-ingress:1.7.2`
-* `f5networks/k8s-bigip-ctlr:2.0.0`
-* `haproxytech/kubernetes-ingress:latest`
-* `kylinsoong/cafe:1.0`
 
 === Topology
 
@@ -200,7 +200,7 @@ Requests/sec:    273.69
 Transfer/sec:     62.27KB
 ----
 
-== F5 CIS Service Discover Performance
+== F5 CIS Performance Metric
 
 === Preparing
 
@@ -217,18 +217,16 @@ cd container-ingress/performance/discover
 kubectl apply -f 200-ns-deploy.yaml 
 ----
 
-=== TMSH commands used to count time
+[source, bash]
+.*Tmsh command: count total pool*
+----
+STARTTIME=$(date +%s) ; for i in {1..100} ; do tmsh list ltm pool /k8s_AS3/Shared/* | grep pool | wc -l ; ENDTIME=$(date +%s); echo "spend $(($ENDTIME - $STARTTIME)) seconds" ; sleep 3 ; done
+----
 
 [source, bash]
-.*Count totoal pool*
+.*Tmsh command: count specific pool's total pool member*
 ----
-for i in {1..1000} ; do date ; tmsh list ltm pool /k8s_AS3/Shared/* | grep pool | wc -l ; sleep 3 ;  done
-----
-
-[source, bash]
-.*Count specific pool's total pool member*
-----
-for i in {1..100} ; do date ; tmsh list ltm pool /k8s_AS3/Shared/ingress_perftest139_app_svc | grep address | wc -l; sleep 3 ;  done
+STARTTIME=$(date +%s) ; for i in {1..100} ; do tmsh list ltm pool /k8s_AS3/Shared/ingress_perftest299_app_svc | grep address | wc -l;  ENDTIME=$(date +%s); echo "spend $(($ENDTIME - $STARTTIME)) seconds" ; sleep 3 ;  done
 ----
 
 === Ingress in multiple namespaces
@@ -245,28 +243,34 @@ kubectl apply -f 120-ns-ingress.yaml
 kubectl apply -f 140-ns-ingress.yaml 
 kubectl apply -f 160-ns-ingress.yaml 
 kubectl apply -f 180-ns-ingress.yaml 
-kubectl apply -f 200-ns-ingress.yaml 
+kubectl apply -f 200-ns-ingress.yaml
+ 
 ----
 
 [source, bash]
 .*Results*
 ----
-total_namespaces,total_deploy_time,service_discover_time
-20,5,3
-40,5,5
-60,6,6
-80,10,9
-100,11,9
-120,11,10
-140,12,11
-160,15,11
-180,16,12
-200,18,12
+total_namespaces,total_deploy_time,service_discover_time,total_deleletion_time
+20,12,3,4
+40,18,5,5
+60,21,6,6
+80,25,9,7
+100,27,9,8
+120,31,10,8
+140,38,11,9
+160,42,11,9
+180,49,17,12
+200,54,18,14
 ----
 
 * total_namespaces - the total number of namespaces
 * total_deploy_time - the total time of deploy all ingress
 * service_discover_time - the time of pod change be update to ingress
+* total_deleletion_time - the total time of delete all ingress
+
+image:img/ingress-perf-multi-ns.png[]
+
+=== Ingress in single namespace
 
 [source, bash]
 .**
