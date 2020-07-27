@@ -9,7 +9,7 @@
 .*Get Code*
 ----
 git clone https://github.com/cloudadc/container-ingress.git
-cd container-ingress/f5-cis-kubernetes/install-on-kube-system/
+cd container-ingress/f5-cis/install-on-kube-system/
 ----
 
 [source, bash]
@@ -37,7 +37,7 @@ kubectl delete secret bigip-login -n kube-system
 .*Get Code*
 ----
 git clone https://github.com/cloudadc/container-ingress.git
-cd container-ingress/f5-cis-kubernetes/install-on-bigip-ctlr/
+cd container-ingress/f5-cis/install-on-bigip-ctlr/
 ----
 
 [source, bash]
@@ -67,7 +67,7 @@ kubectl delete ns bigip-ctlr
 .*Get Code*
 ----
 git clone https://github.com/cloudadc/container-ingress.git
-cd container-ingress/f5-cis-kubernetes/namespaces-isolation-ingress/
+cd container-ingress/f5-cis/namespaces-isolation-ingress/
 ----
 
 [source, bash]
