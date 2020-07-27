@@ -9,7 +9,7 @@ F5 Container Ingress Service with CCCL agent, which BIG-IP Controller deployed i
 .*Get Code*
 ----
 git clone https://github.com/cloudadc/container-ingress.git
-cd container-ingress/f5-cis-cccl-kubernetes/
+cd container-ingress/f5-cis/cccl
 ----
 
 [source, bash]

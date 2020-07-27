@@ -1,0 +1,621 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cis-perf-test
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+      "class": "AS3",
+      "action": "deploy",
+      "persist": true,
+      "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.18.0",
+        "id": "cis-perf-test",
+        "label": "cis_perf_test",
+        "remark": "HTTP application",
+        "perftest100": {
+          "class": "Tenant",
+          "perftest100": {
+            "class": "Application",
+            "template": "generic",
+            "app_svc_vs": {
+              "class": "Service_HTTP",
+              "persistenceMethods": [ "cookie" ],
+              "virtualAddresses": [
+                "10.1.10.3"
+              ],
+              "snat": "self",
+              "virtualPort": 80,
+              "pool": "perftest100_app_svc_pool"
+            },
+            "perftest100_app_svc_pool": {
+              "class": "Pool",
+              "monitors": [
+                "tcp"
+              ],
+              "loadBalancingMode": "least-connections-member",
+              "members": [
+              {
+                "servicePort": 80,
+                "serverAddresses": []
+              }
+              ]
+            }
+          }
+        },
+        "perftest101": {
+          "class": "Tenant",
+          "perftest101": {
+            "class": "Application",
+            "template": "generic",
+            "app_svc_vs": {
+              "class": "Service_HTTP",
+              "persistenceMethods": [ "cookie" ],
+              "virtualAddresses": [
+                "10.1.10.4"
+              ],
+              "snat": "self",
+              "virtualPort": 80,
+              "pool": "perftest101_app_svc_pool"
+            },
+            "perftest101_app_svc_pool": {
+              "class": "Pool",
+              "monitors": [
+                "tcp"
+              ],
+              "loadBalancingMode": "least-connections-member",
+              "members": [
+              {
+                "servicePort": 80,
+                "serverAddresses": []
+              }
+              ]
+            }
+          }
+        },
+        "perftest102": {
+          "class": "Tenant",
+          "perftest102": {
+            "class": "Application",
+            "template": "generic",
+            "app_svc_vs": {
+              "class": "Service_HTTP",
+              "persistenceMethods": [ "cookie" ],
+              "virtualAddresses": [
+                "10.1.10.5"
+              ],
+              "snat": "self",
+              "virtualPort": 80,
+              "pool": "perftest102_app_svc_pool"
+            },
+            "perftest102_app_svc_pool": {
+              "class": "Pool",
+              "monitors": [
+                "tcp"
+              ],
+              "loadBalancingMode": "least-connections-member",
+              "members": [
+              {
+                "servicePort": 80,
+                "serverAddresses": []
+              }
+              ]
+            }
+          }
+        },
+        "perftest103": {
+          "class": "Tenant",
+          "perftest103": {
+            "class": "Application",
+            "template": "generic",
+            "app_svc_vs": {
+              "class": "Service_HTTP",
+              "persistenceMethods": [ "cookie" ],
+              "virtualAddresses": [
+                "10.1.10.6"
+              ],
+              "snat": "self",
+              "virtualPort": 80,
+              "pool": "perftest103_app_svc_pool"
+            },
+            "perftest103_app_svc_pool": {
+              "class": "Pool",
+              "monitors": [
+                "tcp"
+              ],
+              "loadBalancingMode": "least-connections-member",
+              "members": [
+              {
+                "servicePort": 80,
+                "serverAddresses": []
+              }
+              ]
+            }
+          }
+        },
+        "perftest104": {
+          "class": "Tenant",
+          "perftest104": {
+            "class": "Application",
+            "template": "generic",
+            "app_svc_vs": {
+              "class": "Service_HTTP",
+              "persistenceMethods": [ "cookie" ],
+              "virtualAddresses": [
+                "10.1.10.7"
+              ],
+              "snat": "self",
+              "virtualPort": 80,
+              "pool": "perftest104_app_svc_pool"
+            },
+            "perftest104_app_svc_pool": {
+              "class": "Pool",
+              "monitors": [
+                "tcp"
+              ],
+              "loadBalancingMode": "least-connections-member",
+              "members": [
+              {
+                "servicePort": 80,
+                "serverAddresses": []
+              }
+              ]
+            }
+          }
+        },
+        "perftest105": {
+          "class": "Tenant",
+          "perftest105": {
+            "class": "Application",
+            "template": "generic",
+            "app_svc_vs": {
+              "class": "Service_HTTP",
+              "persistenceMethods": [ "cookie" ],
+              "virtualAddresses": [
+                "10.1.10.8"
+              ],
+              "snat": "self",
+              "virtualPort": 80,
+              "pool": "perftest105_app_svc_pool"
+            },
+            "perftest105_app_svc_pool": {
+              "class": "Pool",
+              "monitors": [
+                "tcp"
+              ],
+              "loadBalancingMode": "least-connections-member",
+              "members": [
+              {
+                "servicePort": 80,
+                "serverAddresses": []
+              }
+              ]
+            }
+          }
+        },
+        "perftest106": {
+          "class": "Tenant",
+          "perftest106": {
+            "class": "Application",
+            "template": "generic",
+            "app_svc_vs": {
+              "class": "Service_HTTP",
+              "persistenceMethods": [ "cookie" ],
+              "virtualAddresses": [
+                "10.1.10.9"
+              ],
+              "snat": "self",
+              "virtualPort": 80,
+              "pool": "perftest106_app_svc_pool"
+            },
+            "perftest106_app_svc_pool": {
+              "class": "Pool",
+              "monitors": [
+                "tcp"
+              ],
+              "loadBalancingMode": "least-connections-member",
+              "members": [
+              {
+                "servicePort": 80,
+                "serverAddresses": []
+              }
+              ]
+            }
+          }
+        },
+        "perftest107": {
+          "class": "Tenant",
+          "perftest107": {
+            "class": "Application",
+            "template": "generic",
+            "app_svc_vs": {
+              "class": "Service_HTTP",
+              "persistenceMethods": [ "cookie" ],
+              "virtualAddresses": [
+                "10.1.10.10"
+              ],
+              "snat": "self",
+              "virtualPort": 80,
+              "pool": "perftest107_app_svc_pool"
+            },
+            "perftest107_app_svc_pool": {
+              "class": "Pool",
+              "monitors": [
+                "tcp"
+              ],
+              "loadBalancingMode": "least-connections-member",
+              "members": [
+              {
+                "servicePort": 80,
+                "serverAddresses": []
+              }
+              ]
+            }
+          }
+        },
+        "perftest108": {
+          "class": "Tenant",
+          "perftest108": {
+            "class": "Application",
+            "template": "generic",
+            "app_svc_vs": {
+              "class": "Service_HTTP",
+              "persistenceMethods": [ "cookie" ],
+              "virtualAddresses": [
+                "10.1.10.11"
+              ],
+              "snat": "self",
+              "virtualPort": 80,
+              "pool": "perftest108_app_svc_pool"
+            },
+            "perftest108_app_svc_pool": {
+              "class": "Pool",
+              "monitors": [
+                "tcp"
+              ],
+              "loadBalancingMode": "least-connections-member",
+              "members": [
+              {
+                "servicePort": 80,
+                "serverAddresses": []
+              }
+              ]
+            }
+          }
+        },
+        "perftest109": {
+          "class": "Tenant",
+          "perftest109": {
+            "class": "Application",
+            "template": "generic",
+            "app_svc_vs": {
+              "class": "Service_HTTP",
+              "persistenceMethods": [ "cookie" ],
+              "virtualAddresses": [
+                "10.1.10.12"
+              ],
+              "snat": "self",
+              "virtualPort": 80,
+              "pool": "perftest109_app_svc_pool"
+            },
+            "perftest109_app_svc_pool": {
+              "class": "Pool",
+              "monitors": [
+                "tcp"
+              ],
+              "loadBalancingMode": "least-connections-member",
+              "members": [
+              {
+                "servicePort": 80,
+                "serverAddresses": []
+              }
+              ]
+            }
+          }
+        },
+        "perftest110": {
+          "class": "Tenant",
+          "perftest110": {
+            "class": "Application",
+            "template": "generic",
+            "app_svc_vs": {
+              "class": "Service_HTTP",
+              "persistenceMethods": [ "cookie" ],
+              "virtualAddresses": [
+                "10.1.10.13"
+              ],
+              "snat": "self",
+              "virtualPort": 80,
+              "pool": "perftest110_app_svc_pool"
+            },
+            "perftest110_app_svc_pool": {
+              "class": "Pool",
+              "monitors": [
+                "tcp"
+              ],
+              "loadBalancingMode": "least-connections-member",
+              "members": [
+              {
+                "servicePort": 80,
+                "serverAddresses": []
+              }
+              ]
+            }
+          }
+        },
+        "perftest111": {
+          "class": "Tenant",
+          "perftest111": {
+            "class": "Application",
+            "template": "generic",
+            "app_svc_vs": {
+              "class": "Service_HTTP",
+              "persistenceMethods": [ "cookie" ],
+              "virtualAddresses": [
+                "10.1.10.14"
+              ],
+              "snat": "self",
+              "virtualPort": 80,
+              "pool": "perftest111_app_svc_pool"
+            },
+            "perftest111_app_svc_pool": {
+              "class": "Pool",
+              "monitors": [
+                "tcp"
+              ],
+              "loadBalancingMode": "least-connections-member",
+              "members": [
+              {
+                "servicePort": 80,
+                "serverAddresses": []
+              }
+              ]
+            }
+          }
+        },
+        "perftest112": {
+          "class": "Tenant",
+          "perftest112": {
+            "class": "Application",
+            "template": "generic",
+            "app_svc_vs": {
+              "class": "Service_HTTP",
+              "persistenceMethods": [ "cookie" ],
+              "virtualAddresses": [
+                "10.1.10.15"
+              ],
+              "snat": "self",
+              "virtualPort": 80,
+              "pool": "perftest112_app_svc_pool"
+            },
+            "perftest112_app_svc_pool": {
+              "class": "Pool",
+              "monitors": [
+                "tcp"
+              ],
+              "loadBalancingMode": "least-connections-member",
+              "members": [
+              {
+                "servicePort": 80,
+                "serverAddresses": []
+              }
+              ]
+            }
+          }
+        },
+        "perftest113": {
+          "class": "Tenant",
+          "perftest113": {
+            "class": "Application",
+            "template": "generic",
+            "app_svc_vs": {
+              "class": "Service_HTTP",
+              "persistenceMethods": [ "cookie" ],
+              "virtualAddresses": [
+                "10.1.10.16"
+              ],
+              "snat": "self",
+              "virtualPort": 80,
+              "pool": "perftest113_app_svc_pool"
+            },
+            "perftest113_app_svc_pool": {
+              "class": "Pool",
+              "monitors": [
+                "tcp"
+              ],
+              "loadBalancingMode": "least-connections-member",
+              "members": [
+              {
+                "servicePort": 80,
+                "serverAddresses": []
+              }
+              ]
+            }
+          }
+        },
+        "perftest114": {
+          "class": "Tenant",
+          "perftest114": {
+            "class": "Application",
+            "template": "generic",
+            "app_svc_vs": {
+              "class": "Service_HTTP",
+              "persistenceMethods": [ "cookie" ],
+              "virtualAddresses": [
+                "10.1.10.17"
+              ],
+              "snat": "self",
+              "virtualPort": 80,
+              "pool": "perftest114_app_svc_pool"
+            },
+            "perftest114_app_svc_pool": {
+              "class": "Pool",
+              "monitors": [
+                "tcp"
+              ],
+              "loadBalancingMode": "least-connections-member",
+              "members": [
+              {
+                "servicePort": 80,
+                "serverAddresses": []
+              }
+              ]
+            }
+          }
+        },
+        "perftest115": {
+          "class": "Tenant",
+          "perftest115": {
+            "class": "Application",
+            "template": "generic",
+            "app_svc_vs": {
+              "class": "Service_HTTP",
+              "persistenceMethods": [ "cookie" ],
+              "virtualAddresses": [
+                "10.1.10.18"
+              ],
+              "snat": "self",
+              "virtualPort": 80,
+              "pool": "perftest115_app_svc_pool"
+            },
+            "perftest115_app_svc_pool": {
+              "class": "Pool",
+              "monitors": [
+                "tcp"
+              ],
+              "loadBalancingMode": "least-connections-member",
+              "members": [
+              {
+                "servicePort": 80,
+                "serverAddresses": []
+              }
+              ]
+            }
+          }
+        },
+        "perftest116": {
+          "class": "Tenant",
+          "perftest116": {
+            "class": "Application",
+            "template": "generic",
+            "app_svc_vs": {
+              "class": "Service_HTTP",
+              "persistenceMethods": [ "cookie" ],
+              "virtualAddresses": [
+                "10.1.10.19"
+              ],
+              "snat": "self",
+              "virtualPort": 80,
+              "pool": "perftest116_app_svc_pool"
+            },
+            "perftest116_app_svc_pool": {
+              "class": "Pool",
+              "monitors": [
+                "tcp"
+              ],
+              "loadBalancingMode": "least-connections-member",
+              "members": [
+              {
+                "servicePort": 80,
+                "serverAddresses": []
+              }
+              ]
+            }
+          }
+        },
+        "perftest117": {
+          "class": "Tenant",
+          "perftest117": {
+            "class": "Application",
+            "template": "generic",
+            "app_svc_vs": {
+              "class": "Service_HTTP",
+              "persistenceMethods": [ "cookie" ],
+              "virtualAddresses": [
+                "10.1.10.20"
+              ],
+              "snat": "self",
+              "virtualPort": 80,
+              "pool": "perftest117_app_svc_pool"
+            },
+            "perftest117_app_svc_pool": {
+              "class": "Pool",
+              "monitors": [
+                "tcp"
+              ],
+              "loadBalancingMode": "least-connections-member",
+              "members": [
+              {
+                "servicePort": 80,
+                "serverAddresses": []
+              }
+              ]
+            }
+          }
+        },
+        "perftest118": {
+          "class": "Tenant",
+          "perftest118": {
+            "class": "Application",
+            "template": "generic",
+            "app_svc_vs": {
+              "class": "Service_HTTP",
+              "persistenceMethods": [ "cookie" ],
+              "virtualAddresses": [
+                "10.1.10.21"
+              ],
+              "snat": "self",
+              "virtualPort": 80,
+              "pool": "perftest118_app_svc_pool"
+            },
+            "perftest118_app_svc_pool": {
+              "class": "Pool",
+              "monitors": [
+                "tcp"
+              ],
+              "loadBalancingMode": "least-connections-member",
+              "members": [
+              {
+                "servicePort": 80,
+                "serverAddresses": []
+              }
+              ]
+            }
+          }
+        },
+        "perftest119": {
+          "class": "Tenant",
+          "perftest119": {
+            "class": "Application",
+            "template": "generic",
+            "app_svc_vs": {
+              "class": "Service_HTTP",
+              "persistenceMethods": [ "cookie" ],
+              "virtualAddresses": [
+                "10.1.10.22"
+              ],
+              "snat": "self",
+              "virtualPort": 80,
+              "pool": "perftest119_app_svc_pool"
+            },
+            "perftest119_app_svc_pool": {
+              "class": "Pool",
+              "monitors": [
+                "tcp"
+              ],
+              "loadBalancingMode": "least-connections-member",
+              "members": [
+              {
+                "servicePort": 80,
+                "serverAddresses": []
+              }
+              ]
+            }
+          }
+        }
+      }
+    }
