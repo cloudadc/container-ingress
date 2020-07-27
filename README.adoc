@@ -3,7 +3,7 @@
 
 == Popularity of Ingress Controllers 
 
-The below Popularity of Ingress Controllers is from the downloads counts from DockerHub:
+The below Popularity of Ingress Controllers is from the downloads counts of DockerHub:
 
 image:etc/img/k8s-ingress-downloads-dockerhub.png[]
 
@@ -13,7 +13,7 @@ image:etc/img/k8s-ingress-downloads-dockerhub.png[]
 |===
 |Solution |Provider |Demonstations
 
-|link:f5-cis-cccl-kubernetes/README.adoc[F5 Container Ingress Service] 
+|link:f5-cis/cccl/README.adoc[F5 Container Ingress Service] 
 |F5 
 |
 * F5 CIS `cccl` agent
@@ -21,7 +21,7 @@ image:etc/img/k8s-ingress-downloads-dockerhub.png[]
 * Various balance methods
 * TCP health monitor 
 
-|link:f5-cis-cccl-kubernetes/README.adoc[F5 Container Ingress Service]
+|link:f5-cis/as3/README.adoc[F5 Container Ingress Service]
 |F5
 |
 * F5 CIS `as3` agent
@@ -37,7 +37,7 @@ image:etc/img/k8s-ingress-downloads-dockerhub.png[]
 * OneConnect Acceleration Profile
 * TLS
 
-|link:f5-cis-ingress-kubernetes/README.adoc[F5 Container Ingress Service]
+|link:f5-cis/ingress/README.adoc[F5 Container Ingress Service]
 |F5
 |
 * Ingress Controller/Ingress

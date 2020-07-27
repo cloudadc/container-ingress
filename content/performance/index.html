@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>Performance Comparision · GitBook</title>
+        <title>PERFORMANCE · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -96,7 +96,7 @@
                 <a href="../">
             
                     
-                    Introduction
+                    INTRODUCTION
             
                 </a>
             
@@ -104,12 +104,12 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2" data-path="../f5-cis-kubernetes/">
+        <li class="chapter " data-level="1.2" data-path="../f5-cis/">
             
-                <a href="../f5-cis-kubernetes/">
+                <a href="../f5-cis/">
             
                     
-                    F5 Container Ingress Service
+                    F5 CIS
             
                 </a>
             
@@ -118,9 +118,9 @@
             <ul class="articles">
                 
     
-        <li class="chapter " data-level="1.2.1" data-path="../f5-cis-as3-kubernetes/">
+        <li class="chapter " data-level="1.2.1" data-path="../f5-cis/as3/">
             
-                <a href="../f5-cis-as3-kubernetes/">
+                <a href="../f5-cis/as3/">
             
                     
                     AS3
@@ -131,9 +131,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2.2" data-path="../f5-cis-ingress-kubernetes/">
+        <li class="chapter " data-level="1.2.2" data-path="../f5-cis/ingress/">
             
-                <a href="../f5-cis-ingress-kubernetes/">
+                <a href="../f5-cis/ingress/">
             
                     
                     Ingress
@@ -144,9 +144,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2.3" data-path="../f5-cis-cccl-kubernetes/">
+        <li class="chapter " data-level="1.2.3" data-path="../f5-cis/cccl/">
             
-                <a href="../f5-cis-cccl-kubernetes/">
+                <a href="../f5-cis/cccl/">
             
                     
                     CCCL
@@ -167,7 +167,7 @@
                 <a href="../nginx-ingress/">
             
                     
-                    Nginx Ingress Controller
+                    NGINX
             
                 </a>
             
@@ -212,7 +212,7 @@
                 <a href="../nginx-plus-ingress/">
             
                     
-                    Nginx Plus Ingress Controller
+                    NGINX PLUS
             
                 </a>
             
@@ -225,7 +225,7 @@
                 <a href="./">
             
                     
-                    Performance Comparision
+                    PERFORMANCE
             
                 </a>
             
@@ -263,7 +263,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href=".." >Performance Comparision</a>
+        <a href=".." >PERFORMANCE</a>
     </h1>
 </div>
 
@@ -282,25 +282,67 @@
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_set_up">Set up</a></li>
-<li><a href="#_performance_comparision_test">Performance Comparision Test</a>
+<li><a href="#_http_request_performance_comparision">HTTP Request Performance Comparision</a>
 <ul class="sectlevel2">
 <li><a href="#_software_used">Software Used</a></li>
+<li><a href="#_set_up">Set up</a></li>
 <li><a href="#_topology">Topology</a></li>
 <li><a href="#_metrics_collected">Metrics Collected</a></li>
 <li><a href="#_results">Results</a></li>
 </ul>
 </li>
+<li><a href="#_f5_cis_performance_metric">F5 CIS Performance Metric</a>
+<ul class="sectlevel2">
+<li><a href="#_preparing">Preparing</a></li>
+<li><a href="#_ingress_in_multiple_namespaces">Ingress in multiple namespaces</a></li>
+<li><a href="#_ingress_in_single_namespace">Ingress in single namespace</a></li>
+<li><a href="#_ingress_in_single_namespace_2">ingress in single namespace</a></li>
+<li><a href="#_configmap_in_single_namespace">configmap in single namespace</a></li>
+</ul>
+</li>
 </ul>
 </div>
 <div class="sect1">
-<h2 id="_set_up">Set up</h2>
+<h2 id="_http_request_performance_comparision">HTTP Request Performance Comparision</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>This section will compare the performance of different Ingress controller(F5, Nginx, HAProxy) to process simple http request.</p>
+</div>
+<div class="sect2">
+<h3 id="_software_used">Software Used</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><code>wrk</code> 4.1.0</p>
+</li>
+<li>
+<p><code>k8s</code> 1.15.12, one master two worker, 6 vCPU 12 GB(each node 2 vCPU 4 GB)</p>
+</li>
+<li>
+<p><code>CentOS Linux</code> 7.8.2003</p>
+</li>
+<li>
+<p><code>nginx/nginx-ingress:1.7.2</code></p>
+</li>
+<li>
+<p><code>f5networks/k8s-bigip-ctlr:2.0.0</code></p>
+</li>
+<li>
+<p><code>haproxytech/kubernetes-ingress:latest</code></p>
+</li>
+<li>
+<p><code>kylinsoong/cafe:1.0</code></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_set_up">Set up</h3>
 <div class="listingblock">
 <div class="title"><strong>1. Get Code</strong></div>
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">git <span class="hljs-built_in">clone</span> https://github.com/cloudadc/container-ingress.git
-<span class="hljs-built_in">cd</span> container-ingress/performance/</code></pre>
+<span class="hljs-built_in">cd</span> container-ingress/performance/install</code></pre>
 </div>
 </div>
 <div class="listingblock">
@@ -344,38 +386,6 @@ nginx-ingress        Active   5m</code></pre>
 </div>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_performance_comparision_test">Performance Comparision Test</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_software_used">Software Used</h3>
-<div class="ulist">
-<ul>
-<li>
-<p><code>wrk</code> 4.1.0</p>
-</li>
-<li>
-<p><code>k8s</code> 1.15.12, one master two worker, 6 vCPU 12 GB(each node 2 vCPU 4 GB)</p>
-</li>
-<li>
-<p><code>CentOS Linux</code> 7.8.2003</p>
-</li>
-<li>
-<p><code>nginx/nginx-ingress:1.7.2</code></p>
-</li>
-<li>
-<p><code>f5networks/k8s-bigip-ctlr:2.0.0</code></p>
-</li>
-<li>
-<p><code>haproxytech/kubernetes-ingress:latest</code></p>
-</li>
-<li>
-<p><code>kylinsoong/cafe:1.0</code></p>
-</li>
-</ul>
-</div>
-</div>
 <div class="sect2">
 <h3 id="_topology">Topology</h3>
 <div class="paragraph">
@@ -388,6 +398,14 @@ nginx-ingress        Active   5m</code></pre>
 <p>The <code>cafe</code> application have 3 replicas are used as performance comparision application, the k8s ingress object are created, use the following command to deploy performance comparision application:</p>
 </div>
 <div class="listingblock">
+<div class="title"><strong>Get Code</strong></div>
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">git <span class="hljs-built_in">clone</span> https://github.com/cloudadc/container-ingress.git
+<span class="hljs-built_in">cd</span> container-ingress/performance/cafe</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title"><strong>Deploy Cafe Application</strong></div>
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">kubectl apply <span class="hljs-_">-f</span> app-deploy.yaml
 kubectl apply <span class="hljs-_">-f</span> app-ingress.yaml</code></pre>
@@ -539,6 +557,156 @@ Transfer/sec:     62.27KB</code></pre>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_f5_cis_performance_metric">F5 CIS Performance Metric</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_preparing">Preparing</h3>
+<div class="listingblock">
+<div class="title"><strong>Get Code</strong></div>
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">git <span class="hljs-built_in">clone</span> https://github.com/cloudadc/container-ingress.git
+<span class="hljs-built_in">cd</span> container-ingress/performance/discover</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title"><strong>Deploy 200 Application</strong></div>
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">kubectl apply <span class="hljs-_">-f</span> 200-ns-deploy.yaml</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title"><strong>Tmsh command: count total pool</strong></div>
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">STARTTIME=$(date +%s) ; <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> {1..100} ; <span class="hljs-keyword">do</span> tmsh list ltm pool /k8s_AS3/Shared/* | grep pool | wc <span class="hljs-_">-l</span> ; ENDTIME=$(date +%s); <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;spend <span class="hljs-variable">$(($ENDTIME - $STARTTIME)</span>) seconds&quot;</span> ; sleep 3 ; <span class="hljs-keyword">done</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title"><strong>Tmsh command: count specific pool&#x2019;s total pool member</strong></div>
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">STARTTIME=$(date +%s) ; <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> {1..100} ; <span class="hljs-keyword">do</span> tmsh list ltm pool /k8s_AS3/Shared/ingress_perftest299_app_svc | grep address | wc <span class="hljs-_">-l</span>;  ENDTIME=$(date +%s); <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;spend <span class="hljs-variable">$(($ENDTIME - $STARTTIME)</span>) seconds&quot;</span> ; sleep 3 ;  <span class="hljs-keyword">done</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ingress_in_multiple_namespaces">Ingress in multiple namespaces</h3>
+<div class="listingblock">
+<div class="title"><strong>Steps</strong></div>
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">kubectl apply <span class="hljs-_">-f</span> 20-ns-ingress.yaml
+kubectl apply <span class="hljs-_">-f</span> 40-ns-ingress.yaml
+kubectl apply <span class="hljs-_">-f</span> 60-ns-ingress.yaml
+kubectl apply <span class="hljs-_">-f</span> 80-ns-ingress.yaml
+kubectl apply <span class="hljs-_">-f</span> 100-ns-ingress.yaml
+kubectl apply <span class="hljs-_">-f</span> 120-ns-ingress.yaml
+kubectl apply <span class="hljs-_">-f</span> 140-ns-ingress.yaml
+kubectl apply <span class="hljs-_">-f</span> 160-ns-ingress.yaml
+kubectl apply <span class="hljs-_">-f</span> 180-ns-ingress.yaml
+kubectl apply <span class="hljs-_">-f</span> 200-ns-ingress.yaml</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title"><strong>Results</strong></div>
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">total_namespaces,total_deploy_time,service_discover_time,total_deleletion_time
+20,12,3,4
+40,18,5,5
+60,21,6,6
+80,25,9,7
+100,27,9,8
+120,31,10,8
+140,38,11,9
+160,42,11,9
+180,49,17,12
+200,54,18,14</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>total_namespaces - the total number of namespaces</p>
+</li>
+<li>
+<p>total_deploy_time - the total time of deploy all ingress</p>
+</li>
+<li>
+<p>service_discover_time - the time of pod change be update to ingress</p>
+</li>
+<li>
+<p>total_deleletion_time - the total time of delete all ingress</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="img/ingress-perf-multi-ns.png" alt="ingress perf multi ns.png"></span></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ingress_in_single_namespace">Ingress in single namespace</h3>
+<div class="listingblock">
+<div class="title"><strong>Steps</strong></div>
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">kubectl apply <span class="hljs-_">-f</span> 20-ns-configmap.yaml
+kubectl apply <span class="hljs-_">-f</span> 40-ns-configmap.yaml
+kubectl apply <span class="hljs-_">-f</span> 60-ns-configmap.yaml
+kubectl apply <span class="hljs-_">-f</span> 80-ns-configmap.yaml
+kubectl apply <span class="hljs-_">-f</span> 100-ns-configmap.yaml
+kubectl apply <span class="hljs-_">-f</span> 120-ns-configmap.yaml
+kubectl apply <span class="hljs-_">-f</span> 140-ns-configmap.yaml
+kubectl apply <span class="hljs-_">-f</span> 160-ns-configmap.yaml
+kubectl apply <span class="hljs-_">-f</span> 180-ns-configmap.yaml
+kubectl apply <span class="hljs-_">-f</span> 200-ns-configmap.yaml</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title"><strong>Results</strong></div>
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">total_namespaces,total_deploy_time,service_discover_time,total_deleletion_time
+20,
+40,
+60,
+80,
+100,
+120,
+140,
+160,
+180,
+200,</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ingress_in_single_namespace_2">ingress in single namespace</h3>
+<div class="listingblock">
+<div class="title"><strong>Steps</strong></div>
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash"></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title"><strong>Results</strong></div>
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash"></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_configmap_in_single_namespace">configmap in single namespace</h3>
+<div class="listingblock">
+<div class="title"><strong>Steps</strong></div>
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash"></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title"><strong>Results</strong></div>
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash"></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
                                 
                                 </section>
                             
@@ -565,7 +733,7 @@ Transfer/sec:     62.27KB</code></pre>
 
             
                 
-                <a href="../nginx-plus-ingress/" class="navigation navigation-prev navigation-unique" aria-label="Previous page: Nginx Plus Ingress Controller">
+                <a href="../nginx-plus-ingress/" class="navigation navigation-prev navigation-unique" aria-label="Previous page: NGINX PLUS">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
@@ -577,7 +745,7 @@ Transfer/sec:     62.27KB</code></pre>
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Performance Comparision","level":"1.5","depth":1,"previous":{"title":"Nginx Plus Ingress Controller","level":"1.4","depth":1,"path":"nginx-plus-ingress/README.adoc","ref":"nginx-plus-ingress/README.adoc","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{"copyrightYear":"2020","copyrightHolder":"Kylin Soong"},"plugins":["collapsible-menu","donate","-sharing","sharing-plus","splitter","back-to-top-button","edit-link"],"pluginsConfig":{"tbfed-pagefooter":{"copyright":"Copyright &copy Kylin Soong 2018","modify_label":"该文件修订时间：","modify_format":"YYYY-MM-DD HH:mm:ss"},"collapsible-menu":{},"splitter":{},"search":{},"sharing-plus":{"qq":false,"all":["facebook","google","twitter","instapaper","linkedin","pocket","stumbleupon"],"douban":false,"facebook":true,"weibo":false,"instapaper":false,"whatsapp":false,"hatenaBookmark":false,"twitter":true,"messenger":false,"line":false,"vk":false,"pocket":true,"google":false,"viber":false,"stumbleupon":false,"qzone":false,"linkedin":false},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"donate":{"alipay":"http://ksoong.org/docs/content/images/alipay.png","alipayText":"支付宝捐赠","button":"赞赏","title":"","wechat":"http://ksoong.org/docs/content/images/wechat.png","wechatText":"微信捐赠"},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"back-to-top-button":{},"sharing":{"weibo":true,"linkedin":true,"google":true,"facebook":true,"all":["facebook","google","linkedin","weibo"]},"edit-link":{"label":"Edit This Page","base":"https://github.com/kylinsoong/docs/blob/gh-pages"},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"website.css"}},"file":{"path":"performance/README.adoc","mtime":"2020-07-19T15:10:27.081Z","type":"asciidoc"},"gitbook":{"version":"3.2.3","time":"2020-07-19T15:11:18.338Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"PERFORMANCE","level":"1.5","depth":1,"previous":{"title":"NGINX PLUS","level":"1.4","depth":1,"path":"nginx-plus-ingress/README.adoc","ref":"nginx-plus-ingress/README.adoc","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{"copyrightYear":"2020","copyrightHolder":"Kylin Soong"},"plugins":["collapsible-menu","donate","-sharing","sharing-plus","splitter","back-to-top-button","edit-link"],"pluginsConfig":{"tbfed-pagefooter":{"copyright":"Copyright &copy Kylin Soong 2018","modify_label":"该文件修订时间：","modify_format":"YYYY-MM-DD HH:mm:ss"},"collapsible-menu":{},"splitter":{},"search":{},"sharing-plus":{"qq":false,"all":["facebook","google","twitter","instapaper","linkedin","pocket","stumbleupon"],"douban":false,"facebook":true,"weibo":false,"instapaper":false,"whatsapp":false,"hatenaBookmark":false,"twitter":true,"messenger":false,"line":false,"vk":false,"pocket":true,"google":false,"viber":false,"stumbleupon":false,"qzone":false,"linkedin":false},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"donate":{"alipay":"http://ksoong.org/docs/content/images/alipay.png","alipayText":"支付宝捐赠","button":"赞赏","title":"","wechat":"http://ksoong.org/docs/content/images/wechat.png","wechatText":"微信捐赠"},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"back-to-top-button":{},"sharing":{"weibo":true,"linkedin":true,"google":true,"facebook":true,"all":["facebook","google","linkedin","weibo"]},"edit-link":{"label":"Edit This Page","base":"https://github.com/kylinsoong/docs/blob/gh-pages"},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"website.css"}},"file":{"path":"performance/README.adoc","mtime":"2020-07-27T05:59:12.539Z","type":"asciidoc"},"gitbook":{"version":"3.2.3","time":"2020-07-27T05:59:36.856Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

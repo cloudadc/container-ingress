@@ -1,13 +1,27 @@
 = Container Ingress Performance
 :toc: manual
 
-== Set up
+== HTTP Request Performance Comparision
+
+This section will compare the performance of different Ingress controller(F5, Nginx, HAProxy) to process simple http request.
+
+=== Software Used
+
+* `wrk` 4.1.0
+* `k8s` 1.15.12, one master two worker, 6 vCPU 12 GB(each node 2 vCPU 4 GB)
+* `CentOS Linux` 7.8.2003
+* `nginx/nginx-ingress:1.7.2`
+* `f5networks/k8s-bigip-ctlr:2.0.0`
+* `haproxytech/kubernetes-ingress:latest`
+* `kylinsoong/cafe:1.0`
+
+=== Set up
 
 [source, bash]
 .*1. Get Code*
 ----
 git clone https://github.com/cloudadc/container-ingress.git
-cd container-ingress/performance/
+cd container-ingress/performance/install
 ----
 
 [source, bash]
@@ -37,7 +51,7 @@ kubectl apply -f cis.yaml
 [source, bash]
 .*4. Install HAProxy controller*
 ----
-kubectl apply -f haproxy-ingress.yaml 
+kubectl apply -f haproxy-ingress.yaml
 ----
 
 [source, bash]
@@ -50,18 +64,6 @@ haproxy-controller   Active   5m
 nginx-ingress        Active   5m
 ----
 
-== Performance Comparision Test
-
-=== Software Used
-
-* `wrk` 4.1.0
-* `k8s` 1.15.12, one master two worker, 6 vCPU 12 GB(each node 2 vCPU 4 GB)
-* `CentOS Linux` 7.8.2003
-* `nginx/nginx-ingress:1.7.2`
-* `f5networks/k8s-bigip-ctlr:2.0.0`
-* `haproxytech/kubernetes-ingress:latest`
-* `kylinsoong/cafe:1.0`
-
 === Topology
 
 The topology looks like below diagram:
@@ -71,6 +73,14 @@ image:img/performance-comparision.png[]
 The `cafe` application have 3 replicas are used as performance comparision application, the k8s ingress object are created, use the following command to deploy performance comparision application: 
 
 [source, bash]
+.*Get Code*
+----
+git clone https://github.com/cloudadc/container-ingress.git
+cd container-ingress/performance/cafe
+----
+
+[source, bash]
+.*Deploy Cafe Application*
 ----
 kubectl apply -f app-deploy.yaml
 kubectl apply -f app-ingress.yaml
@@ -188,4 +198,135 @@ Running 3m test @ http://perftest01.example.com
   Non-2xx or 3xx responses: 49289
 Requests/sec:    273.69
 Transfer/sec:     62.27KB
+----
+
+== F5 CIS Performance Metric
+
+=== Preparing
+
+[source, bash]
+.*Get Code*
+----
+git clone https://github.com/cloudadc/container-ingress.git
+cd container-ingress/performance/discover
+----
+
+[source, bash]
+.*Deploy 200 Application*
+----
+kubectl apply -f 200-ns-deploy.yaml 
+----
+
+[source, bash]
+.*Tmsh command: count total pool*
+----
+STARTTIME=$(date +%s) ; for i in {1..100} ; do tmsh list ltm pool /k8s_AS3/Shared/* | grep pool | wc -l ; ENDTIME=$(date +%s); echo "spend $(($ENDTIME - $STARTTIME)) seconds" ; sleep 3 ; done
+----
+
+[source, bash]
+.*Tmsh command: count specific pool's total pool member*
+----
+STARTTIME=$(date +%s) ; for i in {1..100} ; do tmsh list ltm pool /k8s_AS3/Shared/ingress_perftest299_app_svc | grep address | wc -l;  ENDTIME=$(date +%s); echo "spend $(($ENDTIME - $STARTTIME)) seconds" ; sleep 3 ;  done
+----
+
+=== Ingress in multiple namespaces
+
+[source, bash]
+.*Steps*
+----
+kubectl apply -f 20-ns-ingress.yaml 
+kubectl apply -f 40-ns-ingress.yaml 
+kubectl apply -f 60-ns-ingress.yaml 
+kubectl apply -f 80-ns-ingress.yaml 
+kubectl apply -f 100-ns-ingress.yaml 
+kubectl apply -f 120-ns-ingress.yaml 
+kubectl apply -f 140-ns-ingress.yaml 
+kubectl apply -f 160-ns-ingress.yaml 
+kubectl apply -f 180-ns-ingress.yaml 
+kubectl apply -f 200-ns-ingress.yaml
+ 
+----
+
+[source, bash]
+.*Results*
+----
+total_namespaces,total_deploy_time,service_discover_time,total_deleletion_time
+20,12,3,4
+40,18,5,5
+60,21,6,6
+80,25,9,7
+100,27,9,8
+120,31,10,8
+140,38,11,9
+160,42,11,9
+180,49,17,12
+200,54,18,14
+----
+
+* total_namespaces - the total number of namespaces
+* total_deploy_time - the total time of deploy all ingress
+* service_discover_time - the time of pod change be update to ingress
+* total_deleletion_time - the total time of delete all ingress
+
+image:img/ingress-perf-multi-ns.png[]
+
+=== Ingress in single namespace
+
+[source, bash]
+.*Steps*
+----
+kubectl apply -f 20-ns-configmap.yaml
+kubectl apply -f 40-ns-configmap.yaml
+kubectl apply -f 60-ns-configmap.yaml
+kubectl apply -f 80-ns-configmap.yaml
+kubectl apply -f 100-ns-configmap.yaml
+kubectl apply -f 120-ns-configmap.yaml
+kubectl apply -f 140-ns-configmap.yaml
+kubectl apply -f 160-ns-configmap.yaml
+kubectl apply -f 180-ns-configmap.yaml
+kubectl apply -f 200-ns-configmap.yaml
+----
+
+[source, bash]
+.*Results*
+----
+total_namespaces,total_deploy_time,service_discover_time,total_deleletion_time
+20,
+40,
+60,
+80,
+100,
+120,
+140,
+160,
+180,
+200,
+----
+
+=== ingress in single namespace
+
+[source, bash]
+.*Steps*
+----
+
+----
+
+[source, bash]
+.*Results*
+----
+
+----
+
+=== configmap in single namespace
+
+[source, bash]
+.*Steps*
+----
+
+----
+
+[source, bash]
+.*Results*
+----
+
 ----
