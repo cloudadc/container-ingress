@@ -273,9 +273,60 @@ image:img/ingress-perf-multi-ns.png[]
 === Ingress in single namespace
 
 [source, bash]
-.**
+.*Steps*
+----
+kubectl apply -f 20-ns-configmap.yaml
+kubectl apply -f 40-ns-configmap.yaml
+kubectl apply -f 60-ns-configmap.yaml
+kubectl apply -f 80-ns-configmap.yaml
+kubectl apply -f 100-ns-configmap.yaml
+kubectl apply -f 120-ns-configmap.yaml
+kubectl apply -f 140-ns-configmap.yaml
+kubectl apply -f 160-ns-configmap.yaml
+kubectl apply -f 180-ns-configmap.yaml
+kubectl apply -f 200-ns-configmap.yaml
+----
+
+[source, bash]
+.*Results*
+----
+total_namespaces,total_deploy_time,service_discover_time,total_deleletion_time
+20,
+40,
+60,
+80,
+100,
+120,
+140,
+160,
+180,
+200,
+----
+
+=== ingress in single namespace
+
+[source, bash]
+.*Steps*
 ----
 
 ----
 
+[source, bash]
+.*Results*
+----
 
+----
+
+=== configmap in single namespace
+
+[source, bash]
+.*Steps*
+----
+
+----
+
+[source, bash]
+.*Results*
+----
+
+----
