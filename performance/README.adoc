@@ -270,7 +270,7 @@ total_namespaces,total_deploy_time,service_discover_time,total_deleletion_time
 
 image:img/ingress-perf-multi-ns.png[]
 
-=== Ingress in single namespace
+=== Configmap in multiple namespaces
 
 [source, bash]
 .*Steps*
