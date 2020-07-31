@@ -303,7 +303,7 @@ total_namespaces,total_deploy_time,service_discover_time,total_deleletion_time
 200,
 ----
 
-=== ingress in single namespace
+=== Ingress in single namespace
 
 [source, bash]
 .*Steps*
@@ -317,7 +317,7 @@ total_namespaces,total_deploy_time,service_discover_time,total_deleletion_time
 
 ----
 
-=== configmap in single namespace
+=== Configmap in single namespace
 
 [source, bash]
 .*Steps*
