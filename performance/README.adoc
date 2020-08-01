@@ -217,19 +217,16 @@ cd container-ingress/performance/discover
 kubectl apply -f 200-ns-deploy.yaml 
 ----
 
-[source, bash]
-.*Tmsh command: count total pool*
-----
-STARTTIME=$(date +%s) ; for i in {1..100} ; do tmsh list ltm pool /k8s_AS3/Shared/* | grep pool | wc -l ; ENDTIME=$(date +%s); echo "spend $(($ENDTIME - $STARTTIME)) seconds" ; sleep 3 ; done
-----
-
-[source, bash]
-.*Tmsh command: count specific pool's total pool member*
-----
-STARTTIME=$(date +%s) ; for i in {1..100} ; do tmsh list ltm pool /k8s_AS3/Shared/ingress_perftest299_app_svc | grep address | wc -l;  ENDTIME=$(date +%s); echo "spend $(($ENDTIME - $STARTTIME)) seconds" ; sleep 3 ;  done
-----
-
 === Ingress in multiple namespaces
+
+[source, bash]
+.*Tmsh command: count time*
+----
+// count total pool
+STARTTIME=$(date +%s) ; for i in {1..100} ; do tmsh list ltm pool /k8s/Shared/* | grep pool | wc -l ; ENDTIME=$(date +%s); echo "spend $(($ENDTIME - $STARTTIME)) seconds" ; sleep 3 ; done
+// count specific pool's total pool member
+STARTTIME=$(date +%s) ; for i in {1..100} ; do tmsh list ltm pool /k8s/Shared/ingress_perftest299_app_svc | grep address | wc -l;  ENDTIME=$(date +%s); echo "spend $(($ENDTIME - $STARTTIME)) seconds" ; sleep 3 ;  done
+----
 
 [source, bash]
 .*Steps*
@@ -250,58 +247,75 @@ kubectl apply -f 200-ns-ingress.yaml
 [source, bash]
 .*Results*
 ----
-total_namespaces,total_deploy_time,service_discover_time,total_deleletion_time
-20,12,3,4
-40,18,5,5
-60,21,6,6
-80,25,9,7
-100,27,9,8
-120,31,10,8
-140,38,11,9
-160,42,11,9
-180,49,17,12
-200,54,18,14
+total_namespaces,total_deploy_time,service_discover_time,total_deleletion_time,delete_one_ingress,create_one_ingress
+20,12,3,4,3,3
+40,18,5,5,4,5
+60,21,6,6,4,6
+80,25,9,7,7,7
+100,27,9,8,8,10
+120,31,10,8,8,13
+140,38,11,9,10,16
+160,42,11,9,14,18
+180,49,17,12,15,19
+200,54,18,14,17,21
 ----
 
 * total_namespaces - the total number of namespaces
 * total_deploy_time - the total time of deploy all ingress
 * service_discover_time - the time of pod change be update to ingress
 * total_deleletion_time - the total time of delete all ingress
+* delete_one_ingress - the time of delete one ingress
+* create_one_ingress - the time of create one ingress in current namespace
 
-image:img/ingress-perf-multi-ns.png[]
+image:img/ingress-perf-multi-ns-v1.png[]
 
 === Configmap in multiple namespaces
 
 [source, bash]
+.*Tmsh command: count time*
+----
+STARTTIME=$(date +%s) ; for i in {1..100} ; do tmsh list ltm pool /perftest109/perftest109/* | grep pool | wc -l ; ENDTIME=$(date +%s); echo "spend $(($ENDTIME - $STARTTIME)) seconds" ; sleep 3 ; done
+STARTTIME=$(date +%s) ; for i in {1..100} ; do tmsh list ltm pool /perftest122/perftest122/* | grep address | wc -l ; ENDTIME=$(date +%s); echo "spend $(($ENDTIME - $STARTTIME)) seconds" ; sleep 3 ; done
+----
+
+[source, bash]
 .*Steps*
 ----
+kubectl apply -f 10-ns-configmap.yaml
 kubectl apply -f 20-ns-configmap.yaml
+kubectl apply -f 30-ns-configmap.yaml
 kubectl apply -f 40-ns-configmap.yaml
+kubectl apply -f 500-ns-configmap.yaml
 kubectl apply -f 60-ns-configmap.yaml
+kubectl apply -f 70-ns-configmap.yaml
 kubectl apply -f 80-ns-configmap.yaml
+kubectl apply -f 90-ns-configmap.yaml
 kubectl apply -f 100-ns-configmap.yaml
-kubectl apply -f 120-ns-configmap.yaml
-kubectl apply -f 140-ns-configmap.yaml
-kubectl apply -f 160-ns-configmap.yaml
-kubectl apply -f 180-ns-configmap.yaml
-kubectl apply -f 200-ns-configmap.yaml
 ----
 
 [source, bash]
 .*Results*
 ----
-total_namespaces,total_deploy_time,service_discover_time,total_deleletion_time
-20,
-40,
-60,
-80,
-100,
-120,
-140,
-160,
-180,
-200,
+total_namespaces,total_deploy_time,service_discover_time,total_deleletion_time,delete_one_tenant,create_one_tenant
+5,15,7,16,6,4
+10,20,9,23,9,8
+20,37,13,40,12,12
+30,54,18,58,20,15
+40,72,24,81,30,28
+50,96,37,106,50,39
+60,110,51,119,61,58
+80,161,57,169,73,70
+100,205,59,207,97,92
 ----
+
+* total_namespaces - the total number of namespaces
+* total_deploy_time - the total time of deploy all ingress
+* service_discover_time - the time of pod change be update to ingress
+* total_deleletion_time - the total time of delete all ingress
+* delete_one_tenant - delete one configmap 
+* create_one_tenant - create one configmap
+
+image:img/perf-multiplue-cm-in-multiple-ns.png[]
 
 === Ingress in single namespace
 
