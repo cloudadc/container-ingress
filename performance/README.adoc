@@ -320,6 +320,12 @@ image:img/perf-multiplue-cm-in-multiple-ns.png[]
 === Ingress in single namespace
 
 [source, bash]
+.*Tmsh command: count time*
+----
+
+----
+
+[source, bash]
 .*Steps*
 ----
 
@@ -334,13 +340,26 @@ image:img/perf-multiplue-cm-in-multiple-ns.png[]
 === Configmap in single namespace
 
 [source, bash]
-.*Steps*
+.*Tmsh command: count time*
+----
+STARTTIME=$(date +%s) ; for i in {1..100} ; do tmsh list ltm node /cistest/* | grep node | wc -l ; ENDTIME=$(date +%s); echo "spend $(($ENDTIME - $STARTTIME)) seconds" ; sleep 3 ; done
+STARTTIME=$(date +%s) ; for i in {1..100} ; do tmsh list ltm pool /cistest/cistest_app-svc-19/* | grep address | wc -l ; ENDTIME=$(date +%s); echo "spend $(($ENDTIME - $STARTTIME)) seconds" ; sleep 3 ; don
 ----
 
+[source, bash]
+.*Steps*
+----
+kubectl apply -f X-ns-configmap.yaml 
 ----
 
 [source, bash]
 .*Results*
 ----
-
+total_servicess,total_deploy_time,service_discover_time,total_deleletion_time,delete_one_service,create_one_service
+20,14,20,22,19,21
+40,36,43,54,39,45
+60,55,52,52,65,72
+70,63,75,96,65,75
+80,72,76,125,75,84
+100,89,92,151,91,94
 ----
