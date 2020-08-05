@@ -309,9 +309,9 @@ total_namespaces,total_deploy_time,service_discover_time,total_deleletion_time,d
 ----
 
 * total_namespaces - the total number of namespaces
-* total_deploy_time - the total time of deploy all ingress
-* service_discover_time - the time of pod change be update to ingress
-* total_deleletion_time - the total time of delete all ingress
+* total_deploy_time - the total time of deploy all configmap  
+* service_discover_time - the time of pod change be update to configmap
+* total_deleletion_time - the total time of delete all configmap
 * delete_one_tenant - delete one configmap 
 * create_one_tenant - create one configmap
 
