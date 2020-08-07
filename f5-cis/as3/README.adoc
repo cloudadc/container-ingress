@@ -195,3 +195,31 @@ This above commands will
 2. create a 4 namesapces, the first 3 with `--namespace-label=cis_scanner_zone=zone_1` label
 3. create 4 services in 4 namesapces accordingly
 4. create 4 ingress reference with 4 services
+
+== Multiports Service
+
+[source, bash]
+.*1. Get Code*
+----
+git clone https://github.com/cloudadc/container-ingress.git
+cd container-ingress/f5-cis/as3/multiports
+----
+
+[source, bash]
+.*2. Deploy app*
+----
+kubectl apply -f backend.yaml
+----
+
+[source, bash]
+.*3. Deploy configmap*
+----
+kubectl apply -f cm.yaml
+----
+
+[source, bash]
+.*4. Test*
+----
+curl http://192.168.5.40
+curl http://192.168.5.40:8081
+----

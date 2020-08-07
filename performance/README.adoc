@@ -349,7 +349,7 @@ STARTTIME=$(date +%s) ; for i in {1..100} ; do tmsh list ltm pool /cistest/ciste
 [source, bash]
 .*Steps*
 ----
-kubectl apply -f X-ns-configmap.yaml 
+kubectl apply -f X-svc-configmap.yaml 
 ----
 
 [source, bash]
