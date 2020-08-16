@@ -7,7 +7,9 @@
 .. link:f5-cis/cccl/README.adoc[CCCL]
 . link:nginx-ingress/README.adoc[NGINX]
 .. link:nginx-ingress/bigip/README.adoc[Deployment Architectures]
-.. link:nginx-ingress/release/README.adoc[Zero-Downtime Releases]
 . link:nginx-plus-ingress/README.adoc[NGINX PLUS]
+.. link:nginx-plus-ingress/bigip/README.adoc[Deployment Architectures]
+.. link:nginx-plus-ingress/l4-lb/README.adoc[L4 Load Balancing]
+.. link:nginx-plus-ingress/release/README.adoc[Zero-Downtime Releases]
 . link:performance/README.adoc[PERFORMANCE]
 
