@@ -191,19 +191,6 @@
             
         </li>
     
-        <li class="chapter " data-level="1.3.2" data-path="../nginx-ingress/release/">
-            
-                <a href="../nginx-ingress/release/">
-            
-                    
-                    Zero-Downtime Releases
-            
-                </a>
-            
-
-            
-        </li>
-    
 
             </ul>
             
@@ -219,6 +206,51 @@
                 </a>
             
 
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.1" data-path="../nginx-plus-ingress/bigip/">
+            
+                <a href="../nginx-plus-ingress/bigip/">
+            
+                    
+                    Deployment Architectures
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.2" data-path="../nginx-plus-ingress/l4-lb/">
+            
+                <a href="../nginx-plus-ingress/l4-lb/">
+            
+                    
+                    L4 Load Balancing
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3" data-path="../nginx-plus-ingress/release/">
+            
+                <a href="../nginx-plus-ingress/release/">
+            
+                    
+                    Zero-Downtime Releases
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
             
         </li>
     
@@ -290,7 +322,11 @@
 <li><a href="#_install_on_bigip_ctlr">Install on bigip-ctlr</a></li>
 </ul>
 </li>
-<li><a href="#_namespaces_isolation_ingress">Namespaces isolation ingress</a></li>
+<li><a href="#_namespaces_isolation">Namespaces isolation</a>
+<ul class="sectlevel2">
+<li><a href="#__namespace_label">--namespace-label</a></li>
+</ul>
+</li>
 <li><a href="#_cis_robust_test">CIS Robust Test</a>
 <ul class="sectlevel2">
 <li><a href="#_re_create_cis_pod">Re-create CIS POD</a></li>
@@ -365,39 +401,78 @@ kubectl delete ns bigip-ctlr</code></pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_namespaces_isolation_ingress">Namespaces isolation ingress</h2>
+<h2 id="_namespaces_isolation">Namespaces isolation</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="__namespace_label">--namespace-label</h3>
+<div class="paragraph">
+<p>As depicted in below figure:</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="namespaces-isolation/namespace-isolation.png" alt="namespace isolation.png"></span></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>&#x540C;&#x4E00;&#x4E2A; K8S &#x5185;&#xFF0C;&#x4E00;&#x4E2A; CIS &#x53EF;&#x53EA;&#x76D1;&#x63A7;&#x4E00;&#x4E2A;&#x5206;&#x533A;&#xFF0C;&#x591A;&#x4E2A; CIS &#x5E76;&#x884C;&#x5DE5;&#x4F5C;&#xFF0C;&#x786E;&#x4FDD;&#x4E86;&#x5BB9;&#x5668;&#x8BA1;&#x7B97;&#x5C42; CIS &#x7684;&#x6027;&#x80FD;</p>
+</li>
+<li>
+<p>&#x540C;&#x4E00;&#x4E2A; K8S &#x5185;&#x7684; Service &#x53EF;&#x4EE5;&#x53D1;&#x5E03;&#x5230;&#x4E0D;&#x540C;&#x7684; F5 HW/VE&#xFF0C;&#x786E;&#x4FDD;&#x4E86;&#x5BB9;&#x5668;&#x8DEF;&#x7531;&#x5C42; F5 &#x7684;&#x6027;&#x80FD;</p>
+</li>
+</ul>
+</div>
 <div class="listingblock">
-<div class="title"><strong>Get Code</strong></div>
+<div class="title"><strong>1. cis argument</strong></div>
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash"><span class="hljs-string">&quot;--namespace-label=cis_scanner_zone=zone_1&quot;</span>,</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title"><strong>2. Get Code</strong></div>
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">git <span class="hljs-built_in">clone</span> https://github.com/cloudadc/container-ingress.git
-<span class="hljs-built_in">cd</span> container-ingress/f5-cis/namespaces-isolation-ingress/</code></pre>
+<span class="hljs-built_in">cd</span> container-ingress/f5-cis/namespaces-isolation</code></pre>
 </div>
 </div>
 <div class="listingblock">
+<div class="title"><strong>3. Deploy 4 apps within 4 namespaces</strong></div>
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">kubectl create <span class="hljs-_">-f</span> cis.yaml
-kubectl apply <span class="hljs-_">-f</span> deploy.yaml</code></pre>
+
+$ kubectl get ns --show-labels | grep cistest10*
+cistest100        Active   78s     cis_scanner_zone=zone_1
+cistest101        Active   78s     cis_scanner_zone=zone_1
+cistest102        Active   78s     cis_scanner_zone=zone_1
+cistest103        Active   78s     &lt;none&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>This above commands will</p>
+<p>the first 3 namespace has cis_scanner_zone, the cistest103 didn&#x2019;t.</p>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>deploy a CIS pod with <code>--namespace-label=cis_scanner_zone=zone_1</code></p>
-</li>
-<li>
-<p>create a 4 namesapces, the first 3 with <code>--namespace-label=cis_scanner_zone=zone_1</code> label</p>
-</li>
-<li>
-<p>create 4 services in 4 namesapces accordingly</p>
-</li>
-<li>
-<p>create 4 ingress reference with 4 services</p>
-</li>
-</ol>
+<div class="listingblock">
+<div class="title"><strong>4. deploy ingresses</strong></div>
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">kubectl apply <span class="hljs-_">-f</span> ingress.yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>there will be 4 ingress object created, only the first 3 will deploy to F5 due to the namespace isolation.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="namespaces-isolation/f5-cis-ingress.png" alt="f5 cis ingress.png"></span></p>
+</div>
+<div class="listingblock">
+<div class="title"><strong>5. deploy configmap</strong></div>
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">kubectl apply <span class="hljs-_">-f</span> cm.yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>there will be 4 configmaps created, only the first 3 will deploy to F5 due to the namespace isolation.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="namespaces-isolation/f5-cis-configmaps.png" alt="f5 cis configmaps.png"></span></p>
+</div>
 </div>
 </div>
 </div>
@@ -478,7 +553,7 @@ kubectl delete <span class="hljs-_">-f</span> cm.2.yaml</code></pre>
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"F5 CIS","level":"1.2","depth":1,"next":{"title":"AS3","level":"1.2.1","depth":2,"path":"f5-cis/as3/README.adoc","ref":"f5-cis/as3/README.adoc","articles":[]},"previous":{"title":"INTRODUCTION","level":"1.1","depth":1,"path":"README.adoc","ref":"README.adoc","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{"copyrightYear":"2020","copyrightHolder":"Kylin Soong"},"plugins":["collapsible-menu","donate","-sharing","sharing-plus","splitter","back-to-top-button","edit-link"],"pluginsConfig":{"tbfed-pagefooter":{"copyright":"Copyright &copy Kylin Soong 2018","modify_label":"该文件修订时间：","modify_format":"YYYY-MM-DD HH:mm:ss"},"collapsible-menu":{},"splitter":{},"search":{},"sharing-plus":{"qq":false,"all":["facebook","google","twitter","instapaper","linkedin","pocket","stumbleupon"],"douban":false,"facebook":true,"weibo":false,"instapaper":false,"whatsapp":false,"hatenaBookmark":false,"twitter":true,"messenger":false,"line":false,"vk":false,"pocket":true,"google":false,"viber":false,"stumbleupon":false,"qzone":false,"linkedin":false},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"donate":{"alipay":"http://ksoong.org/docs/content/images/alipay.png","alipayText":"支付宝捐赠","button":"赞赏","title":"","wechat":"http://ksoong.org/docs/content/images/wechat.png","wechatText":"微信捐赠"},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"back-to-top-button":{},"sharing":{"weibo":true,"linkedin":true,"google":true,"facebook":true,"all":["facebook","google","linkedin","weibo"]},"edit-link":{"label":"Edit This Page","base":"https://github.com/kylinsoong/docs/blob/gh-pages"},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"website.css"}},"file":{"path":"f5-cis/README.adoc","mtime":"2020-07-27T05:59:12.635Z","type":"asciidoc"},"gitbook":{"version":"3.2.3","time":"2020-07-27T05:59:36.856Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"F5 CIS","level":"1.2","depth":1,"next":{"title":"AS3","level":"1.2.1","depth":2,"path":"f5-cis/as3/README.adoc","ref":"f5-cis/as3/README.adoc","articles":[]},"previous":{"title":"INTRODUCTION","level":"1.1","depth":1,"path":"README.adoc","ref":"README.adoc","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{"copyrightYear":"2020","copyrightHolder":"Kylin Soong"},"plugins":["collapsible-menu","donate","-sharing","sharing-plus","splitter","back-to-top-button","edit-link"],"pluginsConfig":{"tbfed-pagefooter":{"copyright":"Copyright &copy Kylin Soong 2018","modify_label":"该文件修订时间：","modify_format":"YYYY-MM-DD HH:mm:ss"},"collapsible-menu":{},"splitter":{},"search":{},"sharing-plus":{"qq":false,"all":["facebook","google","twitter","instapaper","linkedin","pocket","stumbleupon"],"douban":false,"facebook":true,"weibo":false,"instapaper":false,"whatsapp":false,"hatenaBookmark":false,"twitter":true,"messenger":false,"line":false,"vk":false,"pocket":true,"google":false,"viber":false,"stumbleupon":false,"qzone":false,"linkedin":false},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"donate":{"alipay":"http://ksoong.org/docs/content/images/alipay.png","alipayText":"支付宝捐赠","button":"赞赏","title":"","wechat":"http://ksoong.org/docs/content/images/wechat.png","wechatText":"微信捐赠"},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"back-to-top-button":{},"sharing":{"weibo":true,"linkedin":true,"google":true,"facebook":true,"all":["facebook","google","linkedin","weibo"]},"edit-link":{"label":"Edit This Page","base":"https://github.com/kylinsoong/docs/blob/gh-pages"},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"website.css"}},"file":{"path":"f5-cis/README.adoc","mtime":"2020-08-16T08:56:40.422Z","type":"asciidoc"},"gitbook":{"version":"3.2.3","time":"2020-08-16T08:57:00.345Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

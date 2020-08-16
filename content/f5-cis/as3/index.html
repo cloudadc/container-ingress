@@ -191,19 +191,6 @@
             
         </li>
     
-        <li class="chapter " data-level="1.3.2" data-path="../../nginx-ingress/release/">
-            
-                <a href="../../nginx-ingress/release/">
-            
-                    
-                    Zero-Downtime Releases
-            
-                </a>
-            
-
-            
-        </li>
-    
 
             </ul>
             
@@ -219,6 +206,51 @@
                 </a>
             
 
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.1" data-path="../../nginx-plus-ingress/bigip/">
+            
+                <a href="../../nginx-plus-ingress/bigip/">
+            
+                    
+                    Deployment Architectures
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.2" data-path="../../nginx-plus-ingress/l4-lb/">
+            
+                <a href="../../nginx-plus-ingress/l4-lb/">
+            
+                    
+                    L4 Load Balancing
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3" data-path="../../nginx-plus-ingress/release/">
+            
+                <a href="../../nginx-plus-ingress/release/">
+            
+                    
+                    Zero-Downtime Releases
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
             
         </li>
     
@@ -281,6 +313,23 @@
                                 <section class="normal markdown-section">
                                 
                                 <h1 id="whats-this">What&#x2019;s this</h1>
+<div id="toc" class="toc">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_all_in_one_demostrations">All in One Demostrations</a>
+<ul class="sectlevel2">
+<li><a href="#_demostrations">Demostrations</a></li>
+<li><a href="#_deployment_templates">Deployment Templates</a></li>
+</ul>
+</li>
+<li><a href="#_namespaces_isolation">Namespaces isolation</a>
+<ul class="sectlevel2">
+<li><a href="#__namespace_label">--namespace-label</a></li>
+</ul>
+</li>
+<li><a href="#_multiports_service">Multiports Service</a></li>
+</ul>
+</div>
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
@@ -296,11 +345,16 @@
 </li>
 </ul>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_all_in_one_demostrations">All in One Demostrations</h2>
+<div class="sectionbody">
 <div class="listingblock">
 <div class="title"><strong>Get Code</strong></div>
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">git <span class="hljs-built_in">clone</span> https://github.com/cloudadc/container-ingress.git
-<span class="hljs-built_in">cd</span> container-ingress/f5-cis/as3</code></pre>
+<span class="hljs-built_in">cd</span> container-ingress/f5-cis/as3/general</code></pre>
 </div>
 </div>
 <div class="listingblock">
@@ -312,25 +366,257 @@ kubectl create <span class="hljs-_">-f</span> rbac.yaml
 kubectl create <span class="hljs-_">-f</span> cis.yaml</code></pre>
 </div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_demostrations">Demostrations</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_demostrations">Demostrations</h3>
 <div class="listingblock">
-<div class="title"><strong>1. Deploy</strong></div>
+<div class="title"><strong>Deploy</strong></div>
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">kubectl create ns <span class="hljs-built_in">test</span>001
-kubectl create <span class="hljs-_">-f</span> deploy.yaml
 kubectl create <span class="hljs-_">-f</span> cm.yaml</code></pre>
 </div>
 </div>
 <div class="listingblock">
-<div class="title"><strong>2. Test</strong></div>
+<div class="title"><strong>Test</strong></div>
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">curl http://10.1.10.71/
+<pre class="highlight"><code class="language-bash" data-lang="bash">curl http://192.168.5.50/coffee
 curl http://10.1.10.72/
 curl -k https://10.1.10.73/</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_deployment_templates">Deployment Templates</h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 28.5714%;">
+<col style="width: 71.4286%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Template</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Standard VS + TCP profile</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="listingblock">
+<div class="content">
+<pre>            &quot;app_svc_vs&quot;: {
+              &quot;class&quot;: &quot;Service_TCP&quot;,</pre>
+</div>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">source-address persistence</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="listingblock">
+<div class="content">
+<pre>              &quot;persistenceMethods&quot;: [ &quot;source-address&quot; ],</pre>
+</div>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">cookie persistence</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="listingblock">
+<div class="content">
+<pre>              &quot;persistenceMethods&quot;: [ &quot;cookie&quot; ],</pre>
+</div>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">custom tcp profile</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="listingblock">
+<div class="content">
+<pre>            &quot;app_svc_vs&quot;: {
+              ...
+              &quot;profileTCP&quot;: {
+                &quot;use&quot;: &quot;customTCPProfile&quot;
+              },
+              ...
+            },
+            &quot;customTCPProfile&quot;: {
+              &quot;class&quot;: &quot;TCP_Profile&quot;,
+              &quot;idleTimeout&quot;: 600
+            },</pre>
+</div>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">custom http profile</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="listingblock">
+<div class="content">
+<pre>            &quot;app_svc_vs&quot;: {
+              ...
+              &quot;profileHTTP&quot;: {
+                &quot;use&quot;: &quot;customHTTPProfile&quot;
+              },
+              ...
+            },
+            &quot;customHTTPProfile&quot;: {
+              &quot;class&quot;: &quot;HTTP_Profile&quot;,
+              &quot;xForwardedFor&quot;: true
+            },</pre>
+</div>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">custom oneconnect prpfile</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="listingblock">
+<div class="content">
+<pre>            &quot;app_svc_vs&quot;: {
+              ...
+              &quot;profileMultiplex&quot;: {
+                &quot;use&quot;: &quot;custoOneConnectProfile&quot;
+              },
+              ...
+            },
+            &quot;custoOneConnectProfile&quot;: {
+              &quot;class&quot;: &quot;Multiplex_Profile&quot;,
+              &quot;sourceMask&quot;: &quot;255.255.255.255&quot;
+            },</pre>
+</div>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">snat</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="listingblock">
+<div class="content">
+<pre>              &quot;snat&quot;: &quot;self&quot;,</pre>
+</div>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Connection Mirroring</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="listingblock">
+<div class="content">
+<pre>              &quot;mirroring&quot;: &quot;L4&quot;,</pre>
+</div>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">least-connections-member</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="listingblock">
+<div class="content">
+<pre>              &quot;loadBalancingMode&quot;: &quot;least-connections-member&quot;,</pre>
+</div>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">multiple monitors</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="listingblock">
+<div class="content">
+<pre>              &quot;monitors&quot;: [
+                &quot;tcp&quot;,
+                &quot;http&quot;
+              ],</pre>
+</div>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TLS</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="listingblock">
+<div class="content">
+<pre>            &quot;serviceMain&quot;: {
+              &quot;class&quot;: &quot;Service_HTTPS&quot;,
+              ...
+              &quot;serverTLS&quot;: &quot;webtls&quot;
+            },
+            &quot;webtls&quot;: {
+              &quot;class&quot;: &quot;TLS_Server&quot;,
+              &quot;certificates&quot;: [
+              {
+                &quot;certificate&quot;: &quot;webcert&quot;
+              }
+              ]
+            },
+            &quot;webcert&quot;: {
+              &quot;class&quot;: &quot;Certificate&quot;,
+              &quot;certificate&quot;: {&quot;bigip&quot;: &quot;/Common/default.crt&quot;},
+              &quot;privateKey&quot;: {&quot;bigip&quot;: &quot;/Common/default.key&quot;}
+            }</pre>
+</div>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">td</p></td>
+<td class="tableblock halign-left valign-top"><div><div class="listingblock">
+<div class="content">
+<pre>td</pre>
+</div>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_namespaces_isolation">Namespaces isolation</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="__namespace_label">--namespace-label</h3>
+<div class="listingblock">
+<div class="title"><strong>Get Code</strong></div>
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">git <span class="hljs-built_in">clone</span> https://github.com/cloudadc/container-ingress.git
+<span class="hljs-built_in">cd</span> container-ingress/f5-cis/namespaces-isolation</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">kubectl create <span class="hljs-_">-f</span> cis.yaml
+kubectl apply <span class="hljs-_">-f</span> deploy.yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This above commands will</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>deploy a CIS pod with <code>--namespace-label=cis_scanner_zone=zone_1</code></p>
+</li>
+<li>
+<p>create a 4 namesapces, the first 3 with <code>--namespace-label=cis_scanner_zone=zone_1</code> label</p>
+</li>
+<li>
+<p>create 4 services in 4 namesapces accordingly</p>
+</li>
+<li>
+<p>create 4 ingress reference with 4 services</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_multiports_service">Multiports Service</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="title"><strong>1. Get Code</strong></div>
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">git <span class="hljs-built_in">clone</span> https://github.com/cloudadc/container-ingress.git
+<span class="hljs-built_in">cd</span> container-ingress/f5-cis/as3/multiports</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title"><strong>2. Deploy app</strong></div>
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">kubectl apply <span class="hljs-_">-f</span> backend.yaml</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title"><strong>3. Deploy configmap</strong></div>
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">kubectl apply <span class="hljs-_">-f</span> cm.yaml</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title"><strong>4. Test</strong></div>
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">curl http://192.168.5.40
+curl http://192.168.5.40:8081</code></pre>
 </div>
 </div>
 </div>
@@ -377,7 +663,7 @@ curl -k https://10.1.10.73/</code></pre>
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"AS3","level":"1.2.1","depth":2,"next":{"title":"Ingress","level":"1.2.2","depth":2,"path":"f5-cis/ingress/README.adoc","ref":"f5-cis/ingress/README.adoc","articles":[]},"previous":{"title":"F5 CIS","level":"1.2","depth":1,"path":"f5-cis/README.adoc","ref":"f5-cis/README.adoc","articles":[{"title":"AS3","level":"1.2.1","depth":2,"path":"f5-cis/as3/README.adoc","ref":"f5-cis/as3/README.adoc","articles":[]},{"title":"Ingress","level":"1.2.2","depth":2,"path":"f5-cis/ingress/README.adoc","ref":"f5-cis/ingress/README.adoc","articles":[]},{"title":"CCCL","level":"1.2.3","depth":2,"path":"f5-cis/cccl/README.adoc","ref":"f5-cis/cccl/README.adoc","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{"copyrightYear":"2020","copyrightHolder":"Kylin Soong"},"plugins":["collapsible-menu","donate","-sharing","sharing-plus","splitter","back-to-top-button","edit-link"],"pluginsConfig":{"tbfed-pagefooter":{"copyright":"Copyright &copy Kylin Soong 2018","modify_label":"该文件修订时间：","modify_format":"YYYY-MM-DD HH:mm:ss"},"collapsible-menu":{},"splitter":{},"search":{},"sharing-plus":{"qq":false,"all":["facebook","google","twitter","instapaper","linkedin","pocket","stumbleupon"],"douban":false,"facebook":true,"weibo":false,"instapaper":false,"whatsapp":false,"hatenaBookmark":false,"twitter":true,"messenger":false,"line":false,"vk":false,"pocket":true,"google":false,"viber":false,"stumbleupon":false,"qzone":false,"linkedin":false},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"donate":{"alipay":"http://ksoong.org/docs/content/images/alipay.png","alipayText":"支付宝捐赠","button":"赞赏","title":"","wechat":"http://ksoong.org/docs/content/images/wechat.png","wechatText":"微信捐赠"},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"back-to-top-button":{},"sharing":{"weibo":true,"linkedin":true,"google":true,"facebook":true,"all":["facebook","google","linkedin","weibo"]},"edit-link":{"label":"Edit This Page","base":"https://github.com/kylinsoong/docs/blob/gh-pages"},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"website.css"}},"file":{"path":"f5-cis/as3/README.adoc","mtime":"2020-07-27T05:59:12.635Z","type":"asciidoc"},"gitbook":{"version":"3.2.3","time":"2020-07-27T05:59:36.856Z"},"basePath":"../..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"AS3","level":"1.2.1","depth":2,"next":{"title":"Ingress","level":"1.2.2","depth":2,"path":"f5-cis/ingress/README.adoc","ref":"f5-cis/ingress/README.adoc","articles":[]},"previous":{"title":"F5 CIS","level":"1.2","depth":1,"path":"f5-cis/README.adoc","ref":"f5-cis/README.adoc","articles":[{"title":"AS3","level":"1.2.1","depth":2,"path":"f5-cis/as3/README.adoc","ref":"f5-cis/as3/README.adoc","articles":[]},{"title":"Ingress","level":"1.2.2","depth":2,"path":"f5-cis/ingress/README.adoc","ref":"f5-cis/ingress/README.adoc","articles":[]},{"title":"CCCL","level":"1.2.3","depth":2,"path":"f5-cis/cccl/README.adoc","ref":"f5-cis/cccl/README.adoc","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{"copyrightYear":"2020","copyrightHolder":"Kylin Soong"},"plugins":["collapsible-menu","donate","-sharing","sharing-plus","splitter","back-to-top-button","edit-link"],"pluginsConfig":{"tbfed-pagefooter":{"copyright":"Copyright &copy Kylin Soong 2018","modify_label":"该文件修订时间：","modify_format":"YYYY-MM-DD HH:mm:ss"},"collapsible-menu":{},"splitter":{},"search":{},"sharing-plus":{"qq":false,"all":["facebook","google","twitter","instapaper","linkedin","pocket","stumbleupon"],"douban":false,"facebook":true,"weibo":false,"instapaper":false,"whatsapp":false,"hatenaBookmark":false,"twitter":true,"messenger":false,"line":false,"vk":false,"pocket":true,"google":false,"viber":false,"stumbleupon":false,"qzone":false,"linkedin":false},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"donate":{"alipay":"http://ksoong.org/docs/content/images/alipay.png","alipayText":"支付宝捐赠","button":"赞赏","title":"","wechat":"http://ksoong.org/docs/content/images/wechat.png","wechatText":"微信捐赠"},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"back-to-top-button":{},"sharing":{"weibo":true,"linkedin":true,"google":true,"facebook":true,"all":["facebook","google","linkedin","weibo"]},"edit-link":{"label":"Edit This Page","base":"https://github.com/kylinsoong/docs/blob/gh-pages"},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"website.css"}},"file":{"path":"f5-cis/as3/README.adoc","mtime":"2020-08-16T08:56:40.423Z","type":"asciidoc"},"gitbook":{"version":"3.2.3","time":"2020-08-16T08:57:00.345Z"},"basePath":"../..","book":{"language":""}});
         });
     </script>
 </div>

@@ -128,7 +128,7 @@ cd container-ingress/nginx-plus-ingress/monitor/
           - -nginx-status-port=8898
 ----
 
-*3. Dashboard*
+*3. Dashboard(http://HOST/dashboard.html)*
 
 image:monitor/nginx-plus-dashboard.png[]
 
