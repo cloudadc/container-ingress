@@ -62,7 +62,7 @@
 
     
     
-    <link rel="prev" href="../nginx-plus-ingress/" />
+    <link rel="prev" href="../nginx-plus-ingress/release/" />
     
 
     </head>
@@ -189,19 +189,6 @@
             
         </li>
     
-        <li class="chapter " data-level="1.3.2" data-path="../nginx-ingress/release/">
-            
-                <a href="../nginx-ingress/release/">
-            
-                    
-                    Zero-Downtime Releases
-            
-                </a>
-            
-
-            
-        </li>
-    
 
             </ul>
             
@@ -217,6 +204,51 @@
                 </a>
             
 
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.1" data-path="../nginx-plus-ingress/bigip/">
+            
+                <a href="../nginx-plus-ingress/bigip/">
+            
+                    
+                    Deployment Architectures
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.2" data-path="../nginx-plus-ingress/l4-lb/">
+            
+                <a href="../nginx-plus-ingress/l4-lb/">
+            
+                    
+                    L4 Load Balancing
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3" data-path="../nginx-plus-ingress/release/">
+            
+                <a href="../nginx-plus-ingress/release/">
+            
+                    
+                    Zero-Downtime Releases
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
             
         </li>
     
@@ -295,9 +327,9 @@
 <ul class="sectlevel2">
 <li><a href="#_preparing">Preparing</a></li>
 <li><a href="#_ingress_in_multiple_namespaces">Ingress in multiple namespaces</a></li>
+<li><a href="#_configmap_in_multiple_namespaces">Configmap in multiple namespaces</a></li>
 <li><a href="#_ingress_in_single_namespace">Ingress in single namespace</a></li>
-<li><a href="#_ingress_in_single_namespace_2">ingress in single namespace</a></li>
-<li><a href="#_configmap_in_single_namespace">configmap in single namespace</a></li>
+<li><a href="#_configmap_in_single_namespace">Configmap in single namespace</a></li>
 </ul>
 </li>
 </ul>
@@ -575,21 +607,18 @@ Transfer/sec:     62.27KB</code></pre>
 <pre class="highlight"><code class="language-bash" data-lang="bash">kubectl apply <span class="hljs-_">-f</span> 200-ns-deploy.yaml</code></pre>
 </div>
 </div>
-<div class="listingblock">
-<div class="title"><strong>Tmsh command: count total pool</strong></div>
-<div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">STARTTIME=$(date +%s) ; <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> {1..100} ; <span class="hljs-keyword">do</span> tmsh list ltm pool /k8s_AS3/Shared/* | grep pool | wc <span class="hljs-_">-l</span> ; ENDTIME=$(date +%s); <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;spend <span class="hljs-variable">$(($ENDTIME - $STARTTIME)</span>) seconds&quot;</span> ; sleep 3 ; <span class="hljs-keyword">done</span></code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title"><strong>Tmsh command: count specific pool&#x2019;s total pool member</strong></div>
-<div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">STARTTIME=$(date +%s) ; <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> {1..100} ; <span class="hljs-keyword">do</span> tmsh list ltm pool /k8s_AS3/Shared/ingress_perftest299_app_svc | grep address | wc <span class="hljs-_">-l</span>;  ENDTIME=$(date +%s); <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;spend <span class="hljs-variable">$(($ENDTIME - $STARTTIME)</span>) seconds&quot;</span> ; sleep 3 ;  <span class="hljs-keyword">done</span></code></pre>
-</div>
-</div>
 </div>
 <div class="sect2">
 <h3 id="_ingress_in_multiple_namespaces">Ingress in multiple namespaces</h3>
+<div class="listingblock">
+<div class="title"><strong>Tmsh command: count time</strong></div>
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">// count total pool
+STARTTIME=$(date +%s) ; <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> {1..100} ; <span class="hljs-keyword">do</span> tmsh list ltm pool /k8s/Shared/* | grep pool | wc <span class="hljs-_">-l</span> ; ENDTIME=$(date +%s); <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;spend <span class="hljs-variable">$(($ENDTIME - $STARTTIME)</span>) seconds&quot;</span> ; sleep 3 ; <span class="hljs-keyword">done</span>
+// count specific pool<span class="hljs-string">&apos;s total pool member
+STARTTIME=$(date +%s) ; for i in {1..100} ; do tmsh list ltm pool /k8s/Shared/ingress_perftest299_app_svc | grep address | wc -l;  ENDTIME=$(date +%s); echo &quot;spend $(($ENDTIME - $STARTTIME)) seconds&quot; ; sleep 3 ;  done</span></code></pre>
+</div>
+</div>
 <div class="listingblock">
 <div class="title"><strong>Steps</strong></div>
 <div class="content">
@@ -608,17 +637,17 @@ kubectl apply <span class="hljs-_">-f</span> 200-ns-ingress.yaml</code></pre>
 <div class="listingblock">
 <div class="title"><strong>Results</strong></div>
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">total_namespaces,total_deploy_time,service_discover_time,total_deleletion_time
-20,12,3,4
-40,18,5,5
-60,21,6,6
-80,25,9,7
-100,27,9,8
-120,31,10,8
-140,38,11,9
-160,42,11,9
-180,49,17,12
-200,54,18,14</code></pre>
+<pre class="highlight"><code class="language-bash" data-lang="bash">total_namespaces,total_deploy_time,service_discover_time,total_deleletion_time,delete_one_ingress,create_one_ingress
+20,12,3,4,3,3
+40,18,5,5,4,5
+60,21,6,6,4,6
+80,25,9,7,7,7
+100,27,9,8,8,10
+120,31,10,8,8,13
+140,38,11,9,10,16
+160,42,11,9,14,18
+180,49,17,12,15,19
+200,54,18,14,17,21</code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -635,48 +664,91 @@ kubectl apply <span class="hljs-_">-f</span> 200-ns-ingress.yaml</code></pre>
 <li>
 <p>total_deleletion_time - the total time of delete all ingress</p>
 </li>
+<li>
+<p>delete_one_ingress - the time of delete one ingress</p>
+</li>
+<li>
+<p>create_one_ingress - the time of create one ingress in current namespace</p>
+</li>
 </ul>
 </div>
 <div class="paragraph">
-<p><span class="image"><img src="img/ingress-perf-multi-ns.png" alt="ingress perf multi ns.png"></span></p>
+<p><span class="image"><img src="img/ingress-perf-multi-ns-v1.png" alt="ingress perf multi ns v1.png"></span></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_configmap_in_multiple_namespaces">Configmap in multiple namespaces</h3>
+<div class="listingblock">
+<div class="title"><strong>Tmsh command: count time</strong></div>
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">STARTTIME=$(date +%s) ; <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> {1..100} ; <span class="hljs-keyword">do</span> tmsh list ltm pool /perftest109/perftest109/* | grep pool | wc <span class="hljs-_">-l</span> ; ENDTIME=$(date +%s); <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;spend <span class="hljs-variable">$(($ENDTIME - $STARTTIME)</span>) seconds&quot;</span> ; sleep 3 ; <span class="hljs-keyword">done</span>
+STARTTIME=$(date +%s) ; <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> {1..100} ; <span class="hljs-keyword">do</span> tmsh list ltm pool /perftest122/perftest122/* | grep address | wc <span class="hljs-_">-l</span> ; ENDTIME=$(date +%s); <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;spend <span class="hljs-variable">$(($ENDTIME - $STARTTIME)</span>) seconds&quot;</span> ; sleep 3 ; <span class="hljs-keyword">done</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title"><strong>Steps</strong></div>
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">kubectl apply <span class="hljs-_">-f</span> 10-ns-configmap.yaml
+kubectl apply <span class="hljs-_">-f</span> 20-ns-configmap.yaml
+kubectl apply <span class="hljs-_">-f</span> 30-ns-configmap.yaml
+kubectl apply <span class="hljs-_">-f</span> 40-ns-configmap.yaml
+kubectl apply <span class="hljs-_">-f</span> 500-ns-configmap.yaml
+kubectl apply <span class="hljs-_">-f</span> 60-ns-configmap.yaml
+kubectl apply <span class="hljs-_">-f</span> 70-ns-configmap.yaml
+kubectl apply <span class="hljs-_">-f</span> 80-ns-configmap.yaml
+kubectl apply <span class="hljs-_">-f</span> 90-ns-configmap.yaml
+kubectl apply <span class="hljs-_">-f</span> 100-ns-configmap.yaml</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title"><strong>Results</strong></div>
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">total_namespaces,total_deploy_time,service_discover_time,total_deleletion_time,delete_one_tenant,create_one_tenant
+5,15,7,16,6,4
+10,20,9,23,9,8
+20,37,13,40,12,12
+30,54,18,58,20,15
+40,72,24,81,30,28
+50,96,37,106,50,39
+60,110,51,119,61,58
+80,161,57,169,73,70
+100,205,59,207,97,92</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>total_namespaces - the total number of namespaces</p>
+</li>
+<li>
+<p>total_deploy_time - the total time of deploy all configmap</p>
+</li>
+<li>
+<p>service_discover_time - the time of pod change be update to configmap</p>
+</li>
+<li>
+<p>total_deleletion_time - the total time of delete all configmap</p>
+</li>
+<li>
+<p>delete_one_tenant - delete one configmap</p>
+</li>
+<li>
+<p>create_one_tenant - create one configmap</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="img/perf-multiplue-cm-in-multiple-ns.png" alt="perf multiplue cm in multiple ns.png"></span></p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_ingress_in_single_namespace">Ingress in single namespace</h3>
 <div class="listingblock">
-<div class="title"><strong>Steps</strong></div>
+<div class="title"><strong>Tmsh command: count time</strong></div>
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">kubectl apply <span class="hljs-_">-f</span> 20-ns-configmap.yaml
-kubectl apply <span class="hljs-_">-f</span> 40-ns-configmap.yaml
-kubectl apply <span class="hljs-_">-f</span> 60-ns-configmap.yaml
-kubectl apply <span class="hljs-_">-f</span> 80-ns-configmap.yaml
-kubectl apply <span class="hljs-_">-f</span> 100-ns-configmap.yaml
-kubectl apply <span class="hljs-_">-f</span> 120-ns-configmap.yaml
-kubectl apply <span class="hljs-_">-f</span> 140-ns-configmap.yaml
-kubectl apply <span class="hljs-_">-f</span> 160-ns-configmap.yaml
-kubectl apply <span class="hljs-_">-f</span> 180-ns-configmap.yaml
-kubectl apply <span class="hljs-_">-f</span> 200-ns-configmap.yaml</code></pre>
+<pre class="highlight"><code class="language-bash" data-lang="bash"></code></pre>
 </div>
 </div>
-<div class="listingblock">
-<div class="title"><strong>Results</strong></div>
-<div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">total_namespaces,total_deploy_time,service_discover_time,total_deleletion_time
-20,
-40,
-60,
-80,
-100,
-120,
-140,
-160,
-180,
-200,</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_ingress_in_single_namespace_2">ingress in single namespace</h3>
 <div class="listingblock">
 <div class="title"><strong>Steps</strong></div>
 <div class="content">
@@ -691,17 +763,30 @@ kubectl apply <span class="hljs-_">-f</span> 200-ns-configmap.yaml</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_configmap_in_single_namespace">configmap in single namespace</h3>
+<h3 id="_configmap_in_single_namespace">Configmap in single namespace</h3>
+<div class="listingblock">
+<div class="title"><strong>Tmsh command: count time</strong></div>
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">STARTTIME=$(date +%s) ; <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> {1..100} ; <span class="hljs-keyword">do</span> tmsh list ltm node /cistest/* | grep node | wc <span class="hljs-_">-l</span> ; ENDTIME=$(date +%s); <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;spend <span class="hljs-variable">$(($ENDTIME - $STARTTIME)</span>) seconds&quot;</span> ; sleep 3 ; <span class="hljs-keyword">done</span>
+STARTTIME=$(date +%s) ; <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> {1..100} ; <span class="hljs-keyword">do</span> tmsh list ltm pool /cistest/cistest_app-svc-19/* | grep address | wc <span class="hljs-_">-l</span> ; ENDTIME=$(date +%s); <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;spend <span class="hljs-variable">$(($ENDTIME - $STARTTIME)</span>) seconds&quot;</span> ; sleep 3 ; don</code></pre>
+</div>
+</div>
 <div class="listingblock">
 <div class="title"><strong>Steps</strong></div>
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash"></code></pre>
+<pre class="highlight"><code class="language-bash" data-lang="bash">kubectl apply <span class="hljs-_">-f</span> X-svc-configmap.yaml</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title"><strong>Results</strong></div>
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash"></code></pre>
+<pre class="highlight"><code class="language-bash" data-lang="bash">total_servicess,total_deploy_time,service_discover_time,total_deleletion_time,delete_one_service,create_one_service
+20,14,20,22,19,21
+40,36,43,54,39,45
+60,55,52,52,65,72
+70,63,75,96,65,75
+80,72,76,125,75,84
+100,89,92,151,91,94</code></pre>
 </div>
 </div>
 </div>
@@ -733,7 +818,7 @@ kubectl apply <span class="hljs-_">-f</span> 200-ns-configmap.yaml</code></pre>
 
             
                 
-                <a href="../nginx-plus-ingress/" class="navigation navigation-prev navigation-unique" aria-label="Previous page: NGINX PLUS">
+                <a href="../nginx-plus-ingress/release/" class="navigation navigation-prev navigation-unique" aria-label="Previous page: Zero-Downtime Releases">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
@@ -745,7 +830,7 @@ kubectl apply <span class="hljs-_">-f</span> 200-ns-configmap.yaml</code></pre>
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"PERFORMANCE","level":"1.5","depth":1,"previous":{"title":"NGINX PLUS","level":"1.4","depth":1,"path":"nginx-plus-ingress/README.adoc","ref":"nginx-plus-ingress/README.adoc","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{"copyrightYear":"2020","copyrightHolder":"Kylin Soong"},"plugins":["collapsible-menu","donate","-sharing","sharing-plus","splitter","back-to-top-button","edit-link"],"pluginsConfig":{"tbfed-pagefooter":{"copyright":"Copyright &copy Kylin Soong 2018","modify_label":"该文件修订时间：","modify_format":"YYYY-MM-DD HH:mm:ss"},"collapsible-menu":{},"splitter":{},"search":{},"sharing-plus":{"qq":false,"all":["facebook","google","twitter","instapaper","linkedin","pocket","stumbleupon"],"douban":false,"facebook":true,"weibo":false,"instapaper":false,"whatsapp":false,"hatenaBookmark":false,"twitter":true,"messenger":false,"line":false,"vk":false,"pocket":true,"google":false,"viber":false,"stumbleupon":false,"qzone":false,"linkedin":false},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"donate":{"alipay":"http://ksoong.org/docs/content/images/alipay.png","alipayText":"支付宝捐赠","button":"赞赏","title":"","wechat":"http://ksoong.org/docs/content/images/wechat.png","wechatText":"微信捐赠"},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"back-to-top-button":{},"sharing":{"weibo":true,"linkedin":true,"google":true,"facebook":true,"all":["facebook","google","linkedin","weibo"]},"edit-link":{"label":"Edit This Page","base":"https://github.com/kylinsoong/docs/blob/gh-pages"},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"website.css"}},"file":{"path":"performance/README.adoc","mtime":"2020-07-27T05:59:12.539Z","type":"asciidoc"},"gitbook":{"version":"3.2.3","time":"2020-07-27T05:59:36.856Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"PERFORMANCE","level":"1.5","depth":1,"previous":{"title":"Zero-Downtime Releases","level":"1.4.3","depth":2,"path":"nginx-plus-ingress/release/README.adoc","ref":"nginx-plus-ingress/release/README.adoc","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{"copyrightYear":"2020","copyrightHolder":"Kylin Soong"},"plugins":["collapsible-menu","donate","-sharing","sharing-plus","splitter","back-to-top-button","edit-link"],"pluginsConfig":{"tbfed-pagefooter":{"copyright":"Copyright &copy Kylin Soong 2018","modify_label":"该文件修订时间：","modify_format":"YYYY-MM-DD HH:mm:ss"},"collapsible-menu":{},"splitter":{},"search":{},"sharing-plus":{"qq":false,"all":["facebook","google","twitter","instapaper","linkedin","pocket","stumbleupon"],"douban":false,"facebook":true,"weibo":false,"instapaper":false,"whatsapp":false,"hatenaBookmark":false,"twitter":true,"messenger":false,"line":false,"vk":false,"pocket":true,"google":false,"viber":false,"stumbleupon":false,"qzone":false,"linkedin":false},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"donate":{"alipay":"http://ksoong.org/docs/content/images/alipay.png","alipayText":"支付宝捐赠","button":"赞赏","title":"","wechat":"http://ksoong.org/docs/content/images/wechat.png","wechatText":"微信捐赠"},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"back-to-top-button":{},"sharing":{"weibo":true,"linkedin":true,"google":true,"facebook":true,"all":["facebook","google","linkedin","weibo"]},"edit-link":{"label":"Edit This Page","base":"https://github.com/kylinsoong/docs/blob/gh-pages"},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"website.css"}},"file":{"path":"performance/README.adoc","mtime":"2020-08-16T08:56:40.521Z","type":"asciidoc"},"gitbook":{"version":"3.2.3","time":"2020-08-16T08:57:00.345Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
