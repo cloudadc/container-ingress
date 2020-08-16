@@ -1,3 +1,8 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: test001
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -19,13 +24,11 @@ spec:
         app: app-1
     spec:
       containers:
-      - image: kylinsoong/backend:0.0.4
+      - image: cloudadc/cafe:1.0
         name: backend
         ports:
         - containerPort: 8080
-
 ---
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -47,13 +50,11 @@ spec:
         app: app-2
     spec:
       containers:
-      - image: kylinsoong/backend:0.0.4
+      - image: cloudadc/cafe:1.0
         name: backend
         ports:
         - containerPort: 8080
-
 ---
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -75,15 +76,11 @@ spec:
         app: app-3
     spec:
       containers:
-      - image: kylinsoong/backend:0.0.4
+      - image: cloudadc/cafe:1.0
         name: backend
         ports:
         - containerPort: 8080
-
-
-
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -103,9 +100,7 @@ spec:
     app: app-1
   sessionAffinity: None
   type: ClusterIP
-
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -125,9 +120,7 @@ spec:
     app: app-2
   sessionAffinity: None
   type: ClusterIP
-
 ---
-
 apiVersion: v1
 kind: Service
 metadata:

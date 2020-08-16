@@ -1,7 +1,8 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: cis-perf-test
+  name: cm-cistest
+  namespace: perftest100
   labels:
     f5type: virtual-server
     as3: "true"
@@ -13,10 +14,8 @@ data:
       "persist": true,
       "declaration": {
         "class": "ADC",
-        "schemaVersion": "3.18.0",
-        "id": "cis-perf-test",
-        "label": "cis_perf_test",
-        "remark": "HTTP application",
+        "schemaVersion": "3.19.0",
+        "id": "perftest100",
         "perftest100": {
           "class": "Tenant",
           "perftest100": {
@@ -46,7 +45,28 @@ data:
               ]
             }
           }
-        },
+        }
+      }
+    }
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cm-cistest
+  namespace: perftest101
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+      "class": "AS3",
+      "action": "deploy",
+      "persist": true,
+      "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.19.0",
+        "id": "perftest101",
         "perftest101": {
           "class": "Tenant",
           "perftest101": {
@@ -76,7 +96,28 @@ data:
               ]
             }
           }
-        },
+        }
+      }
+    }
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cm-cistest
+  namespace: perftest102
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+      "class": "AS3",
+      "action": "deploy",
+      "persist": true,
+      "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.19.0",
+        "id": "perftest102",
         "perftest102": {
           "class": "Tenant",
           "perftest102": {
@@ -106,7 +147,28 @@ data:
               ]
             }
           }
-        },
+        }
+      }
+    }
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cm-cistest
+  namespace: perftest103
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+      "class": "AS3",
+      "action": "deploy",
+      "persist": true,
+      "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.19.0",
+        "id": "perftest103",
         "perftest103": {
           "class": "Tenant",
           "perftest103": {
@@ -136,7 +198,28 @@ data:
               ]
             }
           }
-        },
+        }
+      }
+    }
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cm-cistest
+  namespace: perftest104
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+      "class": "AS3",
+      "action": "deploy",
+      "persist": true,
+      "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.19.0",
+        "id": "perftest104",
         "perftest104": {
           "class": "Tenant",
           "perftest104": {

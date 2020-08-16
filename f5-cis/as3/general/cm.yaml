@@ -14,7 +14,7 @@ data:
       "persist": true,
       "declaration": {
         "class": "ADC",
-        "schemaVersion": "3.18.0",
+        "schemaVersion": "3.19.0",
         "id": "f5-bigip-confgimap",
         "label": "f5-bigip-confgimap",
         "test001": {
@@ -26,7 +26,7 @@ data:
               "class": "Service_TCP",
               "persistenceMethods": [ "source-address" ],
               "virtualAddresses": [
-                "10.1.10.71"
+                "192.168.5.50"
               ],
               "profileTCP": {
                 "use": "customTCPProfile"
@@ -61,7 +61,7 @@ data:
               "class": "Service_HTTP",
               "persistenceMethods": [ "cookie" ],
               "virtualAddresses": [
-                "10.1.10.72"
+                "192.168.5.51"
               ],
               "profileHTTP": {
                 "use": "customHTTPProfile"
@@ -79,7 +79,10 @@ data:
             },
             "custoOneConnectProfile": {
               "class": "Multiplex_Profile",
-              "sourceMask": "255.255.255.255"
+              "sourceMask": "255.255.255.255",
+              "maxConnectionAge": 86400,
+              "maxConnections": 10000 ,
+              "maxConnectionReuse": 5
             },
             "test001_app_2_svc_pool": {
               "class": "Pool",
@@ -102,7 +105,7 @@ data:
             "serviceMain": {
               "class": "Service_HTTPS",
               "virtualAddresses": [
-                "10.1.10.73"
+                "192.168.5.52"
               ],
               "snat": "self",
               "virtualPort": 443,

@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: k8s-bigip-ctlr
-  namespace: kube-system
+  namespace: bigip-ctlr
   labels:
     app: k8s-bigip-ctlr
 spec:
@@ -19,7 +19,7 @@ spec:
       serviceAccountName: bigip-ctlr
       containers:
         - name: k8s-bigip-ctlr
-          image: "f5networks/k8s-bigip-ctlr:2.0.0"
+          image: "f5networks/k8s-bigip-ctlr:2.1.0"
           env:
             - name: BIGIP_USERNAME
               valueFrom:
@@ -35,9 +35,13 @@ spec:
           args: [
             "--bigip-username=$(BIGIP_USERNAME)",
             "--bigip-password=$(BIGIP_PASSWORD)",
-            "--bigip-url=https://10.1.10.240:443",
+            "--bigip-url=192.168.5.20",
             "--insecure=true",
             "--bigip-partition=k8s",
+            "--manage-configmaps=true",
+            "--manage-ingress=false",
+            "--log-as3-response=true",
             "--log-level=INFO",
+            "--namespace=cistest",
             "--pool-member-type=cluster"
             ]

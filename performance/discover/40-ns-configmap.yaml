@@ -1,7 +1,8 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: cis-perf-test
+  name: cm-cistest
+  namespace: perftest100
   labels:
     f5type: virtual-server
     as3: "true"
@@ -13,10 +14,8 @@ data:
       "persist": true,
       "declaration": {
         "class": "ADC",
-        "schemaVersion": "3.18.0",
-        "id": "cis-perf-test",
-        "label": "cis_perf_test",
-        "remark": "HTTP application",
+        "schemaVersion": "3.19.0",
+        "id": "perftest100",
         "perftest100": {
           "class": "Tenant",
           "perftest100": {
@@ -46,7 +45,28 @@ data:
               ]
             }
           }
-        },
+        }
+      }
+    }
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cm-cistest
+  namespace: perftest101
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+      "class": "AS3",
+      "action": "deploy",
+      "persist": true,
+      "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.19.0",
+        "id": "perftest101",
         "perftest101": {
           "class": "Tenant",
           "perftest101": {
@@ -76,7 +96,28 @@ data:
               ]
             }
           }
-        },
+        }
+      }
+    }
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cm-cistest
+  namespace: perftest102
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+      "class": "AS3",
+      "action": "deploy",
+      "persist": true,
+      "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.19.0",
+        "id": "perftest102",
         "perftest102": {
           "class": "Tenant",
           "perftest102": {
@@ -106,7 +147,28 @@ data:
               ]
             }
           }
-        },
+        }
+      }
+    }
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cm-cistest
+  namespace: perftest103
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+      "class": "AS3",
+      "action": "deploy",
+      "persist": true,
+      "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.19.0",
+        "id": "perftest103",
         "perftest103": {
           "class": "Tenant",
           "perftest103": {
@@ -136,7 +198,28 @@ data:
               ]
             }
           }
-        },
+        }
+      }
+    }
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cm-cistest
+  namespace: perftest104
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+      "class": "AS3",
+      "action": "deploy",
+      "persist": true,
+      "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.19.0",
+        "id": "perftest104",
         "perftest104": {
           "class": "Tenant",
           "perftest104": {
@@ -166,7 +249,28 @@ data:
               ]
             }
           }
-        },
+        }
+      }
+    }
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cm-cistest
+  namespace: perftest105
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+      "class": "AS3",
+      "action": "deploy",
+      "persist": true,
+      "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.19.0",
+        "id": "perftest105",
         "perftest105": {
           "class": "Tenant",
           "perftest105": {
@@ -196,7 +300,28 @@ data:
               ]
             }
           }
-        },
+        }
+      }
+    }
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cm-cistest
+  namespace: perftest106
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+      "class": "AS3",
+      "action": "deploy",
+      "persist": true,
+      "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.19.0",
+        "id": "perftest106",
         "perftest106": {
           "class": "Tenant",
           "perftest106": {
@@ -226,7 +351,28 @@ data:
               ]
             }
           }
-        },
+        }
+      }
+    }
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cm-cistest
+  namespace: perftest107
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+      "class": "AS3",
+      "action": "deploy",
+      "persist": true,
+      "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.19.0",
+        "id": "perftest107",
         "perftest107": {
           "class": "Tenant",
           "perftest107": {
@@ -256,7 +402,28 @@ data:
               ]
             }
           }
-        },
+        }
+      }
+    }
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cm-cistest
+  namespace: perftest108
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+      "class": "AS3",
+      "action": "deploy",
+      "persist": true,
+      "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.19.0",
+        "id": "perftest108",
         "perftest108": {
           "class": "Tenant",
           "perftest108": {
@@ -286,7 +453,28 @@ data:
               ]
             }
           }
-        },
+        }
+      }
+    }
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cm-cistest
+  namespace: perftest109
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+      "class": "AS3",
+      "action": "deploy",
+      "persist": true,
+      "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.19.0",
+        "id": "perftest109",
         "perftest109": {
           "class": "Tenant",
           "perftest109": {
@@ -316,7 +504,28 @@ data:
               ]
             }
           }
-        },
+        }
+      }
+    }
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cm-cistest
+  namespace: perftest110
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+      "class": "AS3",
+      "action": "deploy",
+      "persist": true,
+      "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.19.0",
+        "id": "perftest110",
         "perftest110": {
           "class": "Tenant",
           "perftest110": {
@@ -346,7 +555,28 @@ data:
               ]
             }
           }
-        },
+        }
+      }
+    }
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cm-cistest
+  namespace: perftest111
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+      "class": "AS3",
+      "action": "deploy",
+      "persist": true,
+      "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.19.0",
+        "id": "perftest111",
         "perftest111": {
           "class": "Tenant",
           "perftest111": {
@@ -376,7 +606,28 @@ data:
               ]
             }
           }
-        },
+        }
+      }
+    }
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cm-cistest
+  namespace: perftest112
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+      "class": "AS3",
+      "action": "deploy",
+      "persist": true,
+      "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.19.0",
+        "id": "perftest112",
         "perftest112": {
           "class": "Tenant",
           "perftest112": {
@@ -406,7 +657,28 @@ data:
               ]
             }
           }
-        },
+        }
+      }
+    }
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cm-cistest
+  namespace: perftest113
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+      "class": "AS3",
+      "action": "deploy",
+      "persist": true,
+      "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.19.0",
+        "id": "perftest113",
         "perftest113": {
           "class": "Tenant",
           "perftest113": {
@@ -436,7 +708,28 @@ data:
               ]
             }
           }
-        },
+        }
+      }
+    }
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cm-cistest
+  namespace: perftest114
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+      "class": "AS3",
+      "action": "deploy",
+      "persist": true,
+      "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.19.0",
+        "id": "perftest114",
         "perftest114": {
           "class": "Tenant",
           "perftest114": {
@@ -466,7 +759,28 @@ data:
               ]
             }
           }
-        },
+        }
+      }
+    }
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cm-cistest
+  namespace: perftest115
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+      "class": "AS3",
+      "action": "deploy",
+      "persist": true,
+      "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.19.0",
+        "id": "perftest115",
         "perftest115": {
           "class": "Tenant",
           "perftest115": {
@@ -496,7 +810,28 @@ data:
               ]
             }
           }
-        },
+        }
+      }
+    }
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cm-cistest
+  namespace: perftest116
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+      "class": "AS3",
+      "action": "deploy",
+      "persist": true,
+      "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.19.0",
+        "id": "perftest116",
         "perftest116": {
           "class": "Tenant",
           "perftest116": {
@@ -526,7 +861,28 @@ data:
               ]
             }
           }
-        },
+        }
+      }
+    }
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cm-cistest
+  namespace: perftest117
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+      "class": "AS3",
+      "action": "deploy",
+      "persist": true,
+      "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.19.0",
+        "id": "perftest117",
         "perftest117": {
           "class": "Tenant",
           "perftest117": {
@@ -556,7 +912,28 @@ data:
               ]
             }
           }
-        },
+        }
+      }
+    }
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cm-cistest
+  namespace: perftest118
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+      "class": "AS3",
+      "action": "deploy",
+      "persist": true,
+      "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.19.0",
+        "id": "perftest118",
         "perftest118": {
           "class": "Tenant",
           "perftest118": {
@@ -586,7 +963,28 @@ data:
               ]
             }
           }
-        },
+        }
+      }
+    }
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cm-cistest
+  namespace: perftest119
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+      "class": "AS3",
+      "action": "deploy",
+      "persist": true,
+      "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.19.0",
+        "id": "perftest119",
         "perftest119": {
           "class": "Tenant",
           "perftest119": {
@@ -616,7 +1014,28 @@ data:
               ]
             }
           }
-        },
+        }
+      }
+    }
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cm-cistest
+  namespace: perftest120
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+      "class": "AS3",
+      "action": "deploy",
+      "persist": true,
+      "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.19.0",
+        "id": "perftest120",
         "perftest120": {
           "class": "Tenant",
           "perftest120": {
@@ -646,7 +1065,28 @@ data:
               ]
             }
           }
-        },
+        }
+      }
+    }
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cm-cistest
+  namespace: perftest121
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+      "class": "AS3",
+      "action": "deploy",
+      "persist": true,
+      "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.19.0",
+        "id": "perftest121",
         "perftest121": {
           "class": "Tenant",
           "perftest121": {
@@ -676,7 +1116,28 @@ data:
               ]
             }
           }
-        },
+        }
+      }
+    }
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cm-cistest
+  namespace: perftest122
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+      "class": "AS3",
+      "action": "deploy",
+      "persist": true,
+      "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.19.0",
+        "id": "perftest122",
         "perftest122": {
           "class": "Tenant",
           "perftest122": {
@@ -706,7 +1167,28 @@ data:
               ]
             }
           }
-        },
+        }
+      }
+    }
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cm-cistest
+  namespace: perftest123
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+      "class": "AS3",
+      "action": "deploy",
+      "persist": true,
+      "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.19.0",
+        "id": "perftest123",
         "perftest123": {
           "class": "Tenant",
           "perftest123": {
@@ -736,7 +1218,28 @@ data:
               ]
             }
           }
-        },
+        }
+      }
+    }
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cm-cistest
+  namespace: perftest124
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+      "class": "AS3",
+      "action": "deploy",
+      "persist": true,
+      "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.19.0",
+        "id": "perftest124",
         "perftest124": {
           "class": "Tenant",
           "perftest124": {
@@ -766,7 +1269,28 @@ data:
               ]
             }
           }
-        },
+        }
+      }
+    }
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cm-cistest
+  namespace: perftest125
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+      "class": "AS3",
+      "action": "deploy",
+      "persist": true,
+      "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.19.0",
+        "id": "perftest125",
         "perftest125": {
           "class": "Tenant",
           "perftest125": {
@@ -796,7 +1320,28 @@ data:
               ]
             }
           }
-        },
+        }
+      }
+    }
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cm-cistest
+  namespace: perftest126
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+      "class": "AS3",
+      "action": "deploy",
+      "persist": true,
+      "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.19.0",
+        "id": "perftest126",
         "perftest126": {
           "class": "Tenant",
           "perftest126": {
@@ -826,7 +1371,28 @@ data:
               ]
             }
           }
-        },
+        }
+      }
+    }
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cm-cistest
+  namespace: perftest127
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+      "class": "AS3",
+      "action": "deploy",
+      "persist": true,
+      "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.19.0",
+        "id": "perftest127",
         "perftest127": {
           "class": "Tenant",
           "perftest127": {
@@ -856,7 +1422,28 @@ data:
               ]
             }
           }
-        },
+        }
+      }
+    }
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cm-cistest
+  namespace: perftest128
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+      "class": "AS3",
+      "action": "deploy",
+      "persist": true,
+      "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.19.0",
+        "id": "perftest128",
         "perftest128": {
           "class": "Tenant",
           "perftest128": {
@@ -886,7 +1473,28 @@ data:
               ]
             }
           }
-        },
+        }
+      }
+    }
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cm-cistest
+  namespace: perftest129
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+      "class": "AS3",
+      "action": "deploy",
+      "persist": true,
+      "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.19.0",
+        "id": "perftest129",
         "perftest129": {
           "class": "Tenant",
           "perftest129": {
@@ -916,7 +1524,28 @@ data:
               ]
             }
           }
-        },
+        }
+      }
+    }
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cm-cistest
+  namespace: perftest130
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+      "class": "AS3",
+      "action": "deploy",
+      "persist": true,
+      "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.19.0",
+        "id": "perftest130",
         "perftest130": {
           "class": "Tenant",
           "perftest130": {
@@ -946,7 +1575,28 @@ data:
               ]
             }
           }
-        },
+        }
+      }
+    }
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cm-cistest
+  namespace: perftest131
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+      "class": "AS3",
+      "action": "deploy",
+      "persist": true,
+      "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.19.0",
+        "id": "perftest131",
         "perftest131": {
           "class": "Tenant",
           "perftest131": {
@@ -976,7 +1626,28 @@ data:
               ]
             }
           }
-        },
+        }
+      }
+    }
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cm-cistest
+  namespace: perftest132
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+      "class": "AS3",
+      "action": "deploy",
+      "persist": true,
+      "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.19.0",
+        "id": "perftest132",
         "perftest132": {
           "class": "Tenant",
           "perftest132": {
@@ -1006,7 +1677,28 @@ data:
               ]
             }
           }
-        },
+        }
+      }
+    }
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cm-cistest
+  namespace: perftest133
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+      "class": "AS3",
+      "action": "deploy",
+      "persist": true,
+      "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.19.0",
+        "id": "perftest133",
         "perftest133": {
           "class": "Tenant",
           "perftest133": {
@@ -1036,7 +1728,28 @@ data:
               ]
             }
           }
-        },
+        }
+      }
+    }
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cm-cistest
+  namespace: perftest134
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+      "class": "AS3",
+      "action": "deploy",
+      "persist": true,
+      "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.19.0",
+        "id": "perftest134",
         "perftest134": {
           "class": "Tenant",
           "perftest134": {
@@ -1066,7 +1779,28 @@ data:
               ]
             }
           }
-        },
+        }
+      }
+    }
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cm-cistest
+  namespace: perftest135
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+      "class": "AS3",
+      "action": "deploy",
+      "persist": true,
+      "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.19.0",
+        "id": "perftest135",
         "perftest135": {
           "class": "Tenant",
           "perftest135": {
@@ -1096,7 +1830,28 @@ data:
               ]
             }
           }
-        },
+        }
+      }
+    }
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cm-cistest
+  namespace: perftest136
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+      "class": "AS3",
+      "action": "deploy",
+      "persist": true,
+      "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.19.0",
+        "id": "perftest136",
         "perftest136": {
           "class": "Tenant",
           "perftest136": {
@@ -1126,7 +1881,28 @@ data:
               ]
             }
           }
-        },
+        }
+      }
+    }
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cm-cistest
+  namespace: perftest137
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+      "class": "AS3",
+      "action": "deploy",
+      "persist": true,
+      "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.19.0",
+        "id": "perftest137",
         "perftest137": {
           "class": "Tenant",
           "perftest137": {
@@ -1156,7 +1932,28 @@ data:
               ]
             }
           }
-        },
+        }
+      }
+    }
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cm-cistest
+  namespace: perftest138
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+      "class": "AS3",
+      "action": "deploy",
+      "persist": true,
+      "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.19.0",
+        "id": "perftest138",
         "perftest138": {
           "class": "Tenant",
           "perftest138": {
@@ -1186,7 +1983,28 @@ data:
               ]
             }
           }
-        },
+        }
+      }
+    }
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cm-cistest
+  namespace: perftest139
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+      "class": "AS3",
+      "action": "deploy",
+      "persist": true,
+      "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.19.0",
+        "id": "perftest139",
         "perftest139": {
           "class": "Tenant",
           "perftest139": {
