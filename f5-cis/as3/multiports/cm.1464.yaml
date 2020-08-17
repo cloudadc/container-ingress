@@ -29,32 +29,9 @@ data:
               ],
               "snat": "self",
               "virtualPort": 80,
-              "pool": "cistest_app_http_svc_pool"
+              "pool": "cistest_app_svc_pool"
             },
-            "app_svc_vs_management": {
-              "class": "Service_HTTP",
-              "persistenceMethods": [ "cookie" ],
-              "virtualAddresses": [
-                "192.168.5.40"
-              ],
-              "snat": "self",
-              "virtualPort": 8081,
-              "pool": "cistest_app_management_svc_pool"
-            },
-            "cistest_app_http_svc_pool": {
-              "class": "Pool",
-              "monitors": [
-                "tcp"
-              ],
-              "loadBalancingMode": "least-connections-member",
-              "members": [
-              {
-                "servicePort": 80,
-                "serverAddresses": []
-              }
-              ]
-            },
-            "cistest_app_management_svc_pool": {
+            "cistest_app_svc_pool": {
               "class": "Pool",
               "monitors": [
                 "tcp"
