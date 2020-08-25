@@ -15,34 +15,29 @@ image:img/bigip-with-cluster-wide-nginx.png[]
 * `bigip-ctlr` deploy BIGIP Virtual Server nginx pod as pool member
 
 [source, bash]
-.*Get Code*
+.*1. Get Code*
 ----
 git clone https://github.com/cloudadc/container-ingress.git
 cd container-ingress/nginx-plus-ingress/bigip/cluster-wide/
 ----
 
+*2. Refer to link:../README.adoc[Installation] to set up Nginx Plus Ingress & Expose to F5*
+
+In this section, Cluster-wide Ingress Controller has 3 replicas, F5 load balancing these replicas.
+
 [source, bash]
-.*Set up*
 ----
 // 1. deploy cluster wide nginx ingress controller
-kubectl apply -f ns-and-sa.yaml
-kubectl apply -f rbac.yaml
-kubectl apply -f default-server-secret.yaml
-kubectl apply -f nginx-config.yaml
-kubectl apply -f vs-definition.yaml
-kubectl apply -f vsr-definition.yaml
-kubectl apply -f ts-definition.yaml
 kubectl apply -f nginx-plus-ingress.yaml
 
-// 2. deploy bigip controller
-kubectl create ns bigip-ctlr
-kubectl create secret generic bigip-login --from-literal=username=admin --from-literal=password=admin.F5demo.com -n bigip-ctlr
-kubectl create serviceaccount bigip-ctlr -n bigip-ctlr
-kubectl apply -f rbac-cis.yaml
-kubectl apply -f cis-nginx.yaml
+// 2. expose to F5
 kubectl apply -f nginx-plus-ingress-svc.yaml
 kubectl apply -f nginx-plus-ingress-configmap.yaml
 ----
+
+* link:cluster-wide/nginx-plus-ingress.yaml[nginx-plus-ingress.yaml]
+* link:cluster-wide/nginx-plus-ingress-svc.yaml[nginx-plus-ingress-svc.yaml]
+* link:cluster-wide/nginx-plus-ingress-svc.yaml[nginx-plus-ingress-svc.yaml]
 
 === Examples
 
@@ -52,6 +47,9 @@ kubectl apply -f nginx-plus-ingress-configmap.yaml
 kubectl apply -f example-deploy.yaml
 kubectl apply -f example-ingress.yaml
 ----
+
+* link:cluster-wide/example-deploy.yaml[example-deploy.yaml]
+* link:cluster-wide/example-ingress.yaml[example-ingress.yaml]
 
 This will create 4 namespaces, and each namespace has 2 services `coffee` and `tea`, also there are 4 ingress resources be create in 4 namespaces accordingly, each has reference a hostname, the path to different the 2 services in each namespace. 
 
@@ -214,37 +212,35 @@ image:img/bigip-nginx-single-namespace.png[]
 * `bigip-ctlr` deploy BIGIP Virtual Server nginx pod as pool member
 
 [source, bash]
-.*Get Code*
+.*1. Get Code*
 ----
 git clone https://github.com/cloudadc/container-ingress.git
 cd container-ingress/nginx-plus-ingress/bigip/single-namespace/
 ----
 
+*2. Refer to link:../README.adoc[Installation] to set up Nginx Plus Ingress & Expose to F5*
+
+In this section, we will deploy 2 groups of ingress controller, each group has 2 controller pods, each group take charge of a single namespace. F5 load balancing each group and provide a unified enterence.
+
 [source, bash]
-.*Set up*
 ----
 // 1. deploy single namespace nginx ingress controller
-kubectl apply -f ns-and-sa.yaml
-kubectl apply -f rbac.yaml
-kubectl apply -f default-server-secret.yaml
-kubectl apply -f nginx-config.yaml
-kubectl apply -f vs-definition.yaml
-kubectl apply -f vsr-definition.yaml
-kubectl apply -f ts-definition.yaml
 kubectl apply -f nginx-plus-ingress-test01.yaml
 kubectl apply -f nginx-plus-ingress-test02.yaml
 
 // 2. deploy bigip controller
-kubectl create ns bigip-ctlr
-kubectl create secret generic bigip-login --from-literal=username=admin --from-literal=password=admin.F5demo.com -n bigip-ctlr
-kubectl create serviceaccount bigip-ctlr -n bigip-ctlr
-kubectl apply -f rbac-cis.yaml
-kubectl apply -f cis-nginx.yaml
 kubectl apply -f nginx-plus-ingress-svc.yaml
 kubectl apply -f nginx-plus-ingress-configmap.yaml
 ----
 
 the above setting up will create 2 ingress controller, one for namespace `test01`, and the other for `test02`.
+
+The reference yaml files:
+
+* link:single-namespace/nginx-plus-ingress-test01.yaml[nginx-plus-ingress-test01.yaml]
+* link:single-namespace/nginx-plus-ingress-test02.yaml[nginx-plus-ingress-test02.yaml]
+* link:single-namespace/nginx-plus-ingress-svc.yaml[nginx-plus-ingress-svc.yaml]
+* link:single-namespace/nginx-plus-ingress-configmap.yaml[nginx-plus-ingress-configmap.yaml]
 
 === Examples
 
@@ -254,6 +250,9 @@ the above setting up will create 2 ingress controller, one for namespace `test01
 kubectl apply -f example-deploy.yaml
 kubectl apply -f example-ingress.yaml
 ---- 
+
+* link:single-namespace/example-deploy.yaml[example-deploy.yaml]
+* link:single-namespace/example-ingress.yaml[example-ingress.yaml]
 
 [source, bash]
 .*2. Check Ingress controller log*
@@ -302,36 +301,33 @@ image:img/nginx-ingress-class.png[]
 * `bigip-ctlr` deploy BIGIP Virtual Server nginx pod as pool member
 
 [source, bash]
-.*Get Code*
+.*1. Get Code*
 ----
 git clone https://github.com/cloudadc/container-ingress.git
 cd container-ingress/nginx-plus-ingress/bigip/specific-ingress-class/
 ----
 
-.*Set up*
+*2. Refer to link:../README.adoc[Installation] to set up Nginx Plus Ingress & Expose to F5*
+
+[source, bash]
 ----
 // 1. deploy Ingress Controller for Specific Ingress Class
-kubectl apply -f ns-and-sa.yaml
-kubectl apply -f rbac.yaml
-kubectl apply -f default-server-secret.yaml
-kubectl apply -f nginx-config.yaml
-kubectl apply -f vs-definition.yaml
-kubectl apply -f vsr-definition.yaml
-kubectl apply -f ts-definition.yaml
 kubectl apply -f nginx-plus-ingress.yaml
 kubectl apply -f nginx-plus-ingress-fintech.yaml
 
 // 2. deploy bigip controller
-kubectl create ns bigip-ctlr
-kubectl create secret generic bigip-login --from-literal=username=admin --from-literal=password=admin.F5demo.com -n bigip-ctlr
-kubectl create serviceaccount bigip-ctlr -n bigip-ctlr
-kubectl apply -f rbac-cis.yaml
-kubectl apply -f cis-nginx.yaml
 kubectl apply -f nginx-plus-ingress-svc.yaml
 kubectl apply -f nginx-plus-ingress-configmap.yaml
 ----
 
 the above setting up deployed 2 ingress controller, one for monitoring the ingress resources with `kubernetes.io/ingress.class: fintech`, the other for monitoring ingress resource with default ingress class. 
+
+The reference yaml files:
+
+* link:specific-ingress-class/nginx-plus-ingress.yaml[nginx-plus-ingress.yaml]
+* link:specific-ingress-class/nginx-plus-ingress-fintech.yaml[nginx-plus-ingress-fintech.yaml]
+* link:specific-ingress-class/nginx-plus-ingress-svc.yaml[nginx-plus-ingress-svc.yaml]
+* link:specific-ingress-class/nginx-plus-ingress-configmap.yaml[nginx-plus-ingress-configmap.yaml]
 
 === Examples
 
@@ -342,6 +338,10 @@ kubectl apply -f example-deploy.yaml
 kubectl apply -f example-ingress.yaml
 kubectl apply -f example-ingress-fintech.yaml
 ----
+
+* link:specific-ingress-class/example-deploy.yaml[example-deploy.yaml]
+* link:specific-ingress-class/example-ingress.yaml[example-ingress.yaml]
+* link:specific-ingress-class/example-ingress-fintech.yaml[example-ingress-fintech.yaml]
 
 this will create 4 namespaces, each namespace has 2 services named `coffee` and `tea`, each namespace also has reference a ingress resources, the 1st 2 ingress resources use the default ingress class, the 2nd 2 ingress resource in `fintech` as ingress class. 
 

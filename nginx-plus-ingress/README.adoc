@@ -3,31 +3,32 @@
 
 F5 Nginx Plus Ingress Controller.
 
-== Image Building
+== Installation
+
+=== Image Building
+
+F5 Nginx Plus Ingress Controller need build from source code.
 
 Refer to https://docs.nginx.com/nginx-ingress-controller/installation/building-ingress-controller-image/ for building the Ingress Controller Image.
 
-NOTE: Apply a Nginx plus envaluation license is necessary for above steps.
-
-https://hub.docker.com/r/cloudadc/nginx-plus-ingress contains all built nginx plus image.
+A valid license is necessary for image buliding, apply a Nginx plus envaluation license to start image building.
 
 [source, bash]
-.*Image*
+.*Check the license*
 ----
-docker pull cloudadc/nginx-plus-ingress:1.7.2
+openssl x509 -in nginx-repo.crt -noout -text
 ----
 
-== Installing
+=== Installing
+
+Refer to https://docs.nginx.com/nginx-ingress-controller/installation/installation-with-manifests to install Nginx Plus Ingress Controller.
 
 [source, bash]
 .*1. Get Code*
 ----
-git clone https://github.com/cloudadc/container-ingress.git
-cd container-ingress/nginx-plus-ingress/install/
-
 git clone https://github.com/nginxinc/kubernetes-ingress/
 cd kubernetes-ingress/deployments
-git checkout v1.7.2
+git checkout v1.8.1
 ----
 
 [source, bash]
@@ -35,6 +36,7 @@ git checkout v1.7.2
 ----
 kubectl apply -f common/ns-and-sa.yaml
 kubectl apply -f rbac/rbac.yaml
+kubectl apply -f rbac/ap-rbac.yaml
 ----
 
 [source, bash]
@@ -42,35 +44,78 @@ kubectl apply -f rbac/rbac.yaml
 ----
 kubectl apply -f common/default-server-secret.yaml
 kubectl apply -f common/nginx-config.yaml
+
 kubectl apply -f common/vs-definition.yaml
 kubectl apply -f common/vsr-definition.yaml
 kubectl apply -f common/ts-definition.yaml
+kubectl apply -f common/policy-definition.yaml
+
 kubectl apply -f common/gc-definition.yaml
 kubectl apply -f common/global-configuration.yaml
+
+kubectl apply -f common/ap-logconf-definition.yaml 
+kubectl apply -f common/ap-policy-definition.yaml 
 ----
 
 [source, bash]
-.*5. Deploy the Ingress Controller*
+.*4. Deploy the Ingress Controller*
 ----
 kubectl apply -f deployment/nginx-plus-ingress.yaml
 ----
 
-[source, bash]
-.*6. Get Access to the Ingress Controller*
-----
-kubectl create ns bigip-ctlr
-kubectl create secret generic bigip-login --from-literal=username=admin --from-literal=password=admin.F5demo.com -n bigip-ctlr
-kubectl create serviceaccount bigip-ctlr -n bigip-ctlr
-kubectl create -f rbac-nginx.yaml
-kubectl create -f cis-nginx.yaml
+NOTE: Modify the `deployment/nginx-plus-ingress.yaml` file to change the image name is necessary before execute deploying.
 
+[source, bash]
+.*5. Verify the installation*
+----
+kubectl get pods -n nginx-ingress
+----
+
+=== Exposing to F5
+
+F5 Virtual Server provide a public IP used as unified enterence for Nginx Plus Ingress Controller.
+
+[source, bash]
+.*1. Get Code*
+----
+git clone https://github.com/cloudadc/container-ingress.git
+cd container-ingress/nginx-plus-ingress/install/
+----
+
+[source, bash]
+.*2. Deploy F5 CIS*
+----
+kubectl apply -f cis-ns-sa.yaml 
+kubectl create secret generic bigip-login --from-literal=username=admin --from-literal=password=F5demo@666 -n bigip-ctlr
+kubectl apply -f cis-ns-sa.yaml 
+kubectl apply -f cis-nginx.yaml 
+----
+
+[source, bash]
+.*3. Verify the F5 CIS installation*
+----
+kubectl get pods -n bigip-ctlr
+----
+
+[source, bash]
+.*4. Exposing Ingress Controller to F5*
+----
 kubectl create -f nginx-plus-ingress-svc.yaml
 kubectl apply -f nginx-plus-ingress-configmap.yaml
 ----
 
-NOTE: Refer to https://docs.nginx.com/nginx-ingress-controller/installation/installation-with-manifests/ for installing Nginx Plus Ingress Controller base on image build above.
+*5. Verify the installation*
+
+From the F5 UI, check the Virtual Server and referenced Pool member:
+
+image:install/nginx-plus-f5-diagram.png[]
+
+* `192.168.8.30:80` - is the public IP and Port used to access the Nginx Plus ingress controller
+* `10.244.2.29:80`  - is the container IP and Port exposed by Nginx Plus ingress controller Pod.
 
 == Coffee Tea Example
+
+This section will deploy the Coffee Tea Example to the environment installed above.
 
 [source, bash]
 .*1. Get Code*
@@ -102,77 +147,5 @@ Server name: tea-7df475c6-nbdrs
 Date: 11/Jul/2020:17:31:33 +0000
 URI: /tea
 Request ID: d8344e70dfe8627d67a136c701851573
-----
-
-== Basic Configuration
-
-=== Monitoring Dashboard
-
-[source, bash]
-.*1. Get Code*
-----
-git clone https://github.com/cloudadc/container-ingress.git
-cd container-ingress/nginx-plus-ingress/monitor/
-----
-
-[source, yaml]
-.*2. Configuration Highlight*
-----
-      containers:
-        ports:
-        - name: monitor
-          containerPort: 8898
-        args:
-          - -nginx-status=true
-          - -nginx-status-allow-cidrs=0.0.0.0/0
-          - -nginx-status-port=8898
-----
-
-*3. Dashboard(http://HOST/dashboard.html)*
-
-image:monitor/nginx-plus-dashboard.png[]
-
-
-=== TLS
-
-
-The Basic Configuration will demonstation:
-
-* TLS
-* Path based route
-
-[source, bash]
-.*Set up*
-----
-openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.cert -subj "/CN=app.example.com/O=app.example.com"
-kubectl create secret tls app-secret --key tls.key --cert tls.cert
-kubectl create -f basic-deploy.yaml 
-kubectl create -f basic-ingress.yaml
-----
-
-[source, bash]
-.*Demostrations*
-----
-curl -k https://app.example.com:31028/bar
-curl -k https://app.example.com:31028/foo
-----
-
-== Advanced Configuration
-
-The Advanced Configuration can use annotations to do more fine-grained ingress controll.
-
-More details refer to https://docs.nginx.com/nginx-ingress-controller/configuration/ingress-resources/advanced-configuration-with-annotations
-
-[source, bash]
-.*Set up*
-----
-kubectl apply -f advanced-ingress.yaml 
-----
-
-[source, bash]
-.*Demostrations*
-----
-curl http://app.example.com:30304/foo
-curl http://app.example.com:30304/bar
 ----
 
