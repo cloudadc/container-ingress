@@ -1,0 +1,130 @@
+= Canary Releasing
+:toc: manual
+
+This page contains the Canary Releasing with F5 CIS AS3.
+
+== Services in Single K8S
+
+[source, bash]
+.*Deploy Services*
+----
+kubectl apply -f backend-canary.yaml
+----
+
+* link:backend-canary.yaml[backend-canary.yaml]
+
+This will deploy 2 services, the `/version` will return app version, the 1st return `{"appVersion": "1.0"}`, the 2nd service return `{"appVersion": "1.0"}`.
+
+=== URL
+
+[source, bash]
+.*1. *
+----
+
+----
+
+[source, bash]
+.*1. *
+----
+
+----
+
+=== Source Address
+
+[source, bash]
+.*1. *
+----
+
+----
+
+[source, bash]
+.*1. *
+----
+
+----
+
+=== Http Header
+
+[source, bash]
+.*1. *
+----
+
+----
+
+[source, bash]
+.*1. *
+----
+
+----
+
+=== Ratio
+
+[source, bash]
+.*1. *
+----
+
+----
+
+[source, bash]
+.*1. *
+----
+
+----
+
+== Services in Different K8S
+
+=== URL
+
+[source, bash]
+.*1. *
+----
+
+----
+
+[source, bash]
+.*1. *
+----
+
+----
+
+=== Source Address
+
+[source, bash]
+.*1. *
+----
+
+----
+
+[source, bash]
+.*1. *
+----
+
+----
+
+=== Http Header
+
+[source, bash]
+.*1. *
+----
+
+----
+
+[source, bash]
+.*1. *
+----
+
+----
+
+=== Ratio
+
+[source, bash]
+.*1. *
+----
+
+----
+
+[source, bash]
+.*1. *
+----
+
+----

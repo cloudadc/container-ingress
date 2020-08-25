@@ -3,6 +3,7 @@
 . link:README.adoc[INTRODUCTION]
 . link:f5-cis/README.adoc[F5 CIS]
 .. link:f5-cis/as3/README.adoc[AS3]
+... link:f5-cis/as3/canary/README.adoc[Canary Releasing]
 .. link:f5-cis/ingress/README.adoc[Ingress]
 .. link:f5-cis/cccl/README.adoc[CCCL]
 . link:nginx-ingress/README.adoc[NGINX]
