@@ -1,8 +1,8 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: cm-cistest
-  namespace: cistest
+  name: cm-test001
+  namespace: test001
   labels:
     f5type: virtual-server
     as3: "true"
@@ -11,42 +11,29 @@ data:
     {
       "class": "AS3",
       "action": "deploy",
-      "persist": true,
+      "persist": true, 
       "declaration": {
         "class": "ADC",
         "schemaVersion": "3.19.0",
-        "id": "cm-cistest",
-        "cistest": {
+        "id": "cm-test001",
+        "test001": {
           "class": "Tenant",
-          "cistest": {
+          "test001_app-v1-svc_svc": {
             "class": "Application",
             "template": "generic",
-            "app_svc_vs_http": {
+            "app_svc_vs": {
               "class": "Service_HTTP",
-              "persistenceMethods": [ "cookie" ],
+               "iRules": ["test001_app-v1-svc_irules"],
               "virtualAddresses": [
                 "192.168.5.40"
               ],
-              "snat": "self",
-              "virtualPort": 80,
-              "pool": "cistest_app_http_svc_pool"
+              "virtualPort": 80
             },
-            "app_svc_vs_management": {
-              "class": "Service_HTTP",
-              "persistenceMethods": [ "cookie" ],
-              "virtualAddresses": [
-                "192.168.5.40"
-              ],
-              "snat": "self",
-              "virtualPort": 8081,
-              "pool": "cistest_app_management_svc_pool"
-            },
-            "cistest_app_http_svc_pool": {
+            "test001_app-v1-svc_80_pool": {
               "class": "Pool",
               "monitors": [
                 "tcp"
               ],
-              "loadBalancingMode": "least-connections-member",
               "members": [
               {
                 "servicePort": 80,
@@ -54,15 +41,22 @@ data:
               }
               ]
             },
-            "cistest_app_management_svc_pool": {
+            "test001_app-v1-svc_irules": {
+              "class": "iRule",
+              "iRule": "when CLIENT_ACCEPTED {\n  if {[IP::addr [IP::client_addr] equals 192.168.5.30] or [IP::addr [IP::client_addr] equals 192.168.5.0/24]} {\n    pool /test001/test001_app-v2-svc_svc/test001_app-v2-svc_80_pool \n  } else {\n    pool /test001/test001_app-v1-svc_svc/test001_app-v1-svc_80_pool \n  }\n}" 
+            }
+          },
+          "test001_app-v2-svc_svc": {
+            "class": "Application",
+            "template": "generic",
+            "test001_app-v2-svc_80_pool": {
               "class": "Pool",
               "monitors": [
                 "tcp"
               ],
-              "loadBalancingMode": "least-connections-member",
               "members": [
               {
-                "servicePort": 8080,
+                "servicePort": 80,
                 "serverAddresses": []
               }
               ]

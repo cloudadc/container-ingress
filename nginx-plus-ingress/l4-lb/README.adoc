@@ -20,6 +20,8 @@ cd container-ingress/nginx-plus-ingress/l4-lb
 kubectl apply -f deploy.yaml 
 ----
 
+* link:deploy.yaml[deploy.yaml]
+
 this will create a namespace named `echoserver`, and the `echoserver` service under it.
 
 [source, bash]
@@ -42,24 +44,16 @@ eg: deploy a cluster-wide nginx plus ingress controller:
 [source, bash]
 ----
 // 1. deploy cluster wide nginx ingress controller
-kubectl apply -f ns-and-sa.yaml
-kubectl apply -f rbac.yaml
-kubectl apply -f default-server-secret.yaml
-kubectl apply -f nginx-config.yaml
-kubectl apply -f vs-definition.yaml
-kubectl apply -f vsr-definition.yaml
-kubectl apply -f ts-definition.yaml
 kubectl apply -f nginx-plus-ingress.yaml
 
 // 2. deploy bigip controller
-kubectl create ns bigip-ctlr
-kubectl create secret generic bigip-login --from-literal=username=admin --from-literal=password=admin.F5demo.com -n bigip-ctlr
-kubectl create serviceaccount bigip-ctlr -n bigip-ctlr
-kubectl apply -f rbac-cis.yaml
-kubectl apply -f cis-nginx.yaml
 kubectl apply -f nginx-plus-ingress-svc.yaml
 kubectl apply -f nginx-plus-ingress-configmap.yaml
 ----
+
+* link:nginx-plus-ingress.yaml[nginx-plus-ingress.yaml]
+* link:nginx-plus-ingress-svc.yaml[nginx-plus-ingress-svc.yaml]
+* link:nginx-plus-ingress-configmap.yaml[nginx-plus-ingress-configmap.yaml]
 
 Check the dashboard via http://192.168.5.40:8080/dashboard.html
 
@@ -74,6 +68,8 @@ We use stream-snippets ConfigMap key to configure TCP load balancing for our ech
 ----
 kubectl apply -f nginx-plus-config.yaml
 ----
+
+link:nginx-plus-config.yaml[nginx-plus-config.yaml]
 
 [source, yaml]
 .*2. highlights of configmap stream-snippets*

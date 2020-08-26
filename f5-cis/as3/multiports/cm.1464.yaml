@@ -1,8 +1,8 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: nginx-ingress-f5
-  namespace: nginx-ingress
+  name: cm-cistest
+  namespace: cistest
   labels:
     f5type: virtual-server
     as3: "true"
@@ -15,25 +15,23 @@ data:
       "declaration": {
         "class": "ADC",
         "schemaVersion": "3.19.0",
-        "id": "nginx-ingress-f5",
-        "label": "nginx-ingress-f5",
-        "remark": "Nginx Ingress",
-        "nginx-ingress": {
+        "id": "cm-cistest",
+        "cistest": {
           "class": "Tenant",
-          "nginx-ingress-app": {
+          "cistest": {
             "class": "Application",
             "template": "generic",
-            "nginx_ingress_vs": {
+            "app_svc_vs_http": {
               "class": "Service_HTTP",
               "persistenceMethods": [ "cookie" ],
               "virtualAddresses": [
-                "192.168.8.30"
+                "192.168.5.40"
               ],
               "snat": "self",
               "virtualPort": 80,
-              "pool": "nginx-ingress-pool"
+              "pool": "cistest_app_svc_pool"
             },
-            "nginx-ingress-pool": {
+            "cistest_app_svc_pool": {
               "class": "Pool",
               "monitors": [
                 "tcp"
@@ -41,7 +39,7 @@ data:
               "loadBalancingMode": "least-connections-member",
               "members": [
               {
-                "servicePort": 80,
+                "servicePort": 8080,
                 "serverAddresses": []
               }
               ]
