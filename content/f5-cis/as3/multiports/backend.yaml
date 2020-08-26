@@ -29,8 +29,10 @@ spec:
       - image: cloudadc/backend:0.0.5
         name: backend
         ports:
-        - containerPort: 8080
-        - containerPort: 8081
+        - name: http
+          containerPort: 8080
+        - name: management
+          containerPort: 8081
         env:
         - name: APP_DATACENTER_NAME
           value: "TEST"
@@ -61,4 +63,43 @@ spec:
   selector:
     app: app
   type: ClusterIP
-
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    cis.f5.com/as3-tenant: "cistest"
+    cis.f5.com/as3-app: "cistest"
+    cis.f5.com/as3-pool: "cistest_app_http_svc_pool"
+  name: app-http-svc
+  namespace: cistest
+spec:
+  ports:
+  - port: 80
+    name: http
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: app
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    cis.f5.com/as3-tenant: "cistest"
+    cis.f5.com/as3-app: "cistest"
+    cis.f5.com/as3-pool: "cistest_app_management_svc_pool"
+  name: app-management-svc
+  namespace: cistest
+spec:
+  ports:
+  - port: 8081
+    name: management
+    protocol: TCP
+    targetPort: 8081
+  selector:
+    app: app
+  type: ClusterIP

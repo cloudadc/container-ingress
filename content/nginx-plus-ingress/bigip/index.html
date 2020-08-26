@@ -64,7 +64,7 @@
     <link rel="next" href="../l4-lb/" />
     
     
-    <link rel="prev" href="../" />
+    <link rel="prev" href="../monitor/dashboard.html" />
     
 
     </head>
@@ -130,6 +130,25 @@
                 </a>
             
 
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.2.1.1" data-path="../../f5-cis/as3/canary/">
+            
+                <a href="../../f5-cis/as3/canary/">
+            
+                    
+                    Canary Releasing
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
             
         </li>
     
@@ -210,7 +229,20 @@
             <ul class="articles">
                 
     
-        <li class="chapter active" data-level="1.4.1" data-path="./">
+        <li class="chapter " data-level="1.4.1" data-path="../monitor/dashboard.html">
+            
+                <a href="../monitor/dashboard.html">
+            
+                    
+                    Monitor Dashboard
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.4.2" data-path="./">
             
                 <a href="./">
             
@@ -223,7 +255,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4.2" data-path="../l4-lb/">
+        <li class="chapter " data-level="1.4.3" data-path="../l4-lb/">
             
                 <a href="../l4-lb/">
             
@@ -236,7 +268,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4.3" data-path="../release/">
+        <li class="chapter " data-level="1.4.4" data-path="../release/">
             
                 <a href="../release/">
             
@@ -368,34 +400,40 @@
 </ul>
 </div>
 <div class="listingblock">
-<div class="title"><strong>Get Code</strong></div>
+<div class="title"><strong>1. Get Code</strong></div>
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">git <span class="hljs-built_in">clone</span> https://github.com/cloudadc/container-ingress.git
 <span class="hljs-built_in">cd</span> container-ingress/nginx-plus-ingress/bigip/cluster-wide/</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p><strong>2. Refer to <a href="../">Installation</a> to set up Nginx Plus Ingress &amp; Expose to F5</strong></p>
+</div>
+<div class="paragraph">
+<p>In this section, Cluster-wide Ingress Controller has 3 replicas, F5 load balancing these replicas.</p>
+</div>
 <div class="listingblock">
-<div class="title"><strong>Set up</strong></div>
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">// 1. deploy cluster wide nginx ingress controller
-kubectl apply <span class="hljs-_">-f</span> ns-and-sa.yaml
-kubectl apply <span class="hljs-_">-f</span> rbac.yaml
-kubectl apply <span class="hljs-_">-f</span> default-server-secret.yaml
-kubectl apply <span class="hljs-_">-f</span> nginx-config.yaml
-kubectl apply <span class="hljs-_">-f</span> vs-definition.yaml
-kubectl apply <span class="hljs-_">-f</span> vsr-definition.yaml
-kubectl apply <span class="hljs-_">-f</span> ts-definition.yaml
 kubectl apply <span class="hljs-_">-f</span> nginx-plus-ingress.yaml
 
-// 2. deploy bigip controller
-kubectl create ns bigip-ctlr
-kubectl create secret generic bigip-login --from-literal=username=admin --from-literal=password=admin.F5demo.com -n bigip-ctlr
-kubectl create serviceaccount bigip-ctlr -n bigip-ctlr
-kubectl apply <span class="hljs-_">-f</span> rbac-cis.yaml
-kubectl apply <span class="hljs-_">-f</span> cis-nginx.yaml
+// 2. expose to F5
 kubectl apply <span class="hljs-_">-f</span> nginx-plus-ingress-svc.yaml
 kubectl apply <span class="hljs-_">-f</span> nginx-plus-ingress-configmap.yaml</code></pre>
 </div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="cluster-wide/nginx-plus-ingress.yaml">nginx-plus-ingress.yaml</a></p>
+</li>
+<li>
+<p><a href="cluster-wide/nginx-plus-ingress-svc.yaml">nginx-plus-ingress-svc.yaml</a></p>
+</li>
+<li>
+<p><a href="cluster-wide/nginx-plus-ingress-svc.yaml">nginx-plus-ingress-svc.yaml</a></p>
+</li>
+</ul>
 </div>
 </div>
 <div class="sect2">
@@ -406,6 +444,16 @@ kubectl apply <span class="hljs-_">-f</span> nginx-plus-ingress-configmap.yaml</
 <pre class="highlight"><code class="language-bash" data-lang="bash">kubectl apply <span class="hljs-_">-f</span> example-deploy.yaml
 kubectl apply <span class="hljs-_">-f</span> example-ingress.yaml</code></pre>
 </div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="cluster-wide/example-deploy.yaml">example-deploy.yaml</a></p>
+</li>
+<li>
+<p><a href="cluster-wide/example-ingress.yaml">example-ingress.yaml</a></p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
 <p>This will create 4 namespaces, and each namespace has 2 services <code>coffee</code> and <code>tea</code>, also there are 4 ingress resources be create in 4 namespaces accordingly, each has reference a hostname, the path to different the 2 services in each namespace.</p>
@@ -607,38 +655,50 @@ server {
 </ul>
 </div>
 <div class="listingblock">
-<div class="title"><strong>Get Code</strong></div>
+<div class="title"><strong>1. Get Code</strong></div>
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">git <span class="hljs-built_in">clone</span> https://github.com/cloudadc/container-ingress.git
 <span class="hljs-built_in">cd</span> container-ingress/nginx-plus-ingress/bigip/single-namespace/</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p><strong>2. Refer to <a href="../">Installation</a> to set up Nginx Plus Ingress &amp; Expose to F5</strong></p>
+</div>
+<div class="paragraph">
+<p>In this section, we will deploy 2 groups of ingress controller, each group has 2 controller pods, each group take charge of a single namespace. F5 load balancing each group and provide a unified enterence.</p>
+</div>
 <div class="listingblock">
-<div class="title"><strong>Set up</strong></div>
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">// 1. deploy single namespace nginx ingress controller
-kubectl apply <span class="hljs-_">-f</span> ns-and-sa.yaml
-kubectl apply <span class="hljs-_">-f</span> rbac.yaml
-kubectl apply <span class="hljs-_">-f</span> default-server-secret.yaml
-kubectl apply <span class="hljs-_">-f</span> nginx-config.yaml
-kubectl apply <span class="hljs-_">-f</span> vs-definition.yaml
-kubectl apply <span class="hljs-_">-f</span> vsr-definition.yaml
-kubectl apply <span class="hljs-_">-f</span> ts-definition.yaml
 kubectl apply <span class="hljs-_">-f</span> nginx-plus-ingress-test01.yaml
 kubectl apply <span class="hljs-_">-f</span> nginx-plus-ingress-test02.yaml
 
 // 2. deploy bigip controller
-kubectl create ns bigip-ctlr
-kubectl create secret generic bigip-login --from-literal=username=admin --from-literal=password=admin.F5demo.com -n bigip-ctlr
-kubectl create serviceaccount bigip-ctlr -n bigip-ctlr
-kubectl apply <span class="hljs-_">-f</span> rbac-cis.yaml
-kubectl apply <span class="hljs-_">-f</span> cis-nginx.yaml
 kubectl apply <span class="hljs-_">-f</span> nginx-plus-ingress-svc.yaml
 kubectl apply <span class="hljs-_">-f</span> nginx-plus-ingress-configmap.yaml</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>the above setting up will create 2 ingress controller, one for namespace <code>test01</code>, and the other for <code>test02</code>.</p>
+</div>
+<div class="paragraph">
+<p>The reference yaml files:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="single-namespace/nginx-plus-ingress-test01.yaml">nginx-plus-ingress-test01.yaml</a></p>
+</li>
+<li>
+<p><a href="single-namespace/nginx-plus-ingress-test02.yaml">nginx-plus-ingress-test02.yaml</a></p>
+</li>
+<li>
+<p><a href="single-namespace/nginx-plus-ingress-svc.yaml">nginx-plus-ingress-svc.yaml</a></p>
+</li>
+<li>
+<p><a href="single-namespace/nginx-plus-ingress-configmap.yaml">nginx-plus-ingress-configmap.yaml</a></p>
+</li>
+</ul>
 </div>
 </div>
 <div class="sect2">
@@ -649,6 +709,16 @@ kubectl apply <span class="hljs-_">-f</span> nginx-plus-ingress-configmap.yaml</
 <pre class="highlight"><code class="language-bash" data-lang="bash">kubectl apply <span class="hljs-_">-f</span> example-deploy.yaml
 kubectl apply <span class="hljs-_">-f</span> example-ingress.yaml</code></pre>
 </div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="single-namespace/example-deploy.yaml">example-deploy.yaml</a></p>
+</li>
+<li>
+<p><a href="single-namespace/example-ingress.yaml">example-ingress.yaml</a></p>
+</li>
+</ul>
 </div>
 <div class="listingblock">
 <div class="title"><strong>2. Check Ingress controller log</strong></div>
@@ -722,38 +792,47 @@ curl http://nginxtest02.example.com/tea</code></pre>
 </ul>
 </div>
 <div class="listingblock">
-<div class="title"><strong>Get Code</strong></div>
+<div class="title"><strong>1. Get Code</strong></div>
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">git <span class="hljs-built_in">clone</span> https://github.com/cloudadc/container-ingress.git
 <span class="hljs-built_in">cd</span> container-ingress/nginx-plus-ingress/bigip/specific-ingress-class/</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p><strong>2. Refer to <a href="../">Installation</a> to set up Nginx Plus Ingress &amp; Expose to F5</strong></p>
+</div>
 <div class="listingblock">
-<div class="title"><strong>Set up</strong></div>
 <div class="content">
-<pre>// 1. deploy Ingress Controller for Specific Ingress Class
-kubectl apply -f ns-and-sa.yaml
-kubectl apply -f rbac.yaml
-kubectl apply -f default-server-secret.yaml
-kubectl apply -f nginx-config.yaml
-kubectl apply -f vs-definition.yaml
-kubectl apply -f vsr-definition.yaml
-kubectl apply -f ts-definition.yaml
-kubectl apply -f nginx-plus-ingress.yaml
-kubectl apply -f nginx-plus-ingress-fintech.yaml
+<pre class="highlight"><code class="language-bash" data-lang="bash">// 1. deploy Ingress Controller <span class="hljs-keyword">for</span> Specific Ingress Class
+kubectl apply <span class="hljs-_">-f</span> nginx-plus-ingress.yaml
+kubectl apply <span class="hljs-_">-f</span> nginx-plus-ingress-fintech.yaml
 
 // 2. deploy bigip controller
-kubectl create ns bigip-ctlr
-kubectl create secret generic bigip-login --from-literal=username=admin --from-literal=password=admin.F5demo.com -n bigip-ctlr
-kubectl create serviceaccount bigip-ctlr -n bigip-ctlr
-kubectl apply -f rbac-cis.yaml
-kubectl apply -f cis-nginx.yaml
-kubectl apply -f nginx-plus-ingress-svc.yaml
-kubectl apply -f nginx-plus-ingress-configmap.yaml</pre>
+kubectl apply <span class="hljs-_">-f</span> nginx-plus-ingress-svc.yaml
+kubectl apply <span class="hljs-_">-f</span> nginx-plus-ingress-configmap.yaml</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>the above setting up deployed 2 ingress controller, one for monitoring the ingress resources with <code>kubernetes.io/ingress.class: fintech</code>, the other for monitoring ingress resource with default ingress class.</p>
+</div>
+<div class="paragraph">
+<p>The reference yaml files:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="specific-ingress-class/nginx-plus-ingress.yaml">nginx-plus-ingress.yaml</a></p>
+</li>
+<li>
+<p><a href="specific-ingress-class/nginx-plus-ingress-fintech.yaml">nginx-plus-ingress-fintech.yaml</a></p>
+</li>
+<li>
+<p><a href="specific-ingress-class/nginx-plus-ingress-svc.yaml">nginx-plus-ingress-svc.yaml</a></p>
+</li>
+<li>
+<p><a href="specific-ingress-class/nginx-plus-ingress-configmap.yaml">nginx-plus-ingress-configmap.yaml</a></p>
+</li>
+</ul>
 </div>
 </div>
 <div class="sect2">
@@ -765,6 +844,19 @@ kubectl apply -f nginx-plus-ingress-configmap.yaml</pre>
 kubectl apply <span class="hljs-_">-f</span> example-ingress.yaml
 kubectl apply <span class="hljs-_">-f</span> example-ingress-fintech.yaml</code></pre>
 </div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="specific-ingress-class/example-deploy.yaml">example-deploy.yaml</a></p>
+</li>
+<li>
+<p><a href="specific-ingress-class/example-ingress.yaml">example-ingress.yaml</a></p>
+</li>
+<li>
+<p><a href="specific-ingress-class/example-ingress-fintech.yaml">example-ingress-fintech.yaml</a></p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
 <p>this will create 4 namespaces, each namespace has 2 services named <code>coffee</code> and <code>tea</code>, each namespace also has reference a ingress resources, the 1st 2 ingress resources use the default ingress class, the 2nd 2 ingress resource in <code>fintech</code> as ingress class.</p>
@@ -836,7 +928,7 @@ kubectl apply <span class="hljs-_">-f</span> example-ingress-fintech.yaml</code>
 
             
                 
-                <a href="../" class="navigation navigation-prev " aria-label="Previous page: NGINX PLUS">
+                <a href="../monitor/dashboard.html" class="navigation navigation-prev " aria-label="Previous page: Monitor Dashboard">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
@@ -852,7 +944,7 @@ kubectl apply <span class="hljs-_">-f</span> example-ingress-fintech.yaml</code>
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Deployment Architectures","level":"1.4.1","depth":2,"next":{"title":"L4 Load Balancing","level":"1.4.2","depth":2,"path":"nginx-plus-ingress/l4-lb/README.adoc","ref":"nginx-plus-ingress/l4-lb/README.adoc","articles":[]},"previous":{"title":"NGINX PLUS","level":"1.4","depth":1,"path":"nginx-plus-ingress/README.adoc","ref":"nginx-plus-ingress/README.adoc","articles":[{"title":"Deployment Architectures","level":"1.4.1","depth":2,"path":"nginx-plus-ingress/bigip/README.adoc","ref":"nginx-plus-ingress/bigip/README.adoc","articles":[]},{"title":"L4 Load Balancing","level":"1.4.2","depth":2,"path":"nginx-plus-ingress/l4-lb/README.adoc","ref":"nginx-plus-ingress/l4-lb/README.adoc","articles":[]},{"title":"Zero-Downtime Releases","level":"1.4.3","depth":2,"path":"nginx-plus-ingress/release/README.adoc","ref":"nginx-plus-ingress/release/README.adoc","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{"copyrightYear":"2020","copyrightHolder":"Kylin Soong"},"plugins":["collapsible-menu","donate","-sharing","sharing-plus","splitter","back-to-top-button","edit-link"],"pluginsConfig":{"tbfed-pagefooter":{"copyright":"Copyright &copy Kylin Soong 2018","modify_label":"该文件修订时间：","modify_format":"YYYY-MM-DD HH:mm:ss"},"collapsible-menu":{},"splitter":{},"search":{},"sharing-plus":{"qq":false,"all":["facebook","google","twitter","instapaper","linkedin","pocket","stumbleupon"],"douban":false,"facebook":true,"weibo":false,"instapaper":false,"whatsapp":false,"hatenaBookmark":false,"twitter":true,"messenger":false,"line":false,"vk":false,"pocket":true,"google":false,"viber":false,"stumbleupon":false,"qzone":false,"linkedin":false},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"donate":{"alipay":"http://ksoong.org/docs/content/images/alipay.png","alipayText":"支付宝捐赠","button":"赞赏","title":"","wechat":"http://ksoong.org/docs/content/images/wechat.png","wechatText":"微信捐赠"},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"back-to-top-button":{},"sharing":{"weibo":true,"linkedin":true,"google":true,"facebook":true,"all":["facebook","google","linkedin","weibo"]},"edit-link":{"label":"Edit This Page","base":"https://github.com/kylinsoong/docs/blob/gh-pages"},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"website.css"}},"file":{"path":"nginx-plus-ingress/bigip/README.adoc","mtime":"2020-08-16T08:56:40.441Z","type":"asciidoc"},"gitbook":{"version":"3.2.3","time":"2020-08-16T08:57:00.345Z"},"basePath":"../..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Deployment Architectures","level":"1.4.2","depth":2,"next":{"title":"L4 Load Balancing","level":"1.4.3","depth":2,"path":"nginx-plus-ingress/l4-lb/README.adoc","ref":"nginx-plus-ingress/l4-lb/README.adoc","articles":[]},"previous":{"title":"Monitor Dashboard","level":"1.4.1","depth":2,"path":"nginx-plus-ingress/monitor/dashboard.adoc","ref":"nginx-plus-ingress/monitor/dashboard.adoc","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{"copyrightYear":"2020","copyrightHolder":"Kylin Soong"},"plugins":["collapsible-menu","donate","-sharing","sharing-plus","splitter","back-to-top-button","edit-link"],"pluginsConfig":{"tbfed-pagefooter":{"copyright":"Copyright &copy Kylin Soong 2018","modify_label":"该文件修订时间：","modify_format":"YYYY-MM-DD HH:mm:ss"},"collapsible-menu":{},"splitter":{},"search":{},"sharing-plus":{"qq":false,"all":["facebook","google","twitter","instapaper","linkedin","pocket","stumbleupon"],"douban":false,"facebook":true,"weibo":false,"instapaper":false,"whatsapp":false,"hatenaBookmark":false,"twitter":true,"messenger":false,"line":false,"vk":false,"pocket":true,"google":false,"viber":false,"stumbleupon":false,"qzone":false,"linkedin":false},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"donate":{"alipay":"http://ksoong.org/docs/content/images/alipay.png","alipayText":"支付宝捐赠","button":"赞赏","title":"","wechat":"http://ksoong.org/docs/content/images/wechat.png","wechatText":"微信捐赠"},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"back-to-top-button":{},"sharing":{"weibo":true,"linkedin":true,"google":true,"facebook":true,"all":["facebook","google","linkedin","weibo"]},"edit-link":{"label":"Edit This Page","base":"https://github.com/kylinsoong/docs/blob/gh-pages"},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"website.css"}},"file":{"path":"nginx-plus-ingress/bigip/README.adoc","mtime":"2020-08-26T09:38:08.854Z","type":"asciidoc"},"gitbook":{"version":"3.2.3","time":"2020-08-26T09:43:59.601Z"},"basePath":"../..","book":{"language":""}});
         });
     </script>
 </div>

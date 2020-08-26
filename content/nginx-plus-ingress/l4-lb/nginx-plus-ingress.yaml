@@ -15,7 +15,7 @@ spec:
     spec:
       serviceAccountName: nginx-ingress
       containers:
-      - image: cloudadc/nginx-plus-ingress:1.7.2
+      - image: cloudadc/nginx-ingress:1.8.1.1
         name: nginx-ingress
         ports:
         - name: echoserver

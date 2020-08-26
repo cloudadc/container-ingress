@@ -49,7 +49,7 @@ data:
           "nginx-ingress-dashboard-app": {
             "class": "Application",
             "template": "generic",
-            "nginx_ingress-dashboard-_vs": {
+            "nginx_ingress-dashboard_vs": {
               "class": "Service_HTTP",
               "persistenceMethods": [ "cookie" ],
               "virtualAddresses": [

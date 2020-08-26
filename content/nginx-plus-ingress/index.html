@@ -61,7 +61,7 @@
     <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="bigip/" />
+    <link rel="next" href="monitor/dashboard.html" />
     
     
     <link rel="prev" href="../nginx-ingress/bigip/" />
@@ -130,6 +130,25 @@
                 </a>
             
 
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.2.1.1" data-path="../f5-cis/as3/canary/">
+            
+                <a href="../f5-cis/as3/canary/">
+            
+                    
+                    Canary Releasing
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
             
         </li>
     
@@ -210,7 +229,20 @@
             <ul class="articles">
                 
     
-        <li class="chapter " data-level="1.4.1" data-path="bigip/">
+        <li class="chapter " data-level="1.4.1" data-path="monitor/dashboard.html">
+            
+                <a href="monitor/dashboard.html">
+            
+                    
+                    Monitor Dashboard
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.2" data-path="bigip/">
             
                 <a href="bigip/">
             
@@ -223,7 +255,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4.2" data-path="l4-lb/">
+        <li class="chapter " data-level="1.4.3" data-path="l4-lb/">
             
                 <a href="l4-lb/">
             
@@ -236,7 +268,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4.3" data-path="release/">
+        <li class="chapter " data-level="1.4.4" data-path="release/">
             
                 <a href="release/">
             
@@ -316,16 +348,14 @@
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
+<li><a href="#_installation">Installation</a>
+<ul class="sectlevel2">
 <li><a href="#_image_building">Image Building</a></li>
 <li><a href="#_installing">Installing</a></li>
-<li><a href="#_coffee_tea_example">Coffee Tea Example</a></li>
-<li><a href="#_basic_configuration">Basic Configuration</a>
-<ul class="sectlevel2">
-<li><a href="#_monitoring_dashboard">Monitoring Dashboard</a></li>
-<li><a href="#_tls">TLS</a></li>
+<li><a href="#_exposing_to_f5">Exposing to F5</a></li>
 </ul>
 </li>
-<li><a href="#_advanced_configuration">Advanced Configuration</a></li>
+<li><a href="#_coffee_tea_example">Coffee Tea Example</a></li>
 </ul>
 </div>
 <div id="preamble">
@@ -336,53 +366,45 @@
 </div>
 </div>
 <div class="sect1">
-<h2 id="_image_building">Image Building</h2>
+<h2 id="_installation">Installation</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="_image_building">Image Building</h3>
+<div class="paragraph">
+<p>F5 Nginx Plus Ingress Controller need build from source code.</p>
+</div>
 <div class="paragraph">
 <p>Refer to <a href="https://docs.nginx.com/nginx-ingress-controller/installation/building-ingress-controller-image/" class="bare" target="_blank">https://docs.nginx.com/nginx-ingress-controller/installation/building-ingress-controller-image/</a> for building the Ingress Controller Image.</p>
 </div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-Apply a Nginx plus envaluation license is necessary for above steps.
-</td>
-</tr>
-</table>
-</div>
 <div class="paragraph">
-<p><a href="https://hub.docker.com/r/cloudadc/nginx-plus-ingress" class="bare" target="_blank">https://hub.docker.com/r/cloudadc/nginx-plus-ingress</a> contains all built nginx plus image.</p>
+<p>A valid license is necessary for image buliding, apply a Nginx plus envaluation license to start image building.</p>
 </div>
 <div class="listingblock">
-<div class="title"><strong>Image</strong></div>
+<div class="title"><strong>Check the license</strong></div>
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">docker pull cloudadc/nginx-plus-ingress:1.7.2</code></pre>
+<pre class="highlight"><code class="language-bash" data-lang="bash">openssl x509 -in nginx-repo.crt -noout -text</code></pre>
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_installing">Installing</h3>
+<div class="paragraph">
+<p>Refer to <a href="https://docs.nginx.com/nginx-ingress-controller/installation/installation-with-manifests" class="bare" target="_blank">https://docs.nginx.com/nginx-ingress-controller/installation/installation-with-manifests</a> to install Nginx Plus Ingress Controller.</p>
 </div>
-<div class="sect1">
-<h2 id="_installing">Installing</h2>
-<div class="sectionbody">
 <div class="listingblock">
 <div class="title"><strong>1. Get Code</strong></div>
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">git <span class="hljs-built_in">clone</span> https://github.com/cloudadc/container-ingress.git
-<span class="hljs-built_in">cd</span> container-ingress/nginx-plus-ingress/install/
-
-git <span class="hljs-built_in">clone</span> https://github.com/nginxinc/kubernetes-ingress/
+<pre class="highlight"><code class="language-bash" data-lang="bash">git <span class="hljs-built_in">clone</span> https://github.com/nginxinc/kubernetes-ingress/
 <span class="hljs-built_in">cd</span> kubernetes-ingress/deployments
-git checkout v1.7.2</code></pre>
+git checkout v1.8.1</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title"><strong>2. Configure RBAC</strong></div>
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">kubectl apply <span class="hljs-_">-f</span> common/ns-and-sa.yaml
-kubectl apply <span class="hljs-_">-f</span> rbac/rbac.yaml</code></pre>
+kubectl apply <span class="hljs-_">-f</span> rbac/rbac.yaml
+kubectl apply <span class="hljs-_">-f</span> rbac/ap-rbac.yaml</code></pre>
 </div>
 </div>
 <div class="listingblock">
@@ -390,30 +412,23 @@ kubectl apply <span class="hljs-_">-f</span> rbac/rbac.yaml</code></pre>
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">kubectl apply <span class="hljs-_">-f</span> common/default-server-secret.yaml
 kubectl apply <span class="hljs-_">-f</span> common/nginx-config.yaml
+
 kubectl apply <span class="hljs-_">-f</span> common/vs-definition.yaml
 kubectl apply <span class="hljs-_">-f</span> common/vsr-definition.yaml
 kubectl apply <span class="hljs-_">-f</span> common/ts-definition.yaml
+kubectl apply <span class="hljs-_">-f</span> common/policy-definition.yaml
+
 kubectl apply <span class="hljs-_">-f</span> common/gc-definition.yaml
-kubectl apply <span class="hljs-_">-f</span> common/global-configuration.yaml</code></pre>
+kubectl apply <span class="hljs-_">-f</span> common/global-configuration.yaml
+
+kubectl apply <span class="hljs-_">-f</span> common/ap-logconf-definition.yaml
+kubectl apply <span class="hljs-_">-f</span> common/ap-policy-definition.yaml</code></pre>
 </div>
 </div>
 <div class="listingblock">
-<div class="title"><strong>5. Deploy the Ingress Controller</strong></div>
+<div class="title"><strong>4. Deploy the Ingress Controller</strong></div>
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">kubectl apply <span class="hljs-_">-f</span> deployment/nginx-plus-ingress.yaml</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title"><strong>6. Get Access to the Ingress Controller</strong></div>
-<div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">kubectl create ns bigip-ctlr
-kubectl create secret generic bigip-login --from-literal=username=admin --from-literal=password=admin.F5demo.com -n bigip-ctlr
-kubectl create serviceaccount bigip-ctlr -n bigip-ctlr
-kubectl create <span class="hljs-_">-f</span> rbac-nginx.yaml
-kubectl create <span class="hljs-_">-f</span> cis-nginx.yaml
-
-kubectl create <span class="hljs-_">-f</span> nginx-plus-ingress-svc.yaml
-kubectl apply <span class="hljs-_">-f</span> nginx-plus-ingress-configmap.yaml</code></pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -423,16 +438,80 @@ kubectl apply <span class="hljs-_">-f</span> nginx-plus-ingress-configmap.yaml</
 <div class="title">Note</div>
 </td>
 <td class="content">
-Refer to <a href="https://docs.nginx.com/nginx-ingress-controller/installation/installation-with-manifests/" class="bare" target="_blank">https://docs.nginx.com/nginx-ingress-controller/installation/installation-with-manifests/</a> for installing Nginx Plus Ingress Controller base on image build above.
+Modify the <code>deployment/nginx-plus-ingress.yaml</code> file to change the image name is necessary before execute deploying.
 </td>
 </tr>
 </table>
+</div>
+<div class="listingblock">
+<div class="title"><strong>5. Verify the installation</strong></div>
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">kubectl get pods -n nginx-ingress</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_exposing_to_f5">Exposing to F5</h3>
+<div class="paragraph">
+<p>F5 Virtual Server provide a public IP used as unified enterence for Nginx Plus Ingress Controller.</p>
+</div>
+<div class="listingblock">
+<div class="title"><strong>1. Get Code</strong></div>
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">git <span class="hljs-built_in">clone</span> https://github.com/cloudadc/container-ingress.git
+<span class="hljs-built_in">cd</span> container-ingress/nginx-plus-ingress/install/</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title"><strong>2. Deploy F5 CIS</strong></div>
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">kubectl apply <span class="hljs-_">-f</span> cis-ns-sa.yaml
+kubectl create secret generic bigip-login --from-literal=username=admin --from-literal=password=F5demo@666 -n bigip-ctlr
+kubectl apply <span class="hljs-_">-f</span> cis-ns-sa.yaml
+kubectl apply <span class="hljs-_">-f</span> cis-nginx.yaml</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title"><strong>3. Verify the F5 CIS installation</strong></div>
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">kubectl get pods -n bigip-ctlr</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title"><strong>4. Exposing Ingress Controller to F5</strong></div>
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">kubectl create <span class="hljs-_">-f</span> nginx-plus-ingress-svc.yaml
+kubectl apply <span class="hljs-_">-f</span> nginx-plus-ingress-configmap.yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>5. Verify the installation</strong></p>
+</div>
+<div class="paragraph">
+<p>From the F5 UI, check the Virtual Server and referenced Pool member:</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="install/nginx-plus-f5-diagram.png" alt="nginx plus f5 diagram.png"></span></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>192.168.8.30:80</code> - is the public IP and Port used to access the Nginx Plus ingress controller</p>
+</li>
+<li>
+<p><code>10.244.2.29:80</code>  - is the container IP and Port exposed by Nginx Plus ingress controller Pod.</p>
+</li>
+</ul>
+</div>
 </div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="_coffee_tea_example">Coffee Tea Example</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>This section will deploy the Coffee Tea Example to the environment installed above.</p>
+</div>
 <div class="listingblock">
 <div class="title"><strong>1. Get Code</strong></div>
 <div class="content">
@@ -463,96 +542,6 @@ Server name: tea-7df475c6-nbdrs
 Date: 11/Jul/2020:17:31:33 +0000
 URI: /tea
 Request ID: d8344e70dfe8627d67a136c701851573</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_basic_configuration">Basic Configuration</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_monitoring_dashboard">Monitoring Dashboard</h3>
-<div class="listingblock">
-<div class="title"><strong>1. Get Code</strong></div>
-<div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">git <span class="hljs-built_in">clone</span> https://github.com/cloudadc/container-ingress.git
-<span class="hljs-built_in">cd</span> container-ingress/nginx-plus-ingress/monitor/</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title"><strong>2. Configuration Highlight</strong></div>
-<div class="content">
-<pre class="highlight"><code class="language-yaml" data-lang="yaml"><span class="hljs-attr">      containers:</span>
-<span class="hljs-attr">        ports:</span>
-<span class="hljs-attr">        - name:</span> monitor
-<span class="hljs-attr">          containerPort:</span> <span class="hljs-number">8898</span>
-<span class="hljs-attr">        args:</span>
-<span class="hljs-bullet">          -</span> -nginx-status=<span class="hljs-literal">true</span>
-<span class="hljs-bullet">          -</span> -nginx-status-allow-cidrs=<span class="hljs-number">0.0</span><span class="hljs-number">.0</span><span class="hljs-number">.0</span>/<span class="hljs-number">0</span>
-<span class="hljs-bullet">          -</span> -nginx-status-port=<span class="hljs-number">8898</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p><strong>3. Dashboard(<a href="http://HOST/dashboard.html" class="bare" target="_blank">http://HOST/dashboard.html</a>)</strong></p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="monitor/nginx-plus-dashboard.png" alt="nginx plus dashboard.png"></span></p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_tls">TLS</h3>
-<div class="paragraph">
-<p>The Basic Configuration will demonstation:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>TLS</p>
-</li>
-<li>
-<p>Path based route</p>
-</li>
-</ul>
-</div>
-<div class="listingblock">
-<div class="title"><strong>Set up</strong></div>
-<div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.cert -subj <span class="hljs-string">&quot;/CN=app.example.com/O=app.example.com&quot;</span>
-kubectl create secret tls app-secret --key tls.key --cert tls.cert
-kubectl create <span class="hljs-_">-f</span> basic-deploy.yaml
-kubectl create <span class="hljs-_">-f</span> basic-ingress.yaml</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title"><strong>Demostrations</strong></div>
-<div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">curl -k https://app.example.com:31028/bar
-curl -k https://app.example.com:31028/foo</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_advanced_configuration">Advanced Configuration</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The Advanced Configuration can use annotations to do more fine-grained ingress controll.</p>
-</div>
-<div class="paragraph">
-<p>More details refer to <a href="https://docs.nginx.com/nginx-ingress-controller/configuration/ingress-resources/advanced-configuration-with-annotations" class="bare" target="_blank">https://docs.nginx.com/nginx-ingress-controller/configuration/ingress-resources/advanced-configuration-with-annotations</a></p>
-</div>
-<div class="listingblock">
-<div class="title"><strong>Set up</strong></div>
-<div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">kubectl apply <span class="hljs-_">-f</span> advanced-ingress.yaml</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title"><strong>Demostrations</strong></div>
-<div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">curl http://app.example.com:30304/foo
-curl http://app.example.com:30304/bar</code></pre>
 </div>
 </div>
 </div>
@@ -588,7 +577,7 @@ curl http://app.example.com:30304/bar</code></pre>
                 </a>
                 
                 
-                <a href="bigip/" class="navigation navigation-next " aria-label="Next page: Deployment Architectures">
+                <a href="monitor/dashboard.html" class="navigation navigation-next " aria-label="Next page: Monitor Dashboard">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -599,7 +588,7 @@ curl http://app.example.com:30304/bar</code></pre>
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"NGINX PLUS","level":"1.4","depth":1,"next":{"title":"Deployment Architectures","level":"1.4.1","depth":2,"path":"nginx-plus-ingress/bigip/README.adoc","ref":"nginx-plus-ingress/bigip/README.adoc","articles":[]},"previous":{"title":"Deployment Architectures","level":"1.3.1","depth":2,"path":"nginx-ingress/bigip/README.adoc","ref":"nginx-ingress/bigip/README.adoc","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{"copyrightYear":"2020","copyrightHolder":"Kylin Soong"},"plugins":["collapsible-menu","donate","-sharing","sharing-plus","splitter","back-to-top-button","edit-link"],"pluginsConfig":{"tbfed-pagefooter":{"copyright":"Copyright &copy Kylin Soong 2018","modify_label":"该文件修订时间：","modify_format":"YYYY-MM-DD HH:mm:ss"},"collapsible-menu":{},"splitter":{},"search":{},"sharing-plus":{"qq":false,"all":["facebook","google","twitter","instapaper","linkedin","pocket","stumbleupon"],"douban":false,"facebook":true,"weibo":false,"instapaper":false,"whatsapp":false,"hatenaBookmark":false,"twitter":true,"messenger":false,"line":false,"vk":false,"pocket":true,"google":false,"viber":false,"stumbleupon":false,"qzone":false,"linkedin":false},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"donate":{"alipay":"http://ksoong.org/docs/content/images/alipay.png","alipayText":"支付宝捐赠","button":"赞赏","title":"","wechat":"http://ksoong.org/docs/content/images/wechat.png","wechatText":"微信捐赠"},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"back-to-top-button":{},"sharing":{"weibo":true,"linkedin":true,"google":true,"facebook":true,"all":["facebook","google","linkedin","weibo"]},"edit-link":{"label":"Edit This Page","base":"https://github.com/kylinsoong/docs/blob/gh-pages"},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"website.css"}},"file":{"path":"nginx-plus-ingress/README.adoc","mtime":"2020-08-16T08:56:40.440Z","type":"asciidoc"},"gitbook":{"version":"3.2.3","time":"2020-08-16T08:57:00.345Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"NGINX PLUS","level":"1.4","depth":1,"next":{"title":"Monitor Dashboard","level":"1.4.1","depth":2,"path":"nginx-plus-ingress/monitor/dashboard.adoc","ref":"nginx-plus-ingress/monitor/dashboard.adoc","articles":[]},"previous":{"title":"Deployment Architectures","level":"1.3.1","depth":2,"path":"nginx-ingress/bigip/README.adoc","ref":"nginx-ingress/bigip/README.adoc","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{"copyrightYear":"2020","copyrightHolder":"Kylin Soong"},"plugins":["collapsible-menu","donate","-sharing","sharing-plus","splitter","back-to-top-button","edit-link"],"pluginsConfig":{"tbfed-pagefooter":{"copyright":"Copyright &copy Kylin Soong 2018","modify_label":"该文件修订时间：","modify_format":"YYYY-MM-DD HH:mm:ss"},"collapsible-menu":{},"splitter":{},"search":{},"sharing-plus":{"qq":false,"all":["facebook","google","twitter","instapaper","linkedin","pocket","stumbleupon"],"douban":false,"facebook":true,"weibo":false,"instapaper":false,"whatsapp":false,"hatenaBookmark":false,"twitter":true,"messenger":false,"line":false,"vk":false,"pocket":true,"google":false,"viber":false,"stumbleupon":false,"qzone":false,"linkedin":false},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"donate":{"alipay":"http://ksoong.org/docs/content/images/alipay.png","alipayText":"支付宝捐赠","button":"赞赏","title":"","wechat":"http://ksoong.org/docs/content/images/wechat.png","wechatText":"微信捐赠"},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"back-to-top-button":{},"sharing":{"weibo":true,"linkedin":true,"google":true,"facebook":true,"all":["facebook","google","linkedin","weibo"]},"edit-link":{"label":"Edit This Page","base":"https://github.com/kylinsoong/docs/blob/gh-pages"},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"website.css"}},"file":{"path":"nginx-plus-ingress/README.adoc","mtime":"2020-08-26T09:38:08.854Z","type":"asciidoc"},"gitbook":{"version":"3.2.3","time":"2020-08-26T09:43:59.601Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

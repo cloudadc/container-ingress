@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: coffee
-        image: kylinsoong/cafe:1.0
+        image: cloudadc/cafe:1.0
         ports:
         - containerPort: 8080
 ---
@@ -55,7 +55,7 @@ spec:
     spec:
       containers:
       - name: tea 
-        image: kylinsoong/cafe:1.0
+        image: cloudadc/cafe:1.0
         ports:
         - containerPort: 8080
 ---
@@ -96,7 +96,7 @@ spec:
     spec:
       containers:
       - name: coffee
-        image: kylinsoong/cafe:1.0
+        image: cloudadc/cafe:1.0
         ports:
         - containerPort: 8080
 ---
@@ -131,7 +131,7 @@ spec:
     spec:
       containers:
       - name: tea 
-        image: kylinsoong/cafe:1.0
+        image: cloudadc/cafe:1.0
         ports:
         - containerPort: 8080
 ---
@@ -172,7 +172,7 @@ spec:
     spec:
       containers:
       - name: coffee
-        image: kylinsoong/cafe:1.0
+        image: cloudadc/cafe:1.0
         ports:
         - containerPort: 8080
 ---
@@ -207,7 +207,7 @@ spec:
     spec:
       containers:
       - name: tea 
-        image: kylinsoong/cafe:1.0
+        image: cloudadc/cafe:1.0
         ports:
         - containerPort: 8080
 ---
@@ -248,7 +248,7 @@ spec:
     spec:
       containers:
       - name: coffee
-        image: kylinsoong/cafe:1.0
+        image: cloudadc/cafe:1.0
         ports:
         - containerPort: 8080
 ---
@@ -283,7 +283,7 @@ spec:
     spec:
       containers:
       - name: tea 
-        image: kylinsoong/cafe:1.0
+        image: cloudadc/cafe:1.0
         ports:
         - containerPort: 8080
 ---
