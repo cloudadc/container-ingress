@@ -43,7 +43,7 @@ data:
             },
             "test001_app-v1-svc_irules": {
               "class": "iRule",
-              "iRule": "when HTTP_REQUEST {\n   if { [HTTP::uri] starts_with \"/foo\" } {\n    pool /test001/test001_app-v2-svc_svc/test001_app-v2-svc_80_pool \n    } else {\n    pool /test001/test001_app-v1-svc_svc/test001_app-v1-svc_80_pool \n   }\n}" 
+              "iRule": "when CLIENT_ACCEPTED {\n  if {[expr {[expr {0xffffffff & [crc32 [IP::client_addr]]}] % 100}] < 25} {\n    pool /test001/test001_app-v2-svc_svc/test001_app-v2-svc_80_pool \n  } else {\n    pool /test001/test001_app-v1-svc_svc/test001_app-v1-svc_80_pool \n  }\n}" 
             }
           },
           "test001_app-v2-svc_svc": {

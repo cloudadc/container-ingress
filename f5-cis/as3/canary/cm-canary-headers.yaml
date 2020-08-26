@@ -43,7 +43,7 @@ data:
             },
             "test001_app-v1-svc_irules": {
               "class": "iRule",
-              "iRule": "when HTTP_REQUEST {\n   if { [HTTP::uri] starts_with \"/foo\" } {\n    pool /test001/test001_app-v2-svc_svc/test001_app-v2-svc_80_pool \n    } else {\n    pool /test001/test001_app-v1-svc_svc/test001_app-v1-svc_80_pool \n   }\n}" 
+              "iRule": "when HTTP_REQUEST {\n  if {[HTTP::header exists \"Canary\"] and [HTTP::header values \"Canary\"] equals \"true\"} {\n    pool /test001/test001_app-v2-svc_svc/test001_app-v2-svc_80_pool \n  } else {\n    pool /test001/test001_app-v1-svc_svc/test001_app-v1-svc_80_pool \n  }\n}" 
             }
           },
           "test001_app-v2-svc_svc": {
