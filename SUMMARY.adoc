@@ -6,6 +6,8 @@
 ... link:f5-cis/as3/canary/README.adoc[Canary Releasing]
 .. link:f5-cis/ingress/README.adoc[Ingress]
 .. link:f5-cis/cccl/README.adoc[CCCL]
+.. link:f5-cis/installation/README.adoc[Installation]
+... link:f5-cis/installation/flannel-etcd-mode/README.adoc[Flannel etcd mode]
 . link:nginx-ingress/README.adoc[NGINX]
 .. link:nginx-ingress/bigip/README.adoc[Deployment Architectures]
 . link:nginx-plus-ingress/README.adoc[NGINX PLUS]
