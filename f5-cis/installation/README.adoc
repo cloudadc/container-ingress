@@ -1,0 +1,12 @@
+= F5 CIS Installation
+:toc: manual
+
+== Installation
+
+=== CIS Installation
+
+Refer to link:../README.adoc[CIS Installation] for detailed steps.
+
+=== Integrate CIS with flannel （etc mode）
+
+Refer to link:flannel-etcd-mode/README.adoc[flannel-etcd-mode] for detailed steps.
