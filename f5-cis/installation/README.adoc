@@ -1,0 +1,17 @@
+= F5 CIS Installation
+:toc: manual
+
+== Installation
+
+=== CIS Installation
+
+Refer to link:../README.adoc[CIS Installation] for detailed steps.
+
+=== Integrate CIS with flannel （cni network mode, use k8s API as flannel store）
+
+Refer to offical document on link:https://clouddocs.f5.com/containers/latest/userguide/kubernetes/[Click here].
+
+=== Integrate CIS with flannel （etcd mode, docker0 network）
+
+Refer to link:flannel-etcd-mode/README.adoc[flannel-etcd-mode] for detailed steps.
+
