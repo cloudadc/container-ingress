@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>Zero-Downtime Releases · GitBook</title>
+        <title>Active Health Checks · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -61,10 +61,10 @@
     <link rel="shortcut icon" href="../../gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="../../performance/" />
+    <link rel="next" href="../release/" />
     
     
-    <link rel="prev" href="../health-checks/" />
+    <link rel="prev" href="../l4-lb/" />
     
 
     </head>
@@ -300,9 +300,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4.4" data-path="../health-checks/">
+        <li class="chapter active" data-level="1.4.4" data-path="./">
             
-                <a href="../health-checks/">
+                <a href="./">
             
                     
                     Active Health Checks
@@ -313,9 +313,9 @@
             
         </li>
     
-        <li class="chapter active" data-level="1.4.5" data-path="./">
+        <li class="chapter " data-level="1.4.5" data-path="../release/">
             
-                <a href="./">
+                <a href="../release/">
             
                     
                     Zero-Downtime Releases
@@ -374,7 +374,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="../.." >Zero-Downtime Releases</a>
+        <a href="../.." >Active Health Checks</a>
     </h1>
 </div>
 
@@ -389,24 +389,171 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="zero-downtime-releases">Zero-Downtime Releases</h1>
+                                <h1 id="active-health-checks">Active Health Checks</h1>
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_blue_green_deployments">Blue-Green Deployments</a></li>
-<li><a href="#_canary_releasing">Canary Releasing</a></li>
+<li><a href="#_what_s_this">What&#x2019;s this?</a></li>
+<li><a href="#_deploy_2_services">Deploy 2 services</a></li>
+<li><a href="#_config_difference">config difference</a></li>
+<li><a href="#_highlights_from_dashboard">Highlights from Dashboard</a></li>
 </ul>
 </div>
 <div class="sect1">
-<h2 id="_blue_green_deployments">Blue-Green Deployments</h2>
+<h2 id="_what_s_this">What&#x2019;s this?</h2>
 <div class="sectionbody">
-
+<div class="paragraph">
+<p>NGINX Plus supports Active Health Checks, To use active health checks in the Ingress controller:</p>
+</div>
+<div class="listingblock">
+<div class="title"><strong>1. HTTP Readiness Probe in the templates of your application pods</strong></div>
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: coffee
+...
+        readinessProbe:
+          httpGet:
+            port: 8080
+            path: /healthz/coffee
+            httpHeaders:
+            - name: header1
+              value: <span class="hljs-string">&quot;Active Health Checks&quot;</span>
+            - name: header2
+              value: <span class="hljs-string">&quot;123&quot;</span>
+          initialDelaySeconds: 1
+          periodSeconds: 5
+          timeoutSeconds: 4
+          successThreshold: 2
+          failureThreshold: 3</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title"><strong>2. Enable Active Health Checks with annotations</strong></div>
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">nginx.com/health-checks: <span class="hljs-string">&quot;true&quot;</span>
+nginx.com/health-checks-mandatory: <span class="hljs-string">&quot;true&quot;</span>
+nginx.com/health-checks-mandatory-queue: <span class="hljs-string">&quot;500&quot;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this section, we will deploy 2 services, on without active health checks, another enabled active health checks.</p>
+</div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_canary_releasing">Canary Releasing</h2>
+<h2 id="_deploy_2_services">Deploy 2 services</h2>
 <div class="sectionbody">
+<div class="listingblock">
+<div class="title"><strong>Execute the below commands:</strong></div>
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">kubectl apply <span class="hljs-_">-f</span> deploy.yaml
+kubectl apply <span class="hljs-_">-f</span> ingress.yaml</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="deploy.yaml">deploy.yaml</a></p>
+</li>
+<li>
+<p><a href="ingress.yaml">ingress.yaml</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_config_difference">config difference</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="title"><strong>cafe01-cafe-ingress.conf</strong></div>
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">upstream cafe01-cafe-ingress-cafe01.example.com-coffee-svc-80 {
+	zone cafe01-cafe-ingress-cafe01.example.com-coffee-svc-80 256k;
+	random two least_conn;
+	server 10.244.1.96:8080 max_fails=1 fail_timeout=10s max_conns=0;
+	server 10.244.2.96:8080 max_fails=1 fail_timeout=10s max_conns=0;
+}
 
+server {
+	listen 80;
+	server_tokens <span class="hljs-string">&quot;on&quot;</span>;
+	server_name cafe01.example.com;
+	status_zone cafe01.example.com;
+
+	location /coffee {
+		proxy_http_version 1.1;
+		proxy_connect_timeout 60s;
+		proxy_<span class="hljs-built_in">read</span>_timeout 60s;
+		proxy_send_timeout 60s;
+		client_max_body_size 1m;
+		proxy_<span class="hljs-built_in">set</span>_header Host <span class="hljs-variable">$host</span>;
+		proxy_<span class="hljs-built_in">set</span>_header X-Real-IP <span class="hljs-variable">$remote_addr</span>;
+		proxy_<span class="hljs-built_in">set</span>_header X-Forwarded-For <span class="hljs-variable">$proxy_add_x_forwarded_for</span>;
+		proxy_<span class="hljs-built_in">set</span>_header X-Forwarded-Host <span class="hljs-variable">$host</span>;
+		proxy_<span class="hljs-built_in">set</span>_header X-Forwarded-Port <span class="hljs-variable">$server_port</span>;
+		proxy_<span class="hljs-built_in">set</span>_header X-Forwarded-Proto <span class="hljs-variable">$scheme</span>;
+		proxy_buffering on;
+		proxy_pass http://cafe01-cafe-ingress-cafe01.example.com-coffee-svc-80;
+	}
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title"><strong>cafe02-cafe-ingress.conf</strong></div>
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">upstream cafe02-cafe-ingress-cafe02.example.com-coffee-svc-80 {
+	zone cafe02-cafe-ingress-cafe02.example.com-coffee-svc-80 256k;
+	random two least_conn;
+	server 10.244.1.97:8080 max_fails=1 fail_timeout=10s max_conns=0;
+	server 10.244.2.97:8080 max_fails=1 fail_timeout=10s max_conns=0;
+	queue 500 timeout=4s;
+}
+
+server {
+	listen 80;
+	server_tokens <span class="hljs-string">&quot;on&quot;</span>;
+	server_name cafe02.example.com;
+	status_zone cafe02.example.com;
+
+	location @hc-cafe02-cafe-ingress-cafe02.example.com-coffee-svc-80 {
+		proxy_<span class="hljs-built_in">set</span>_header header1 <span class="hljs-string">&quot;Active Health Checks&quot;</span>;
+		proxy_<span class="hljs-built_in">set</span>_header header2 <span class="hljs-string">&quot;123&quot;</span>;
+		proxy_connect_timeout 4s;
+		proxy_<span class="hljs-built_in">read</span>_timeout 4s;
+		proxy_send_timeout 4s;
+		proxy_pass http://cafe02-cafe-ingress-cafe02.example.com-coffee-svc-80;
+		health_check mandatory uri=/healthz/coffee interval=5s fails=3 passes=2;
+	}
+
+	location /coffee {
+		proxy_http_version 1.1;
+		proxy_connect_timeout 60s;
+		proxy_<span class="hljs-built_in">read</span>_timeout 60s;
+		proxy_send_timeout 60s;
+		client_max_body_size 1m;
+		proxy_<span class="hljs-built_in">set</span>_header Host <span class="hljs-variable">$host</span>;
+		proxy_<span class="hljs-built_in">set</span>_header X-Real-IP <span class="hljs-variable">$remote_addr</span>;
+		proxy_<span class="hljs-built_in">set</span>_header X-Forwarded-For <span class="hljs-variable">$proxy_add_x_forwarded_for</span>;
+		proxy_<span class="hljs-built_in">set</span>_header X-Forwarded-Host <span class="hljs-variable">$host</span>;
+		proxy_<span class="hljs-built_in">set</span>_header X-Forwarded-Port <span class="hljs-variable">$server_port</span>;
+		proxy_<span class="hljs-built_in">set</span>_header X-Forwarded-Proto <span class="hljs-variable">$scheme</span>;
+		proxy_buffering on;
+		proxy_pass http://cafe02-cafe-ingress-cafe02.example.com-coffee-svc-80;
+	}
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_highlights_from_dashboard">Highlights from Dashboard</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><span class="image"><img src="img/nginx-active-health-check.png" alt="nginx active health check.png"></span></p>
+</div>
 </div>
 </div>
                                 
@@ -435,12 +582,12 @@
 
             
                 
-                <a href="../health-checks/" class="navigation navigation-prev " aria-label="Previous page: Active Health Checks">
+                <a href="../l4-lb/" class="navigation navigation-prev " aria-label="Previous page: L4 Load Balancing">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
                 
-                <a href="../../performance/" class="navigation navigation-next " aria-label="Next page: PERFORMANCE">
+                <a href="../release/" class="navigation navigation-next " aria-label="Next page: Zero-Downtime Releases">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -451,7 +598,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Zero-Downtime Releases","level":"1.4.5","depth":2,"next":{"title":"PERFORMANCE","level":"1.5","depth":1,"path":"performance/README.adoc","ref":"performance/README.adoc","articles":[]},"previous":{"title":"Active Health Checks","level":"1.4.4","depth":2,"path":"nginx-plus-ingress/health-checks/README.adoc","ref":"nginx-plus-ingress/health-checks/README.adoc","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{"copyrightYear":"2020","copyrightHolder":"Kylin Soong"},"plugins":["collapsible-menu","donate","-sharing","sharing-plus","splitter","back-to-top-button","edit-link"],"pluginsConfig":{"tbfed-pagefooter":{"copyright":"Copyright &copy Kylin Soong 2018","modify_label":"该文件修订时间：","modify_format":"YYYY-MM-DD HH:mm:ss"},"collapsible-menu":{},"splitter":{},"search":{},"sharing-plus":{"qq":false,"all":["facebook","google","twitter","instapaper","linkedin","pocket","stumbleupon"],"douban":false,"facebook":true,"weibo":false,"instapaper":false,"whatsapp":false,"hatenaBookmark":false,"twitter":true,"messenger":false,"line":false,"vk":false,"pocket":true,"google":false,"viber":false,"stumbleupon":false,"qzone":false,"linkedin":false},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"donate":{"alipay":"http://ksoong.org/docs/content/images/alipay.png","alipayText":"支付宝捐赠","button":"赞赏","title":"","wechat":"http://ksoong.org/docs/content/images/wechat.png","wechatText":"微信捐赠"},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"back-to-top-button":{},"sharing":{"weibo":true,"linkedin":true,"google":true,"facebook":true,"all":["facebook","google","linkedin","weibo"]},"edit-link":{"label":"Edit This Page","base":"https://github.com/kylinsoong/docs/blob/gh-pages"},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"website.css"}},"file":{"path":"nginx-plus-ingress/release/README.adoc","mtime":"2020-08-26T09:22:59.184Z","type":"asciidoc"},"gitbook":{"version":"3.2.3","time":"2020-10-17T14:20:35.977Z"},"basePath":"../..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Active Health Checks","level":"1.4.4","depth":2,"next":{"title":"Zero-Downtime Releases","level":"1.4.5","depth":2,"path":"nginx-plus-ingress/release/README.adoc","ref":"nginx-plus-ingress/release/README.adoc","articles":[]},"previous":{"title":"L4 Load Balancing","level":"1.4.3","depth":2,"path":"nginx-plus-ingress/l4-lb/README.adoc","ref":"nginx-plus-ingress/l4-lb/README.adoc","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{"copyrightYear":"2020","copyrightHolder":"Kylin Soong"},"plugins":["collapsible-menu","donate","-sharing","sharing-plus","splitter","back-to-top-button","edit-link"],"pluginsConfig":{"tbfed-pagefooter":{"copyright":"Copyright &copy Kylin Soong 2018","modify_label":"该文件修订时间：","modify_format":"YYYY-MM-DD HH:mm:ss"},"collapsible-menu":{},"splitter":{},"search":{},"sharing-plus":{"qq":false,"all":["facebook","google","twitter","instapaper","linkedin","pocket","stumbleupon"],"douban":false,"facebook":true,"weibo":false,"instapaper":false,"whatsapp":false,"hatenaBookmark":false,"twitter":true,"messenger":false,"line":false,"vk":false,"pocket":true,"google":false,"viber":false,"stumbleupon":false,"qzone":false,"linkedin":false},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"donate":{"alipay":"http://ksoong.org/docs/content/images/alipay.png","alipayText":"支付宝捐赠","button":"赞赏","title":"","wechat":"http://ksoong.org/docs/content/images/wechat.png","wechatText":"微信捐赠"},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"back-to-top-button":{},"sharing":{"weibo":true,"linkedin":true,"google":true,"facebook":true,"all":["facebook","google","linkedin","weibo"]},"edit-link":{"label":"Edit This Page","base":"https://github.com/kylinsoong/docs/blob/gh-pages"},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"website.css"}},"file":{"path":"nginx-plus-ingress/health-checks/README.adoc","mtime":"2020-10-17T14:20:08.582Z","type":"asciidoc"},"gitbook":{"version":"3.2.3","time":"2020-10-17T14:20:35.977Z"},"basePath":"../..","book":{"language":""}});
         });
     </script>
 </div>
