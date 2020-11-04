@@ -63,7 +63,7 @@ kubectl delete ns bigip-ctlr
 
 == Namespaces isolation
 
-=== --namespace-label
+=== namespace label
 
 As depicted in below figure:
 
@@ -119,7 +119,18 @@ there will be 4 configmaps created, only the first 3 will deploy to F5 due to th
 
 image:namespaces-isolation/f5-cis-configmaps.png[]
 
-== CIS Robust Test
+=== explicit namespace
+
+Using the explicit namespace to implement isolation, the only difference is cis argument, below is an example of explicit namespace isolation:
+
+[source, bash]
+----
+"--namespace=cistest01",
+"--namespace=cistest02",
+"--namespace=cistest03",
+----
+
+== CIS Robust
 
 === Re-create CIS POD
 
