@@ -1,0 +1,40 @@
+= 性能调优
+:toc: manual
+
+== 调优前后性能对比
+
+[source, text]
+----
+Stage,Create,Delete
+Beofre Tunning,115,175 
+After Tunning, 110,165
+---- 
+
+== 调优
+
+.*调优前后参数对比*
+|===
+|参数|调优前|调优后
+|provision.extramb
+|500
+|1000
+
+|restjavad.useextramb
+|false
+|true
+
+|maxMessageBodySize
+|
+|134217728
+|===
+
+[source, bash]
+.*调优步骤*
+----
+tmsh modify sys db provision.extramb value 1000
+tmsh modify sys db restjavad.useextramb value true
+tmsh save sys config
+
+curl -s -f -u admin:F5demo@666 -H "Content-Type: application/json" -d '{"maxMessageBodySize":134217728}' -X POST http://localhost:8100/mgmt/shared/server/messaging/settings/8100 
+----
+
