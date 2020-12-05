@@ -205,8 +205,34 @@
             
         </li>
     
+        <li class="chapter " data-level="1.2.4.2" data-path="installation/probe.html">
+            
+                <a href="installation/probe.html">
+            
+                    
+                    livenessProbe & readinessProbe
+            
+                </a>
+            
+
+            
+        </li>
+    
 
             </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.5" data-path="tunning/">
+            
+                <a href="tunning/">
+            
+                    
+                    性能调优
+            
+                </a>
+            
+
             
         </li>
     
@@ -401,10 +427,11 @@
 </li>
 <li><a href="#_namespaces_isolation">Namespaces isolation</a>
 <ul class="sectlevel2">
-<li><a href="#__namespace_label">--namespace-label</a></li>
+<li><a href="#_namespace_label">namespace label</a></li>
+<li><a href="#_explicit_namespace">explicit namespace</a></li>
 </ul>
 </li>
-<li><a href="#_cis_robust_test">CIS Robust Test</a>
+<li><a href="#_cis_robust">CIS Robust</a>
 <ul class="sectlevel2">
 <li><a href="#_re_create_cis_pod">Re-create CIS POD</a></li>
 <li><a href="#_re_start_f5_ve">Re-start F5 VE</a></li>
@@ -481,7 +508,7 @@ kubectl delete ns bigip-ctlr</code></pre>
 <h2 id="_namespaces_isolation">Namespaces isolation</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="__namespace_label">--namespace-label</h3>
+<h3 id="_namespace_label">namespace label</h3>
 <div class="paragraph">
 <p>As depicted in below figure:</p>
 </div>
@@ -551,10 +578,23 @@ cistest103        Active   78s     &lt;none&gt;</code></pre>
 <p><span class="image"><img src="namespaces-isolation/f5-cis-configmaps.png" alt="f5 cis configmaps.png"></span></p>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_explicit_namespace">explicit namespace</h3>
+<div class="paragraph">
+<p>Using the explicit namespace to implement isolation, the only difference is cis argument, below is an example of explicit namespace isolation:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash"><span class="hljs-string">&quot;--namespace=cistest01&quot;</span>,
+<span class="hljs-string">&quot;--namespace=cistest02&quot;</span>,
+<span class="hljs-string">&quot;--namespace=cistest03&quot;</span>,</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_cis_robust_test">CIS Robust Test</h2>
+<h2 id="_cis_robust">CIS Robust</h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_re_create_cis_pod">Re-create CIS POD</h3>
@@ -630,7 +670,7 @@ kubectl delete <span class="hljs-_">-f</span> cm.2.yaml</code></pre>
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"F5 CIS","level":"1.2","depth":1,"next":{"title":"AS3","level":"1.2.1","depth":2,"path":"f5-cis/as3/README.adoc","ref":"f5-cis/as3/README.adoc","articles":[{"title":"Canary Releasing","level":"1.2.1.1","depth":3,"path":"f5-cis/as3/canary/README.adoc","ref":"f5-cis/as3/canary/README.adoc","articles":[]}]},"previous":{"title":"INTRODUCTION","level":"1.1","depth":1,"path":"README.adoc","ref":"README.adoc","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{"copyrightYear":"2020","copyrightHolder":"Kylin Soong"},"plugins":["collapsible-menu","donate","-sharing","sharing-plus","splitter","back-to-top-button","edit-link"],"pluginsConfig":{"tbfed-pagefooter":{"copyright":"Copyright &copy Kylin Soong 2018","modify_label":"该文件修订时间：","modify_format":"YYYY-MM-DD HH:mm:ss"},"collapsible-menu":{},"splitter":{},"search":{},"sharing-plus":{"qq":false,"all":["facebook","google","twitter","instapaper","linkedin","pocket","stumbleupon"],"douban":false,"facebook":true,"weibo":false,"instapaper":false,"whatsapp":false,"hatenaBookmark":false,"twitter":true,"messenger":false,"line":false,"vk":false,"pocket":true,"google":false,"viber":false,"stumbleupon":false,"qzone":false,"linkedin":false},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"donate":{"alipay":"http://ksoong.org/docs/content/images/alipay.png","alipayText":"支付宝捐赠","button":"赞赏","title":"","wechat":"http://ksoong.org/docs/content/images/wechat.png","wechatText":"微信捐赠"},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"back-to-top-button":{},"sharing":{"weibo":true,"linkedin":true,"google":true,"facebook":true,"all":["facebook","google","linkedin","weibo"]},"edit-link":{"label":"Edit This Page","base":"https://github.com/kylinsoong/docs/blob/gh-pages"},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"website.css"}},"file":{"path":"f5-cis/README.adoc","mtime":"2020-08-26T09:22:59.120Z","type":"asciidoc"},"gitbook":{"version":"3.2.3","time":"2020-10-17T14:20:35.977Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"F5 CIS","level":"1.2","depth":1,"next":{"title":"AS3","level":"1.2.1","depth":2,"path":"f5-cis/as3/README.adoc","ref":"f5-cis/as3/README.adoc","articles":[{"title":"Canary Releasing","level":"1.2.1.1","depth":3,"path":"f5-cis/as3/canary/README.adoc","ref":"f5-cis/as3/canary/README.adoc","articles":[]}]},"previous":{"title":"INTRODUCTION","level":"1.1","depth":1,"path":"README.adoc","ref":"README.adoc","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{"copyrightYear":"2020","copyrightHolder":"Kylin Soong"},"plugins":["collapsible-menu","donate","-sharing","sharing-plus","splitter","back-to-top-button","edit-link"],"pluginsConfig":{"tbfed-pagefooter":{"copyright":"Copyright &copy Kylin Soong 2018","modify_label":"该文件修订时间：","modify_format":"YYYY-MM-DD HH:mm:ss"},"collapsible-menu":{},"splitter":{},"search":{},"sharing-plus":{"qq":false,"all":["facebook","google","twitter","instapaper","linkedin","pocket","stumbleupon"],"douban":false,"facebook":true,"weibo":false,"instapaper":false,"whatsapp":false,"hatenaBookmark":false,"twitter":true,"messenger":false,"line":false,"vk":false,"pocket":true,"google":false,"viber":false,"stumbleupon":false,"qzone":false,"linkedin":false},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"donate":{"alipay":"http://ksoong.org/docs/content/images/alipay.png","alipayText":"支付宝捐赠","button":"赞赏","title":"","wechat":"http://ksoong.org/docs/content/images/wechat.png","wechatText":"微信捐赠"},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"back-to-top-button":{},"sharing":{"weibo":true,"linkedin":true,"google":true,"facebook":true,"all":["facebook","google","linkedin","weibo"]},"edit-link":{"label":"Edit This Page","base":"https://github.com/kylinsoong/docs/blob/gh-pages"},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"website.css"}},"file":{"path":"f5-cis/README.adoc","mtime":"2020-12-05T02:45:20.723Z","type":"asciidoc"},"gitbook":{"version":"3.2.3","time":"2020-12-05T02:47:52.633Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
